@@ -1,0 +1,42 @@
+
+package com.cesar31.audiogenerator.parser;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.List;
+
+class AudioParser;
+
+parser code {:
+	public AudioParser(AudioLex lex) {
+		super(lex);
+	}
+
+	public void syntax_error(Symbol cur_token) {
+		List<String> expected = new ArrayList<>();
+		List<Integer> tokens = expected_token_ids();
+
+		System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		for(Integer i : tokens) {
+			// expected.add(symbl_name_from_id(i));
+			System.out.printf("%s, ", symbl_name_from_id(i));
+		}
+		System.out.println("");
+	}
+:}
+
+terminal TRACK, EXTENDS, KEEP, VAR, INT, DOB, BOOL, CAR, CAD, TRUE, FALSE;
+terminal IF, ELSE, SWITCH, CASE,EXIT, DEFAULT, FOR, WHILE, DO_WHILE, CONTINUE, RETURN;
+terminal PLAY, DO, DO_, RE, RE_, MI, FA, FA_, SOL, SOL_, LA, LA_;
+terminal WAIT, ORDER, ASC, DESC, EVEN, ODD, PRIME, SUM, LENGTH, MSG, MAIN;
+terminal ID, INTEGER, DECIMAL, TAB, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
+terminal NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
+terminal LBRACKET, RBRACKET, LPAREN, RPAREN, EOL, STR;
+terminal ERROR;
+
+non terminal inicio;
+
+inicio ::=
+				STR:s {: System.out.println(s.toString()); :}
+				| INTEGER:i {: System.out.println(i.toString()); :}
+				;
