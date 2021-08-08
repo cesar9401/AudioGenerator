@@ -33,8 +33,30 @@ public class AudioParser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\003\000\002\002\003\000\002\002\004\000\002\002" +
-    "\003" });
+    "\000\113\000\002\002\003\000\002\002\004\000\002\002" +
+    "\003\000\002\002\003\000\002\005\007\000\002\022\004" +
+    "\000\002\022\002\000\002\020\005\000\002\020\003\000" +
+    "\002\017\003\000\002\017\003\000\002\017\003\000\002" +
+    "\017\003\000\002\017\003\000\002\023\004\000\002\023" +
+    "\005\000\002\023\004\000\002\023\004\000\002\006\011" +
+    "\000\002\010\004\000\002\010\003\000\002\007\005\000" +
+    "\002\011\004\000\002\011\002\000\002\013\005\000\002" +
+    "\013\005\000\002\016\005\000\002\016\003\000\002\015" +
+    "\003\000\002\012\005\000\002\012\003\000\002\024\005" +
+    "\000\002\024\005\000\002\024\005\000\002\024\003\000" +
+    "\002\025\005\000\002\025\005\000\002\025\003\000\002" +
+    "\026\005\000\002\026\005\000\002\026\005\000\002\026" +
+    "\005\000\002\026\005\000\002\026\005\000\002\026\003" +
+    "\000\002\027\005\000\002\027\005\000\002\027\003\000" +
+    "\002\030\005\000\002\030\005\000\002\030\005\000\002" +
+    "\030\003\000\002\031\005\000\002\031\003\000\002\032" +
+    "\004\000\002\032\003\000\002\033\004\000\002\033\003" +
+    "\000\002\034\004\000\002\034\003\000\002\035\003\000" +
+    "\002\035\003\000\002\035\003\000\002\035\003\000\002" +
+    "\035\003\000\002\035\003\000\002\035\005\000\002\036" +
+    "\003\000\002\036\003\000\002\021\003\000\002\021\002" +
+    "\000\002\003\004\000\002\003\002\000\002\004\004\000" +
+    "\002\004\002" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -42,9 +64,215 @@ public class AudioParser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\005\000\006\062\004\122\005\001\002\000\004\002" +
-    "\uffff\001\002\000\004\002\001\001\002\000\004\002\007" +
-    "\001\002\000\004\002\000\001\002" });
+    "\000\160\000\010\006\011\007\uffbb\062\004\001\002\000" +
+    "\016\002\ufff9\103\ufff9\104\ufff9\113\160\114\157\115\161" +
+    "\001\002\000\004\007\116\001\002\000\010\002\ufffb\103" +
+    "\015\104\016\001\002\000\004\002\001\001\002\000\004" +
+    "\002\ufffe\001\002\000\004\007\uffbc\001\002\000\004\002" +
+    "\uffff\001\002\000\004\002\014\001\002\000\004\002\000" +
+    "\001\002\000\004\062\115\001\002\000\030\015\023\016" +
+    "\030\062\025\063\037\064\021\074\042\102\022\106\027" +
+    "\122\024\125\032\126\020\001\002\000\004\002\ufff3\001" +
+    "\002\000\056\002\uffc2\066\uffc2\067\uffc2\070\uffc2\071\uffc2" +
+    "\072\uffc2\073\uffc2\075\uffc2\076\uffc2\077\uffc2\100\uffc2\101" +
+    "\uffc2\103\uffc2\105\uffc2\106\uffc2\107\uffc2\110\uffc2\111\uffc2" +
+    "\112\uffc2\117\uffc2\121\uffc2\123\uffc2\001\002\000\056\002" +
+    "\uffc4\066\uffc4\067\uffc4\070\uffc4\071\uffc4\072\uffc4\073\uffc4" +
+    "\075\uffc4\076\uffc4\077\uffc4\100\uffc4\101\uffc4\103\uffc4\105" +
+    "\uffc4\106\uffc4\107\uffc4\110\uffc4\111\uffc4\112\uffc4\117\uffc4" +
+    "\121\uffc4\123\uffc4\001\002\000\024\015\023\016\030\062" +
+    "\025\063\037\064\021\074\042\122\024\125\032\126\020" +
+    "\001\002\000\056\002\uffbe\066\uffbe\067\uffbe\070\uffbe\071" +
+    "\uffbe\072\uffbe\073\uffbe\075\uffbe\076\uffbe\077\uffbe\100\uffbe" +
+    "\101\uffbe\103\uffbe\105\uffbe\106\uffbe\107\uffbe\110\uffbe\111" +
+    "\uffbe\112\uffbe\117\uffbe\121\uffbe\123\uffbe\001\002\000\030" +
+    "\015\023\016\030\062\025\063\037\064\021\074\042\102" +
+    "\022\106\027\122\024\125\032\126\020\001\002\000\056" +
+    "\002\uffc0\066\uffc0\067\uffc0\070\uffc0\071\uffc0\072\uffc0\073" +
+    "\uffc0\075\uffc0\076\uffc0\077\uffc0\100\uffc0\101\uffc0\103\uffc0" +
+    "\105\uffc0\106\uffc0\107\uffc0\110\uffc0\111\uffc0\112\uffc0\117" +
+    "\uffc0\121\uffc0\123\uffc0\001\002\000\056\002\uffc1\066\uffc1" +
+    "\067\uffc1\070\uffc1\071\uffc1\072\uffc1\073\uffc1\075\uffc1\076" +
+    "\uffc1\077\uffc1\100\uffc1\101\uffc1\103\uffc1\105\uffc1\106\uffc1" +
+    "\107\uffc1\110\uffc1\111\uffc1\112\uffc1\117\uffc1\121\uffc1\123" +
+    "\uffc1\001\002\000\026\015\023\016\030\062\025\063\037" +
+    "\064\021\074\042\102\022\122\024\125\032\126\020\001" +
+    "\002\000\056\002\uffbd\066\uffbd\067\uffbd\070\uffbd\071\uffbd" +
+    "\072\uffbd\073\uffbd\075\uffbd\076\uffbd\077\uffbd\100\uffbd\101" +
+    "\uffbd\103\uffbd\105\uffbd\106\uffbd\107\uffbd\110\uffbd\111\uffbd" +
+    "\112\uffbd\117\uffbd\121\uffbd\123\uffbd\001\002\000\056\002" +
+    "\uffc6\066\uffc6\067\uffc6\070\uffc6\071\uffc6\072\uffc6\073\uffc6" +
+    "\075\uffc6\076\uffc6\077\uffc6\100\uffc6\101\uffc6\103\uffc6\105" +
+    "\uffc6\106\uffc6\107\uffc6\110\uffc6\111\uffc6\112\uffc6\117\uffc6" +
+    "\121\uffc6\123\uffc6\001\002\000\056\002\uffc3\066\uffc3\067" +
+    "\uffc3\070\uffc3\071\uffc3\072\uffc3\073\uffc3\075\uffc3\076\uffc3" +
+    "\077\uffc3\100\uffc3\101\uffc3\103\uffc3\105\uffc3\106\uffc3\107" +
+    "\uffc3\110\uffc3\111\uffc3\112\uffc3\117\uffc3\121\uffc3\123\uffc3" +
+    "\001\002\000\056\002\uffc8\066\uffc8\067\uffc8\070\uffc8\071" +
+    "\uffc8\072\uffc8\073\uffc8\075\uffc8\076\uffc8\077\uffc8\100\uffc8" +
+    "\101\uffc8\103\uffc8\105\uffc8\106\uffc8\107\uffc8\110\uffc8\111" +
+    "\uffc8\112\uffc8\117\uffc8\121\uffc8\123\uffc8\001\002\000\056" +
+    "\002\uffca\066\uffca\067\uffca\070\uffca\071\uffca\072\uffca\073" +
+    "\uffca\075\uffca\076\uffca\077\uffca\100\uffca\101\uffca\103\uffca" +
+    "\105\uffca\106\uffca\107\uffca\110\uffca\111\uffca\112\uffca\117" +
+    "\uffca\121\uffca\123\uffca\001\002\000\056\002\uffcc\066\uffcc" +
+    "\067\uffcc\070\uffcc\071\uffcc\072\uffcc\073\uffcc\075\uffcc\076" +
+    "\uffcc\077\uffcc\100\uffcc\101\uffcc\103\uffcc\105\uffcc\106\uffcc" +
+    "\107\uffcc\110\uffcc\111\uffcc\112\107\117\uffcc\121\uffcc\123" +
+    "\uffcc\001\002\000\054\002\uffce\066\uffce\067\uffce\070\uffce" +
+    "\071\uffce\072\uffce\073\uffce\075\uffce\076\uffce\077\uffce\100" +
+    "\uffce\101\uffce\103\uffce\105\uffce\106\uffce\107\uffce\110\uffce" +
+    "\111\uffce\117\uffce\121\uffce\123\uffce\001\002\000\056\002" +
+    "\uffc5\066\uffc5\067\uffc5\070\uffc5\071\uffc5\072\uffc5\073\uffc5" +
+    "\075\uffc5\076\uffc5\077\uffc5\100\uffc5\101\uffc5\103\uffc5\105" +
+    "\uffc5\106\uffc5\107\uffc5\110\uffc5\111\uffc5\112\uffc5\117\uffc5" +
+    "\121\uffc5\123\uffc5\001\002\000\054\002\uffd2\066\uffd2\067" +
+    "\uffd2\070\uffd2\071\uffd2\072\uffd2\073\uffd2\075\uffd2\076\uffd2" +
+    "\077\uffd2\100\uffd2\101\uffd2\103\uffd2\105\uffd2\106\uffd2\107" +
+    "\071\110\070\111\067\117\uffd2\121\uffd2\123\uffd2\001\002" +
+    "\000\046\002\uffd5\066\uffd5\067\uffd5\070\uffd5\071\uffd5\072" +
+    "\uffd5\073\uffd5\075\uffd5\076\uffd5\077\uffd5\100\uffd5\101\uffd5" +
+    "\103\uffd5\105\064\106\065\117\uffd5\121\uffd5\123\uffd5\001" +
+    "\002\000\022\015\023\016\030\062\025\063\037\064\021" +
+    "\122\024\125\032\126\020\001\002\000\042\002\uffdc\066" +
+    "\062\067\061\070\055\071\057\072\060\073\056\075\uffdc" +
+    "\076\uffdc\077\uffdc\100\uffdc\101\uffdc\103\uffdc\117\uffdc\121" +
+    "\uffdc\123\uffdc\001\002\000\026\002\uffdf\075\053\076\052" +
+    "\077\uffdf\100\uffdf\101\uffdf\103\uffdf\117\uffdf\121\uffdf\123" +
+    "\uffdf\001\002\000\012\002\ufffc\077\050\100\046\101\047" +
+    "\001\002\000\030\015\023\016\030\062\025\063\037\064" +
+    "\021\074\042\102\022\106\027\122\024\125\032\126\020" +
+    "\001\002\000\030\015\023\016\030\062\025\063\037\064" +
+    "\021\074\042\102\022\106\027\122\024\125\032\126\020" +
+    "\001\002\000\030\015\023\016\030\062\025\063\037\064" +
+    "\021\074\042\102\022\106\027\122\024\125\032\126\020" +
+    "\001\002\000\026\002\uffe2\075\053\076\052\077\uffe2\100" +
+    "\uffe2\101\uffe2\103\uffe2\117\uffe2\121\uffe2\123\uffe2\001\002" +
+    "\000\030\015\023\016\030\062\025\063\037\064\021\074" +
+    "\042\102\022\106\027\122\024\125\032\126\020\001\002" +
+    "\000\030\015\023\016\030\062\025\063\037\064\021\074" +
+    "\042\102\022\106\027\122\024\125\032\126\020\001\002" +
+    "\000\042\002\uffde\066\062\067\061\070\055\071\057\072" +
+    "\060\073\056\075\uffde\076\uffde\077\uffde\100\uffde\101\uffde" +
+    "\103\uffde\117\uffde\121\uffde\123\uffde\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\046\002" +
+    "\uffdb\066\uffdb\067\uffdb\070\uffdb\071\uffdb\072\uffdb\073\uffdb" +
+    "\075\uffdb\076\uffdb\077\uffdb\100\uffdb\101\uffdb\103\uffdb\105" +
+    "\064\106\065\117\uffdb\121\uffdb\123\uffdb\001\002\000\030" +
+    "\015\023\016\030\062\025\063\037\064\021\074\042\102" +
+    "\022\106\027\122\024\125\032\126\020\001\002\000\030" +
+    "\015\023\016\030\062\025\063\037\064\021\074\042\102" +
+    "\022\106\027\122\024\125\032\126\020\001\002\000\054" +
+    "\002\uffd3\066\uffd3\067\uffd3\070\uffd3\071\uffd3\072\uffd3\073" +
+    "\uffd3\075\uffd3\076\uffd3\077\uffd3\100\uffd3\101\uffd3\103\uffd3" +
+    "\105\uffd3\106\uffd3\107\071\110\070\111\067\117\uffd3\121" +
+    "\uffd3\123\uffd3\001\002\000\030\015\023\016\030\062\025" +
+    "\063\037\064\021\074\042\102\022\106\027\122\024\125" +
+    "\032\126\020\001\002\000\030\015\023\016\030\062\025" +
+    "\063\037\064\021\074\042\102\022\106\027\122\024\125" +
+    "\032\126\020\001\002\000\030\015\023\016\030\062\025" +
+    "\063\037\064\021\074\042\102\022\106\027\122\024\125" +
+    "\032\126\020\001\002\000\054\002\uffd1\066\uffd1\067\uffd1" +
+    "\070\uffd1\071\uffd1\072\uffd1\073\uffd1\075\uffd1\076\uffd1\077" +
+    "\uffd1\100\uffd1\101\uffd1\103\uffd1\105\uffd1\106\uffd1\107\uffd1" +
+    "\110\uffd1\111\uffd1\117\uffd1\121\uffd1\123\uffd1\001\002\000" +
+    "\054\002\uffd0\066\uffd0\067\uffd0\070\uffd0\071\uffd0\072\uffd0" +
+    "\073\uffd0\075\uffd0\076\uffd0\077\uffd0\100\uffd0\101\uffd0\103" +
+    "\uffd0\105\uffd0\106\uffd0\107\uffd0\110\uffd0\111\uffd0\117\uffd0" +
+    "\121\uffd0\123\uffd0\001\002\000\054\002\uffcf\066\uffcf\067" +
+    "\uffcf\070\uffcf\071\uffcf\072\uffcf\073\uffcf\075\uffcf\076\uffcf" +
+    "\077\uffcf\100\uffcf\101\uffcf\103\uffcf\105\uffcf\106\uffcf\107" +
+    "\uffcf\110\uffcf\111\uffcf\117\uffcf\121\uffcf\123\uffcf\001\002" +
+    "\000\054\002\uffd4\066\uffd4\067\uffd4\070\uffd4\071\uffd4\072" +
+    "\uffd4\073\uffd4\075\uffd4\076\uffd4\077\uffd4\100\uffd4\101\uffd4" +
+    "\103\uffd4\105\uffd4\106\uffd4\107\071\110\070\111\067\117" +
+    "\uffd4\121\uffd4\123\uffd4\001\002\000\046\002\uffda\066\uffda" +
+    "\067\uffda\070\uffda\071\uffda\072\uffda\073\uffda\075\uffda\076" +
+    "\uffda\077\uffda\100\uffda\101\uffda\103\uffda\105\064\106\065" +
+    "\117\uffda\121\uffda\123\uffda\001\002\000\046\002\uffd7\066" +
+    "\uffd7\067\uffd7\070\uffd7\071\uffd7\072\uffd7\073\uffd7\075\uffd7" +
+    "\076\uffd7\077\uffd7\100\uffd7\101\uffd7\103\uffd7\105\064\106" +
+    "\065\117\uffd7\121\uffd7\123\uffd7\001\002\000\046\002\uffd8" +
+    "\066\uffd8\067\uffd8\070\uffd8\071\uffd8\072\uffd8\073\uffd8\075" +
+    "\uffd8\076\uffd8\077\uffd8\100\uffd8\101\uffd8\103\uffd8\105\064" +
+    "\106\065\117\uffd8\121\uffd8\123\uffd8\001\002\000\046\002" +
+    "\uffd6\066\uffd6\067\uffd6\070\uffd6\071\uffd6\072\uffd6\073\uffd6" +
+    "\075\uffd6\076\uffd6\077\uffd6\100\uffd6\101\uffd6\103\uffd6\105" +
+    "\064\106\065\117\uffd6\121\uffd6\123\uffd6\001\002\000\046" +
+    "\002\uffd9\066\uffd9\067\uffd9\070\uffd9\071\uffd9\072\uffd9\073" +
+    "\uffd9\075\uffd9\076\uffd9\077\uffd9\100\uffd9\101\uffd9\103\uffd9" +
+    "\105\064\106\065\117\uffd9\121\uffd9\123\uffd9\001\002\000" +
+    "\042\002\uffdd\066\062\067\061\070\055\071\057\072\060" +
+    "\073\056\075\uffdd\076\uffdd\077\uffdd\100\uffdd\101\uffdd\103" +
+    "\uffdd\117\uffdd\121\uffdd\123\uffdd\001\002\000\026\002\uffe0" +
+    "\075\053\076\052\077\uffe0\100\uffe0\101\uffe0\103\uffe0\117" +
+    "\uffe0\121\uffe0\123\uffe0\001\002\000\026\002\uffe1\075\053" +
+    "\076\052\077\uffe1\100\uffe1\101\uffe1\103\uffe1\117\uffe1\121" +
+    "\uffe1\123\uffe1\001\002\000\056\002\uffc7\066\uffc7\067\uffc7" +
+    "\070\uffc7\071\uffc7\072\uffc7\073\uffc7\075\uffc7\076\uffc7\077" +
+    "\uffc7\100\uffc7\101\uffc7\103\uffc7\105\uffc7\106\uffc7\107\uffc7" +
+    "\110\uffc7\111\uffc7\112\uffc7\117\uffc7\121\uffc7\123\uffc7\001" +
+    "\002\000\030\015\023\016\030\062\025\063\037\064\021" +
+    "\074\042\102\022\106\027\122\024\125\032\126\020\001" +
+    "\002\000\054\002\uffcd\066\uffcd\067\uffcd\070\uffcd\071\uffcd" +
+    "\072\uffcd\073\uffcd\075\uffcd\076\uffcd\077\uffcd\100\uffcd\101" +
+    "\uffcd\103\uffcd\105\uffcd\106\uffcd\107\uffcd\110\uffcd\111\uffcd" +
+    "\117\uffcd\121\uffcd\123\uffcd\001\002\000\056\002\uffcb\066" +
+    "\uffcb\067\uffcb\070\uffcb\071\uffcb\072\uffcb\073\uffcb\075\uffcb" +
+    "\076\uffcb\077\uffcb\100\uffcb\101\uffcb\103\uffcb\105\uffcb\106" +
+    "\uffcb\107\uffcb\110\uffcb\111\uffcb\112\uffcb\117\uffcb\121\uffcb" +
+    "\123\uffcb\001\002\000\012\077\050\100\046\101\047\123" +
+    "\113\001\002\000\056\002\uffbf\066\uffbf\067\uffbf\070\uffbf" +
+    "\071\uffbf\072\uffbf\073\uffbf\075\uffbf\076\uffbf\077\uffbf\100" +
+    "\uffbf\101\uffbf\103\uffbf\105\uffbf\106\uffbf\107\uffbf\110\uffbf" +
+    "\111\uffbf\112\uffbf\117\uffbf\121\uffbf\123\uffbf\001\002\000" +
+    "\056\002\uffc9\066\uffc9\067\uffc9\070\uffc9\071\uffc9\072\uffc9" +
+    "\073\uffc9\075\uffc9\076\uffc9\077\uffc9\100\uffc9\101\uffc9\103" +
+    "\uffc9\105\uffc9\106\uffc9\107\uffc9\110\uffc9\111\uffc9\112\uffc9" +
+    "\117\uffc9\121\uffc9\123\uffc9\001\002\000\012\002\ufffa\103" +
+    "\ufffa\104\ufffa\120\ufffa\001\002\000\014\010\123\011\121" +
+    "\012\122\013\124\014\117\001\002\000\006\017\ufff5\062" +
+    "\ufff5\001\002\000\006\017\127\062\125\001\002\000\006" +
+    "\017\ufff7\062\ufff7\001\002\000\006\017\ufff6\062\ufff6\001" +
+    "\002\000\006\017\ufff8\062\ufff8\001\002\000\006\017\ufff4" +
+    "\062\ufff4\001\002\000\012\002\ufff9\103\ufff9\104\ufff9\120" +
+    "\ufff9\001\002\000\010\002\ufffb\103\015\104\016\001\002" +
+    "\000\004\062\125\001\002\000\006\103\015\120\133\001" +
+    "\002\000\010\002\uffea\104\136\120\133\001\002\000\010" +
+    "\002\uffed\104\uffed\120\uffed\001\002\000\030\015\023\016" +
+    "\030\062\025\063\037\064\021\074\042\102\022\106\027" +
+    "\122\024\125\032\126\020\001\002\000\012\077\050\100" +
+    "\046\101\047\121\135\001\002\000\010\002\uffec\104\uffec" +
+    "\120\uffec\001\002\000\004\116\141\001\002\000\004\002" +
+    "\uffef\001\002\000\010\002\uffee\104\uffee\120\uffee\001\002" +
+    "\000\032\015\023\016\030\062\025\063\037\064\021\074" +
+    "\042\102\022\106\027\116\141\122\024\125\032\126\020" +
+    "\001\002\000\004\002\uffeb\001\002\000\006\103\153\117" +
+    "\154\001\002\000\006\103\uffe6\117\uffe6\001\002\000\006" +
+    "\103\150\117\151\001\002\000\006\103\uffe5\117\uffe5\001" +
+    "\002\000\014\077\050\100\046\101\047\103\uffe3\117\uffe3" +
+    "\001\002\000\004\116\141\001\002\000\010\002\uffe8\103" +
+    "\uffe8\117\uffe8\001\002\000\006\103\uffe7\117\uffe7\001\002" +
+    "\000\030\015\023\016\030\062\025\063\037\064\021\074" +
+    "\042\102\022\106\027\122\024\125\032\126\020\001\002" +
+    "\000\010\002\uffe9\103\uffe9\117\uffe9\001\002\000\014\077" +
+    "\050\100\046\101\047\103\uffe4\117\uffe4\001\002\000\004" +
+    "\002\ufffd\001\002\000\004\002\ufff1\001\002\000\030\015" +
+    "\023\016\030\062\025\063\037\064\021\074\042\102\022" +
+    "\106\027\122\024\125\032\126\020\001\002\000\004\002" +
+    "\ufff0\001\002\000\012\002\ufff2\077\050\100\046\101\047" +
+    "\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -52,8 +280,77 @@ public class AudioParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\005\000\004\002\005\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001" });
+    "\000\160\000\016\002\012\005\006\006\007\020\005\021" +
+    "\004\023\011\001\001\000\002\001\001\000\002\001\001" +
+    "\000\004\022\016\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\030\024\044\025" +
+    "\043\026\042\027\040\030\037\031\035\032\034\033\033" +
+    "\034\032\035\030\036\025\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\010\034\113\035\030" +
+    "\036\025\001\001\000\002\001\001\000\030\024\111\025" +
+    "\043\026\042\027\040\030\037\031\035\032\034\033\033" +
+    "\034\032\035\030\036\025\001\001\000\002\001\001\000" +
+    "\002\001\001\000\012\033\110\034\032\035\030\036\025" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\006\035\105\036\025\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\026\025" +
+    "\104\026\042\027\040\030\037\031\035\032\034\033\033" +
+    "\034\032\035\030\036\025\001\001\000\026\025\103\026" +
+    "\042\027\040\030\037\031\035\032\034\033\033\034\032" +
+    "\035\030\036\025\001\001\000\026\025\050\026\042\027" +
+    "\040\030\037\031\035\032\034\033\033\034\032\035\030" +
+    "\036\025\001\001\000\002\001\001\000\024\026\102\027" +
+    "\040\030\037\031\035\032\034\033\033\034\032\035\030" +
+    "\036\025\001\001\000\024\026\053\027\040\030\037\031" +
+    "\035\032\034\033\033\034\032\035\030\036\025\001\001" +
+    "\000\002\001\001\000\022\027\101\030\037\031\035\032" +
+    "\034\033\033\034\032\035\030\036\025\001\001\000\022" +
+    "\027\100\030\037\031\035\032\034\033\033\034\032\035" +
+    "\030\036\025\001\001\000\022\027\077\030\037\031\035" +
+    "\032\034\033\033\034\032\035\030\036\025\001\001\000" +
+    "\022\027\076\030\037\031\035\032\034\033\033\034\032" +
+    "\035\030\036\025\001\001\000\022\027\075\030\037\031" +
+    "\035\032\034\033\033\034\032\035\030\036\025\001\001" +
+    "\000\022\027\062\030\037\031\035\032\034\033\033\034" +
+    "\032\035\030\036\025\001\001\000\002\001\001\000\020" +
+    "\030\074\031\035\032\034\033\033\034\032\035\030\036" +
+    "\025\001\001\000\020\030\065\031\035\032\034\033\033" +
+    "\034\032\035\030\036\025\001\001\000\002\001\001\000" +
+    "\016\031\073\032\034\033\033\034\032\035\030\036\025" +
+    "\001\001\000\016\031\072\032\034\033\033\034\032\035" +
+    "\030\036\025\001\001\000\016\031\071\032\034\033\033" +
+    "\034\032\035\030\036\025\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\016\031\107\032" +
+    "\034\033\033\034\032\035\030\036\025\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\004\017\117" +
+    "\001\001\000\002\001\001\000\004\020\125\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\004\022\155\001\001\000" +
+    "\004\020\127\001\001\000\006\007\131\010\130\001\001" +
+    "\000\006\007\137\011\136\001\001\000\002\001\001\000" +
+    "\030\024\133\025\043\026\042\027\040\030\037\031\035" +
+    "\032\034\033\033\034\032\035\030\036\025\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\013\141\001\001" +
+    "\000\002\001\001\000\002\001\001\000\040\012\142\013" +
+    "\145\015\143\016\144\024\146\025\043\026\042\027\040" +
+    "\030\037\031\035\032\034\033\033\034\032\035\030\036" +
+    "\025\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\006\013\145\015\151\001\001\000\002\001\001" +
+    "\000\002\001\001\000\030\024\154\025\043\026\042\027" +
+    "\040\030\037\031\035\032\034\033\033\034\032\035\030" +
+    "\036\025\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\030\024\161\025\043" +
+    "\026\042\027\040\030\037\031\035\032\034\033\033\034" +
+    "\032\035\030\036\025\001\001\000\002\001\001\000\002" +
+    "\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -108,6 +405,10 @@ public class AudioParser extends java_cup.runtime.lr_parser {
 		System.out.println("");
 	}
 
+	protected int error_sync_size() {
+		return 1;
+	}
+
 
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
@@ -134,13 +435,10 @@ class CUP$AudioParser$actions {
       switch (CUP$AudioParser$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 0: // inicio ::= STR 
+          case 0: // inicio ::= statement 
             {
               Object RESULT =null;
-		int sleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
-		int sright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
-		Object s = (Object)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 System.out.println(s.toString()); 
+
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("inicio",0, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -160,14 +458,659 @@ class CUP$AudioParser$actions {
           return CUP$AudioParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // inicio ::= INTEGER 
+          case 2: // inicio ::= assignment 
             {
               Object RESULT =null;
-		int ileft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
-		int iright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
-		Object i = (Object)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 System.out.println(i.toString()); 
+
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("inicio",0, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 3: // inicio ::= array_statement 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("inicio",0, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 4: // statement ::= keep VAR type id_list value 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("statement",3, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-4)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 5: // value ::= EQUAL a 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value",16, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 6: // value ::= 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value",16, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 7: // id_list ::= id_list COMMA ID 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("id_list",14, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 8: // id_list ::= ID 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("id_list",14, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 9: // type ::= INT 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("type",13, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 10: // type ::= DOB 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("type",13, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 11: // type ::= BOOL 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("type",13, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 12: // type ::= CAD 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("type",13, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 13: // type ::= CAR 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("type",13, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 14: // assignment ::= id_list value 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",17, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 15: // assignment ::= ID PLUS_EQ a 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",17, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 16: // assignment ::= ID PLUS_PLUS 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",17, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 17: // assignment ::= ID MINUS_MINUS 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",17, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 18: // array_statement ::= keep VAR type ARRAY id_list dimensions array_value 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_statement",4, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-6)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 19: // dimensions ::= dimensions dimension 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 20: // dimensions ::= dimension 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 21: // dimension ::= LBRACKET a RBRACKET 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimension",5, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 22: // array_value ::= EQUAL list 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_value",7, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 23: // array_value ::= 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_value",7, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 24: // list ::= LBRACE value_list RBRACE 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list",9, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 25: // list ::= LBRACE list_fn RBRACE 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list",9, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 26: // list_fn ::= list_fn COMMA fn 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list_fn",12, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 27: // list_fn ::= fn 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list_fn",12, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 28: // fn ::= list 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("fn",11, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 29: // value_list ::= value_list COMMA a 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value_list",8, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 30: // value_list ::= a 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value_list",8, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 31: // a ::= a OR b 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("a",18, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 32: // a ::= a NOR b 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("a",18, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 33: // a ::= a XOR b 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("a",18, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 34: // a ::= b 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("a",18, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 35: // b ::= b AND c 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("b",19, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 36: // b ::= b NAND c 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("b",19, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 37: // b ::= c 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("b",19, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 38: // c ::= c EQEQ d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 39: // c ::= c NEQ d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 40: // c ::= c GREATER d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 41: // c ::= c SMALLER d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 42: // c ::= c GRTREQ d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 43: // c ::= c SMLLREQ d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 44: // c ::= d 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("c",20, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 45: // d ::= d PLUS e 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("d",21, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 46: // d ::= d MINUS e 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("d",21, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 47: // d ::= e 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("d",21, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 48: // e ::= e TIMES f 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("e",22, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 49: // e ::= e DIVIDE f 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("e",22, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 50: // e ::= e MOD f 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("e",22, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 51: // e ::= f 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("e",22, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 52: // f ::= g POW f 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("f",23, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 53: // f ::= g 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("f",23, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 54: // g ::= MINUS h 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("g",24, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 55: // g ::= h 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("g",24, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 56: // h ::= NOT i 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("h",25, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 57: // h ::= i 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("h",25, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 58: // i ::= NULL j 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("i",26, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 59: // i ::= j 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("i",26, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 60: // j ::= INTEGER 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 61: // j ::= DECIMAL 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 62: // j ::= STR 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 63: // j ::= CHAR 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 64: // j ::= boolean_val 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 65: // j ::= ID 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 66: // j ::= LPAREN a RPAREN 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 67: // boolean_val ::= TRUE 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("boolean_val",28, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 68: // boolean_val ::= FALSE 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("boolean_val",28, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 69: // keep ::= KEEP 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("keep",15, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 70: // keep ::= 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("keep",15, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 71: // tab ::= tab TAB 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("tab",1, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 72: // tab ::= 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("tab",1, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 73: // eol ::= eol EOL 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol",2, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+            }
+          return CUP$AudioParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 74: // eol ::= 
+            {
+              Object RESULT =null;
+
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol",2, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 

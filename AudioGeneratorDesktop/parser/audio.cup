@@ -23,20 +23,192 @@ parser code {:
 		}
 		System.out.println("");
 	}
+
+	protected int error_sync_size() {
+		return 1;
+	}
 :}
 
 terminal TRACK, EXTENDS, KEEP, VAR, INT, DOB, BOOL, CAR, CAD, TRUE, FALSE;
-terminal IF, ELSE, SWITCH, CASE,EXIT, DEFAULT, FOR, WHILE, DO_WHILE, CONTINUE, RETURN;
+terminal ARRAY, IF, ELSE, SWITCH, CASE,EXIT, DEFAULT, FOR, WHILE, DO_WHILE, CONTINUE, RETURN;
 terminal PLAY, DO, DO_, RE, RE_, MI, FA, FA_, SOL, SOL_, LA, LA_;
 terminal WAIT, ORDER, ASC, DESC, EVEN, ODD, PRIME, SUM, LENGTH, MSG, MAIN;
 terminal ID, INTEGER, DECIMAL, TAB, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
 terminal NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
-terminal LBRACKET, RBRACKET, LPAREN, RPAREN, EOL, STR;
+terminal LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, EOL, STR, CHAR;
 terminal ERROR;
 
 non terminal inicio;
+non terminal tab, eol;
+non terminal statement;
+non terminal array_statement, dimension, dimensions, array_value, value_list;
+non terminal list, list1, fn, list_fn;
+non terminal type, id_list;
+non terminal keep;
+non terminal value, assignment;
+non terminal a, b, c, d, e, f, g, h, i, j;
+non terminal boolean_val;
 
 inicio ::=
-				STR:s {: System.out.println(s.toString()); :}
-				| INTEGER:i {: System.out.println(i.toString()); :}
+				statement /* declaracion de variables*/
+				| assignment /* asignacion de variables */
+				| array_statement /* declaracion de arreglos */
+				;
+
+/* declaracion de variables */
+statement ::=
+				keep VAR type id_list value
+				;
+
+value ::=
+				EQUAL a
+				|
+				;
+
+id_list ::=
+				id_list COMMA ID
+				| ID
+				;
+
+type ::=
+				INT
+				| DOB
+				| BOOL
+				| CAD
+				| CAR
+				;
+
+/* asignacion de variables */
+assignment ::=
+				id_list value
+				| ID PLUS_EQ a
+				| ID PLUS_PLUS
+				| ID MINUS_MINUS
+				;
+
+/* declaracion de arreglos */
+array_statement ::=
+				keep VAR type ARRAY id_list dimensions array_value
+				;
+
+dimensions ::=
+				dimensions dimension
+				| dimension
+				;
+
+dimension ::=
+				LBRACKET a RBRACKET
+				;
+
+array_value ::=
+				EQUAL list
+				|
+				;
+
+list ::=
+				LBRACE value_list RBRACE
+				| LBRACE list_fn RBRACE
+				;
+
+list_fn ::=
+				list_fn COMMA fn
+				| fn
+				;
+
+fn ::=
+				list
+				;
+
+value_list ::=
+				value_list COMMA a
+				| a
+				;
+/* declaracion de arreglos */
+
+/* Operaciones logicas y aritmeticas */
+a ::=
+				a OR b
+				| a NOR b
+				| a XOR b
+				| b
+				;
+
+b ::=
+				b AND c
+				| b NAND c
+				| c
+				;
+
+c ::=
+				c EQEQ d
+				| c NEQ d
+				| c GREATER d
+				| c SMALLER d
+				| c GRTREQ d
+				| c SMLLREQ d
+				| d
+				;
+
+d ::=
+				d PLUS e
+				| d MINUS e
+				| e
+				;
+
+e ::=
+				e TIMES f
+				| e DIVIDE f
+				| e MOD f
+				| f
+				;
+
+f ::=
+				g POW f
+				| g
+				;
+
+g ::=
+				MINUS h
+				| h
+				;
+
+h ::=
+				NOT i
+				| i
+				;
+
+i ::=
+				NULL j
+				| j
+				;
+
+j ::=
+				INTEGER
+				| DECIMAL
+				| STR
+				| CHAR
+				| boolean_val
+				| ID
+				| LPAREN a RPAREN
+				;
+
+boolean_val ::=
+				TRUE
+				| FALSE
+				;
+/* Operaciones logicas y aritmeticas */
+
+keep ::=
+				KEEP
+				|
+				;
+
+tab ::=
+				tab TAB
+				|
+				;
+
+eol ::=
+				eol EOL
+				|
 				;

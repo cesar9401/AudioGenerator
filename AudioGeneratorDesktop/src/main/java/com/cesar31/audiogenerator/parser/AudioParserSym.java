@@ -8,87 +8,91 @@ package com.cesar31.audiogenerator.parser;
 /** CUP generated class containing symbol constants. */
 public class AudioParserSym {
   /* terminals */
-  public static final int MINUS_MINUS = 74;
+  public static final int MINUS_MINUS = 75;
   public static final int TRACK = 2;
-  public static final int TIMES = 68;
+  public static final int TIMES = 69;
   public static final int BOOL = 8;
-  public static final int PLUS_EQ = 72;
-  public static final int MI = 29;
-  public static final int ODD = 41;
-  public static final int ASC = 38;
-  public static final int SOL = 32;
+  public static final int PLUS_EQ = 73;
+  public static final int MI = 30;
+  public static final int ODD = 42;
+  public static final int ASC = 39;
+  public static final int SOL = 33;
   public static final int KEEP = 4;
-  public static final int COMMA = 64;
-  public static final int SUM = 43;
-  public static final int RPAREN = 78;
-  public static final int POW = 71;
-  public static final int INTEGER = 48;
-  public static final int LPAREN = 77;
+  public static final int COMMA = 65;
+  public static final int RBRACE = 77;
+  public static final int SUM = 44;
+  public static final int RPAREN = 81;
+  public static final int POW = 72;
+  public static final int INTEGER = 49;
+  public static final int LBRACE = 76;
+  public static final int LPAREN = 80;
   public static final int FALSE = 12;
-  public static final int NOT = 63;
-  public static final int FA = 30;
-  public static final int NOR = 61;
-  public static final int ERROR = 81;
+  public static final int NOT = 64;
+  public static final int FA = 31;
+  public static final int NOR = 62;
+  public static final int ARRAY = 13;
+  public static final int ERROR = 85;
   public static final int VAR = 5;
-  public static final int LA = 34;
-  public static final int STR = 80;
-  public static final int RE = 27;
-  public static final int PLUS_PLUS = 73;
-  public static final int MOD = 70;
+  public static final int LA = 35;
+  public static final int STR = 83;
+  public static final int RE = 28;
+  public static final int PLUS_PLUS = 74;
+  public static final int MOD = 71;
   public static final int TRUE = 11;
-  public static final int TAB = 50;
-  public static final int PLUS = 66;
-  public static final int DIVIDE = 69;
-  public static final int ORDER = 37;
-  public static final int WHILE = 20;
-  public static final int EQUAL = 65;
-  public static final int EVEN = 40;
+  public static final int TAB = 51;
+  public static final int PLUS = 67;
+  public static final int DIVIDE = 70;
+  public static final int ORDER = 38;
+  public static final int WHILE = 21;
+  public static final int EQUAL = 66;
+  public static final int EVEN = 41;
   public static final int EXTENDS = 3;
-  public static final int DECIMAL = 49;
-  public static final int SWITCH = 15;
-  public static final int DO_ = 26;
-  public static final int DO = 25;
-  public static final int FOR = 19;
-  public static final int GREATER = 53;
-  public static final int LA_ = 35;
-  public static final int RETURN = 23;
-  public static final int ELSE = 14;
+  public static final int CHAR = 84;
+  public static final int DECIMAL = 50;
+  public static final int SWITCH = 16;
+  public static final int DO_ = 27;
+  public static final int DO = 26;
+  public static final int FOR = 20;
+  public static final int GREATER = 54;
+  public static final int LA_ = 36;
+  public static final int RETURN = 24;
+  public static final int ELSE = 15;
   public static final int INT = 6;
-  public static final int EOL = 79;
-  public static final int LENGTH = 44;
-  public static final int EQEQ = 51;
-  public static final int NULL = 57;
+  public static final int EOL = 82;
+  public static final int LENGTH = 45;
+  public static final int EQEQ = 52;
+  public static final int NULL = 58;
   public static final int EOF = 0;
-  public static final int DEFAULT = 18;
-  public static final int SMLLREQ = 56;
-  public static final int PLAY = 24;
-  public static final int GRTREQ = 55;
+  public static final int DEFAULT = 19;
+  public static final int SMLLREQ = 57;
+  public static final int PLAY = 25;
+  public static final int GRTREQ = 56;
   public static final int DOB = 7;
-  public static final int MAIN = 46;
-  public static final int MINUS = 67;
-  public static final int RE_ = 28;
-  public static final int MSG = 45;
-  public static final int OR = 60;
-  public static final int FA_ = 31;
+  public static final int MAIN = 47;
+  public static final int MINUS = 68;
+  public static final int RE_ = 29;
+  public static final int MSG = 46;
+  public static final int OR = 61;
+  public static final int FA_ = 32;
   public static final int error = 1;
-  public static final int EXIT = 17;
-  public static final int CONTINUE = 22;
-  public static final int IF = 13;
-  public static final int DESC = 39;
-  public static final int ID = 47;
-  public static final int RBRACKET = 76;
-  public static final int SOL_ = 33;
-  public static final int CASE = 16;
-  public static final int PRIME = 42;
+  public static final int EXIT = 18;
+  public static final int CONTINUE = 23;
+  public static final int IF = 14;
+  public static final int DESC = 40;
+  public static final int ID = 48;
+  public static final int RBRACKET = 79;
+  public static final int SOL_ = 34;
+  public static final int CASE = 17;
+  public static final int PRIME = 43;
   public static final int CAR = 9;
-  public static final int DO_WHILE = 21;
-  public static final int SMALLER = 54;
-  public static final int NEQ = 52;
-  public static final int AND = 58;
-  public static final int WAIT = 36;
-  public static final int LBRACKET = 75;
-  public static final int NAND = 59;
-  public static final int XOR = 62;
+  public static final int DO_WHILE = 22;
+  public static final int SMALLER = 55;
+  public static final int NEQ = 53;
+  public static final int AND = 59;
+  public static final int WAIT = 37;
+  public static final int LBRACKET = 78;
+  public static final int NAND = 60;
+  public static final int XOR = 63;
   public static final int CAD = 10;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -104,6 +108,7 @@ public class AudioParserSym {
   "CAD",
   "TRUE",
   "FALSE",
+  "ARRAY",
   "IF",
   "ELSE",
   "SWITCH",
@@ -166,12 +171,15 @@ public class AudioParserSym {
   "PLUS_EQ",
   "PLUS_PLUS",
   "MINUS_MINUS",
+  "LBRACE",
+  "RBRACE",
   "LBRACKET",
   "RBRACKET",
   "LPAREN",
   "RPAREN",
   "EOL",
   "STR",
+  "CHAR",
   "ERROR"
   };
 }

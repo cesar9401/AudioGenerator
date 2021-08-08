@@ -18,6 +18,7 @@ import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
 
 %{
 	StringBuffer string = new StringBuffer();
+	StringBuffer character = new StringBuffer();
 
 	private Symbol symbol(int type) {
 		return new Symbol(type, yyline + 1, yycolumn + 1);
@@ -50,10 +51,11 @@ Integer = 0|[1-9][0-9]*
 Decimal = {Integer} \. \d+
 
 /* id for variables */
-Id = [a-zA-Z_]\w+
+Id = [a-zA-Z_]\w*
 
 /* Estados */
 %state STRING
+%state CHARACTER
 
 %%
 
@@ -97,6 +99,9 @@ Id = [a-zA-Z_]\w+
 
 	"false"|"False"
 	{ return symbol(FALSE, yytext()); }
+
+	"arreglo"|"Arreglo"
+	{ return symbol(ARRAY, yytext()); }
 
 	"si"|"Si"
 	{ return symbol(IF, yytext()); }
@@ -234,6 +239,9 @@ Id = [a-zA-Z_]\w+
 	"<="
 	{ return symbol(SMLLREQ, yytext()); }
 
+	"!"
+	{ return symbol(NOT, yytext()); }
+
 	"!!"
 	{ return symbol(NULL, yytext()); }
 
@@ -251,9 +259,6 @@ Id = [a-zA-Z_]\w+
 
 	"&|"
 	{ return symbol(XOR, yytext()); }
-
-	"!"
-	{ return symbol(NOT, yytext()); }
 
 	","
 	{ return symbol(COMMA, yytext()); }
@@ -288,6 +293,12 @@ Id = [a-zA-Z_]\w+
 	"--"
 	{ return symbol(MINUS_MINUS, yytext()); }
 
+	"{"
+	{ return symbol(LBRACE, yytext()); }
+
+	"}"
+	{ return symbol(RBRACE, yytext()); }
+
 	"["
 	{ return symbol(LBRACKET, yytext()); }
 
@@ -306,6 +317,12 @@ Id = [a-zA-Z_]\w+
 		yybegin(STRING);
 	}
 
+	\'
+	{
+		character.setLength(0);
+		yybegin(CHARACTER);
+	}
+
 	{LineTerminator}
 	{ return symbol(EOL, yytext()); }
 
@@ -316,6 +333,7 @@ Id = [a-zA-Z_]\w+
 	{ /* Ignore */ }
 }
 
+/* Estado para construir strings entre comilla doble */
 <STRING> {
 	\"
 	{
@@ -340,7 +358,8 @@ Id = [a-zA-Z_]\w+
 	{ string.append('\"'); }
 
 	##
-	{ string.append("#"); }
+	{ string.append('#'); }
+	/* nuevos escapes con # */
 
 	/* escapes con \ */
 	\\
@@ -354,7 +373,43 @@ Id = [a-zA-Z_]\w+
 
 	\r
 	{ string.append("\\r"); }
+	/* escapes con \ */
+}
 
+/* Estado para construir char entre comilla simple */
+<CHARACTER> {
+	\'
+	{
+		yybegin(YYINITIAL);
+		return symbol(CHAR, character.toString());
+	}
+
+	[^\n\r\t\'\\#]{1,1}
+	{
+		character.append(yytext());
+	}
+
+	/* escapes o caracteres especiales con # */
+	#t
+	{ character.append('\t'); }
+
+	#n
+	{ character.append('\n'); }
+
+	#r
+	{ character.append('\r'); }
+
+	#\'
+	{ character.append('\''); }
+
+	##
+	{ character.append('#'); }
+	/* escapes o caracteres especiales con # */
+
+	/* caracter de escape \ */
+	\\
+	{ character.append('\\'); }
+	/* caracter de escape \ */
 }
 
 [^]
