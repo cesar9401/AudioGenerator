@@ -35,14 +35,14 @@ import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
 %eofclose
 
 LineTerminator = \r|\n|\r\n
-Tab = \t
+Tab = \t|"    "
 WhiteSpace = [ ]
 
 /* Coments */
 InputCharacter = [^\r\n]
-LineComment = ">>" {InputCharacter}* {LineTerminator}?
+LineComment = [ \t]* ">>" {InputCharacter}* {LineTerminator}?
 CommentContent = ([^-]|\-+[^"->"]|\-*[\w<,:;\'\"])*
-BlockComment = "<-" {CommentContent} "-"* "->"
+BlockComment = [ \t]* "<-" {CommentContent} "-"* "->"
 
 Comment = {LineComment} | {BlockComment}
 
@@ -51,7 +51,7 @@ Integer = 0|[1-9][0-9]*
 Decimal = {Integer} \. \d+
 
 /* id for variables */
-Id = [a-zA-Z_]\w*
+Id = [a-zA-Z]\w*
 
 /* Estados */
 %state STRING
@@ -310,6 +310,9 @@ Id = [a-zA-Z_]\w*
 
 	")"
 	{ return symbol(RPAREN, yytext()); }
+
+	";"
+	{ return symbol(SEMI, yytext()); }
 
 	\"
 	{

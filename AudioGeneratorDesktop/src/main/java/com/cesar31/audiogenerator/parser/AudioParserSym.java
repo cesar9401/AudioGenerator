@@ -14,6 +14,7 @@ public class AudioParserSym {
   public static final int BOOL = 8;
   public static final int PLUS_EQ = 73;
   public static final int MI = 30;
+  public static final int SEMI = 82;
   public static final int ODD = 42;
   public static final int ASC = 39;
   public static final int SOL = 33;
@@ -31,10 +32,10 @@ public class AudioParserSym {
   public static final int FA = 31;
   public static final int NOR = 62;
   public static final int ARRAY = 13;
-  public static final int ERROR = 85;
+  public static final int ERROR = 86;
   public static final int VAR = 5;
   public static final int LA = 35;
-  public static final int STR = 83;
+  public static final int STR = 84;
   public static final int RE = 28;
   public static final int PLUS_PLUS = 74;
   public static final int MOD = 71;
@@ -47,7 +48,7 @@ public class AudioParserSym {
   public static final int EQUAL = 66;
   public static final int EVEN = 41;
   public static final int EXTENDS = 3;
-  public static final int CHAR = 84;
+  public static final int CHAR = 85;
   public static final int DECIMAL = 50;
   public static final int SWITCH = 16;
   public static final int DO_ = 27;
@@ -58,7 +59,7 @@ public class AudioParserSym {
   public static final int RETURN = 24;
   public static final int ELSE = 15;
   public static final int INT = 6;
-  public static final int EOL = 82;
+  public static final int EOL = 83;
   public static final int LENGTH = 45;
   public static final int EQEQ = 52;
   public static final int NULL = 58;
@@ -177,6 +178,7 @@ public class AudioParserSym {
   "RBRACKET",
   "LPAREN",
   "RPAREN",
+  "SEMI",
   "EOL",
   "STR",
   "CHAR",
