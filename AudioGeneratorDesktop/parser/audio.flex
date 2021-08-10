@@ -21,11 +21,13 @@ import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
 	StringBuffer character = new StringBuffer();
 
 	private Symbol symbol(int type) {
-		return new Symbol(type, yyline + 1, yycolumn + 1);
+		return new Symbol(type, yyline + 1, yycolumn + 1, new Token(type, yyline + 1, yycolumn + 1));
+		// return new Symbol(type, yyline + 1, yycolumn + 1);
 	}
 
 	private Symbol symbol(int type, Object object) {
-		return new Symbol(type, yyline + 1, yycolumn + 1, object);
+		return new Symbol(type, yyline + 1, yycolumn + 1, new Token(type, (String) object, yyline + 1, yycolumn + 1));
+		// return new Symbol(type, yyline + 1, yycolumn + 1, object);
 	}
 %}
 

@@ -4,6 +4,7 @@ package com.cesar31.audiogenerator.parser;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
+import com.cesar31.audiogenerator.instruction.*;
 
 class AudioParser;
 
@@ -29,25 +30,26 @@ parser code {:
 	}
 :}
 
-terminal TRACK, EXTENDS, KEEP, VAR, INT, DOB, BOOL, CAR, CAD, TRUE, FALSE;
-terminal ARRAY, IF, ELSE, SWITCH, CASE,EXIT, DEFAULT, FOR, WHILE, DO_WHILE, CONTINUE, RETURN;
-terminal PLAY, DO, DO_, RE, RE_, MI, FA, FA_, SOL, SOL_, LA, LA_;
-terminal WAIT, ORDER, ASC, DESC, EVEN, ODD, PRIME, SUM, LENGTH, MSG, MAIN;
-terminal ID, INTEGER, DECIMAL, TAB, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
-terminal NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
-terminal LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, STR, CHAR;
-terminal ERROR;
+terminal Token TRACK, EXTENDS, KEEP, VAR, INT, DOB, BOOL, CAR, CAD, TRUE, FALSE;
+terminal Token ARRAY, IF, ELSE, SWITCH, CASE,EXIT, DEFAULT, FOR, WHILE, DO_WHILE, CONTINUE, RETURN;
+terminal Token PLAY, DO, DO_, RE, RE_, MI, FA, FA_, SOL, SOL_, LA, LA_;
+terminal Token WAIT, ORDER, ASC, DESC, EVEN, ODD, PRIME, SUM, LENGTH, MSG, MAIN;
+terminal Token ID, INTEGER, DECIMAL, TAB, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
+terminal Token NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
+terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, STR, CHAR;
+terminal Token ERROR;
 
+non terminal Integer tab;
 non terminal instruction, list_ins, ins;
-non terminal tab, eol, eol_;
+non terminal eol, eol_;
 non terminal statement;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
 non terminal type, id_list;
 non terminal keep;
 non terminal value, assignment, assign;
-non terminal a, b, c, d, e, f, g, h, i, j;
-non terminal boolean_val;
+non terminal Operation a, b, c, d, e, f, g, h, i, j;
+non terminal Variable boolean_val;
 non terminal l;
 non terminal control, control_if, if_, else_, else_if, list_else_if;
 non terminal for_, for_assig, while_, do_while, switch_, case_, default_, exit_, continue_, return_;
@@ -99,7 +101,7 @@ body ::=
 
 /* declaracion de variables */
 statement ::=
-			eol_ tab keep VAR type id_list value
+			eol_ tab:t keep VAR type id_list value
 			;
 
 value ::=
@@ -181,75 +183,75 @@ value_list ::=
 
 /* Operaciones logicas y aritmeticas */
 a ::=
-			a OR b
-			| a NOR b
-			| a XOR b
-			| b
+			a:l OR b:r {: RESULT = new Operation(OperationType.OR, l, r); :}
+			| a:l NOR b:r {: RESULT = new Operation(OperationType.NOR, l, r); :}
+			| a:l XOR b:r {: RESULT = new Operation(OperationType.XOR, l, r); :}
+			| b:op {: RESULT = op; :}
 			;
 
 b ::=
-			b AND c
-			| b NAND c
-			| c
+			b:l AND c:r {: RESULT = new Operation(OperationType.AND, l, r); :}
+			| b:l NAND c:r {: RESULT = new Operation(OperationType.NAND, l, r); :}
+			| c:op {: RESULT = op; :}
 			;
 
 c ::=
-			c EQEQ d
-			| c NEQ d
-			| c GREATER d
-			| c SMALLER d
-			| c GRTREQ d
-			| c SMLLREQ d
-			| d
+			c:l EQEQ d:r {: RESULT = new Operation(OperationType.EQEQ, l, r); :}
+			| c:l NEQ d:r {: RESULT = new Operation(OperationType.NEQ, l, r); :}
+			| c:l GREATER d:r {: RESULT = new Operation(OperationType.GREATER, l, r); :}
+			| c:l SMALLER d:r {: RESULT = new Operation(OperationType.SMALLER, l, r); :}
+			| c:l GRTREQ d:r {: RESULT = new Operation(OperationType.GREATER_OR_EQUAL, l, r); :}
+			| c:l SMLLREQ d:r {: RESULT = new Operation(OperationType.LESS_OR_EQUAL, l, r); :}
+			| d:op {: RESULT = op; :}
 			;
 
 d ::=
-			d PLUS e
-			| d MINUS e
-			| e
+			d:l PLUS e:r {: RESULT = new Operation(OperationType.SUM, l, r); :}
+			| d:l MINUS e:r {: RESULT = new Operation(OperationType.SUBTRACTION, l, r); :}
+			| e:op {: RESULT = op; :}
 			;
 
 e ::=
-			e TIMES f
-			| e DIVIDE f
-			| e MOD f
-			| f
+			e:l TIMES f:r {: RESULT = new Operation(OperationType.MULTIPLICATION, l, r); :}
+			| e:l DIVIDE f:r {: RESULT =new Operation(OperationType.DIVISION, l, r); :}
+			| e:l MOD f:r {: RESULT = new Operation(OperationType.MOD, l, r); :}
+			| f:op {: RESULT = op; :}
 			;
 
 f ::=
-			g POW f
-			| g
+			g:l POW f:r {: RESULT = new Operation(OperationType.POW, l, r); :}
+			| g:op {: RESULT = op; :}
 			;
 
 g ::=
-			MINUS h
-			| h
+			MINUS h:l {: RESULT = new Operation(OperationType.UMINUS, l); :}
+			| h:op {: RESULT = op; :}
 			;
 
 h ::=
-			NOT i
-			| i
+			NOT i:l {: RESULT = new Operation(OperationType.NOT, l); :}
+			| i:op {: RESULT = op; :}
 			;
 
 i ::=
-			NULL j
-			| j
+			NULL j:l {: RESULT = new Operation(OperationType.NULL, l); :}
+			| j:op {: RESULT = op; :}
 			;
 
 j ::=
-			INTEGER
-			| DECIMAL
-			| STR
-			| CHAR
-			| boolean_val
-			| ID
+			INTEGER:var {: RESULT = new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, var.getValue())); :}
+			| DECIMAL:var {: RESULT = new Operation(OperationType.DOUBLE, new Variable(Var.DOUBLE, var.getValue())); :}
+			| STR:var {: RESULT = new Operation(OperationType.STRING, new Variable(Var.STRING, var.getValue())); :}
+			| CHAR:var {: RESULT = new Operation(OperationType.CHAR, new Variable(Var.CHAR, var.getValue())); :}
+			| boolean_val:var {: RESULT = new Operation(OperationType.BOOLEAN, var); :}
+			| ID:token {: RESULT = new Operation(OperationType.ID, new Variable(token)); :}
 			| l /* arreglo */
-			| LPAREN a RPAREN
+			| LPAREN a:var RPAREN {: RESULT = var; :}
 			;
 
 boolean_val ::=
-			TRUE
-			| FALSE
+			TRUE:var {: RESULT = new Variable(Var.BOOLEAN, var.getValue()); :}
+			| FALSE:var {: RESULT = new Variable(Var.BOOLEAN, var.getValue()); :}
 			;
 /* Operaciones logicas y aritmeticas */
 
@@ -259,8 +261,8 @@ keep ::=
 			;
 
 tab ::=
-			tab TAB
-			| TAB
+			tab:t TAB {: RESULT = t + 1; :}
+			| TAB {: RESULT = 0; :}
 			;
 
 eol_ ::=
