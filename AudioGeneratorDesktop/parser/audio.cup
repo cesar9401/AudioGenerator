@@ -50,250 +50,312 @@ non terminal a, b, c, d, e, f, g, h, i, j;
 non terminal boolean_val;
 non terminal l;
 non terminal control, control_if, if_, else_, else_if, list_else_if;
-non terminal for_, for_assig, while_, while__, do_while;
+non terminal for_, for_assig, while_, do_while, switch_, case_, default_, exit_, continue_, return_;
 non terminal inicio1, extends_, list_id;
 non terminal body, bod;
+non terminal type_f, function, params_f, params, param;
+non terminal main_body;
 
 start with inicio1;
 
 inicio1 ::=
-				eol TRACK ID extends_ bod
-				;
+			eol TRACK ID extends_ bod
+			;
 
 extends_ ::=
-				EXTENDS list_id
-				|
-				;
+			EXTENDS id_list
+			|
+			;
 
-list_id ::=
-				list_id COMMA ID
-				| ID
-				;
+bod ::=
+			body
+			| body eol_
+			;
 
-bod ::=			body
-				| body eol_
-				;
+main_body ::=
+			main_body function body
+			|
+			;
 
 body ::=
-				body statement
-				| body assign:id
-				| body array_statement
-				| body for_
-				| body if_
-				| body:s else_
-				| body else_if
-				| body while_
-				| body do_while
-				|
-				;
+			body statement
+			| body assign
+			| body array_statement
+			| body for_
+			| body if_
+			| body else_
+			| body else_if
+			| body while_
+			| body do_while
+			| body switch_
+			| body case_
+			| body default_
+			| body exit_
+			| body continue_
+			| body return_
+			| body function
+			|
+			;
 
 /* declaracion de variables */
 statement ::=
-				eol_ tab keep VAR type id_list value
-				;
+			eol_ tab keep VAR type id_list value
+			;
 
 value ::=
-				EQUAL a
-				|
-				;
+			EQUAL a
+			|
+			;
 
 id_list ::=
-				id_list COMMA ID
-				| ID
-				;
+			id_list COMMA ID
+			| ID
+			;
 
 type ::=
-				INT
-				| DOB
-				| BOOL
-				| CAD
-				| CAR
-				;
+			INT
+			| DOB
+			| BOOL
+			| CAD
+			| CAR
+			;
 
 /* asignacion de variables */
 assign ::=
-				eol_ tab assignment
-				;
+			eol_ tab assignment
+			;
 
 assignment ::=
-				ID EQUAL a
-				| ID PLUS_EQ a
-				| ID PLUS_PLUS
-				| ID MINUS_MINUS
-				| l EQUAL a /* asignacion a arreglos */
-				| l PLUS_EQ a
-				| l PLUS_PLUS
-				| l MINUS_MINUS
-				;
+			ID EQUAL a
+			| ID PLUS_EQ a
+			| ID PLUS_PLUS
+			| ID MINUS_MINUS
+			| l EQUAL a /* asignacion a arreglos */
+			| l PLUS_EQ a
+			| l PLUS_PLUS
+			| l MINUS_MINUS
+			;
 
 l ::=
-				ID dimensions
-				;
+			ID dimensions
+			;
 
 /* declaracion de arreglos */
 array_statement ::=
-				eol_ tab keep VAR type ARRAY id_list dimensions array_value
-				;
+			eol_ tab keep VAR type ARRAY id_list dimensions array_value
+			;
 
 dimensions ::=
-				dimensions dimension
-				| dimension
-				;
+			dimensions dimension
+			| dimension
+			;
 
 dimension ::=
-				LBRACKET a RBRACKET
-				;
+			LBRACKET a RBRACKET
+			;
 
 array_value ::=
-				EQUAL list
-				|
-				;
+			EQUAL list
+			|
+			;
 
 list ::=
-				LBRACE value_list RBRACE
-				| LBRACE list_fn RBRACE
-				;
+			LBRACE value_list RBRACE
+			| LBRACE list_fn RBRACE
+			;
 
 list_fn ::=
-				list_fn COMMA fn
-				| fn
-				;
+			list_fn COMMA fn
+			| fn
+			;
 
 fn ::=
-				list
-				;
+			list
+			;
 
 value_list ::=
-				value_list COMMA a
-				| a
-				;
+			value_list COMMA a
+			| a
+			;
 /* declaracion de arreglos */
 
 /* Operaciones logicas y aritmeticas */
 a ::=
-				a OR b
-				| a NOR b
-				| a XOR b
-				| b
-				;
+			a OR b
+			| a NOR b
+			| a XOR b
+			| b
+			;
 
 b ::=
-				b AND c
-				| b NAND c
-				| c
-				;
+			b AND c
+			| b NAND c
+			| c
+			;
 
 c ::=
-				c EQEQ d
-				| c NEQ d
-				| c GREATER d
-				| c SMALLER d
-				| c GRTREQ d
-				| c SMLLREQ d
-				| d
-				;
+			c EQEQ d
+			| c NEQ d
+			| c GREATER d
+			| c SMALLER d
+			| c GRTREQ d
+			| c SMLLREQ d
+			| d
+			;
 
 d ::=
-				d PLUS e
-				| d MINUS e
-				| e
-				;
+			d PLUS e
+			| d MINUS e
+			| e
+			;
 
 e ::=
-				e TIMES f
-				| e DIVIDE f
-				| e MOD f
-				| f
-				;
+			e TIMES f
+			| e DIVIDE f
+			| e MOD f
+			| f
+			;
 
 f ::=
-				g POW f
-				| g
-				;
+			g POW f
+			| g
+			;
 
 g ::=
-				MINUS h
-				| h
-				;
+			MINUS h
+			| h
+			;
 
 h ::=
-				NOT i
-				| i
-				;
+			NOT i
+			| i
+			;
 
 i ::=
-				NULL j
-				| j
-				;
+			NULL j
+			| j
+			;
 
 j ::=
-				INTEGER
-				| DECIMAL
-				| STR
-				| CHAR
-				| boolean_val
-				| ID
-				| l /* arreglo */
-				| LPAREN a RPAREN
-				;
+			INTEGER
+			| DECIMAL
+			| STR
+			| CHAR
+			| boolean_val
+			| ID
+			| l /* arreglo */
+			| LPAREN a RPAREN
+			;
 
 boolean_val ::=
-				TRUE
-				| FALSE
-				;
+			TRUE
+			| FALSE
+			;
 /* Operaciones logicas y aritmeticas */
 
 keep ::=
-				KEEP
-				|
-				;
+			KEEP
+			|
+			;
 
 tab ::=
-				tab TAB
-				| TAB
-				;
+			tab TAB
+			| TAB
+			;
 
 eol_ ::=
-				eol_ EOL
-				| EOL
-				;
+			eol_ EOL
+			| EOL
+			;
 
 eol ::=
-				eol EOL
-				|
-				;
+			eol EOL
+			|
+			;
 
 if_ ::=
-				eol_ tab IF LPAREN a RPAREN
-				;
+			eol_ tab IF LPAREN a RPAREN
+			;
 
 else_ ::=
-				eol_ tab ELSE
-				;
+			eol_ tab ELSE
+			;
 
 else_if ::=
-				eol_ tab ELSE IF LPAREN a RPAREN
-				;
+			eol_ tab ELSE IF LPAREN a RPAREN
+			;
 /* if - si */
 
 /* for - para */
 for_ ::=
-				eol_ tab FOR LPAREN for_assig SEMI a SEMI assignment RPAREN
-				;
+			eol_ tab FOR LPAREN for_assig SEMI a SEMI assignment RPAREN
+			;
 
 for_assig ::=
-				VAR INT ID EQUAL a
-				| assignment
-				;
+			VAR INT ID EQUAL a
+			| assignment
+			;
 /* for - para */
 
 /* while - mientras */
 while_ ::=
-				eol_ tab WHILE LPAREN a RPAREN
-				;
+			eol_ tab WHILE LPAREN a RPAREN
+			;
 
 /* do-while - hacer-mientras */
 do_while ::=
-				eol_ tab DO_WHILE
-				;
+			eol_ tab DO_WHILE
+			;
 /* do-while - hacer-mientras */
+
+/* switch  */
+switch_ ::=
+			eol_ tab SWITCH LPAREN a RPAREN
+			;
+
+case_ ::=
+			eol_ tab CASE a
+			;
+
+default_ ::=
+			eol_ tab DEFAULT
+			;
+/* switch  */
+
+/* continue - exit - return */
+exit_ ::=
+			eol_ tab EXIT
+			;
+
+continue_ ::=
+			eol_ tab CONTINUE
+			;
+
+return_ ::=
+			eol_ tab RETURN a
+			;
+/* continue - exit return */
+
+/*  functions */
+function ::=
+			eol_ tab ID LPAREN params_f RPAREN // no keep - void
+			| eol_ tab KEEP type ID LPAREN params_f RPAREN // keep - type
+			| eol_ tab KEEP ID LPAREN params_f RPAREN // keep - void
+			| eol_ tab type ID LPAREN params_f RPAREN // no keep - type
+			| eol_ tab MAIN LPAREN RPAREN
+			;
+
+params_f ::=
+			params
+			|
+			;
+
+params ::=
+			params COMMA param
+			| param
+			;
+
+param ::=
+			type ID
+			;
+/*  functions */
