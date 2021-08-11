@@ -7,5 +7,5 @@ package com.cesar31.audiogenerator.instruction;
  */
 public interface Instruction {
     
-    public Object run();
+    public Object run(SymbolTable table);
 }

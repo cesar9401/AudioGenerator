@@ -40,14 +40,16 @@ terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, ST
 terminal Token ERROR;
 
 non terminal Integer tab;
+non terminal Token type;
+non terminal Boolean keep;
+non terminal Operation value;
+non terminal List<Token> id_list;
+non terminal List<Assignment> statement;
+non terminal Assignment assignment, assign;
 non terminal instruction, list_ins, ins;
 non terminal eol, eol_;
-non terminal statement;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
-non terminal type, id_list;
-non terminal keep;
-non terminal value, assignment, assign;
 non terminal Operation a, b, c, d, e, f, g, h, i, j;
 non terminal Variable boolean_val;
 non terminal l;
@@ -80,7 +82,7 @@ main_body ::=
 			;
 
 body ::=
-			body statement
+			body statement:list // statement -> ArrayList<Assignment>
 			| body assign
 			| body array_statement
 			| body for_
@@ -101,37 +103,57 @@ body ::=
 
 /* declaracion de variables */
 statement ::=
-			eol_ tab:t keep VAR type id_list value
+			eol_ tab:t keep:keep VAR type:token id_list:list value:operation
+				{:
+					RESULT = new ArrayList<Assignment>();
+					for(Token id : list) {
+						RESULT.add(new Assignment(keep, token, id, operation));
+					}
+				:}
 			;
 
 value ::=
-			EQUAL a
-			|
+			EQUAL a:operation {: RESULT = operation; :}
+			|{: RESULT = null; :}
 			;
 
 id_list ::=
-			id_list COMMA ID
-			| ID
+			id_list:list COMMA ID:token
+				{:
+					list.add(token);
+					RESULT = list;
+				:}
+			| ID:token
+				{:
+					RESULT = new ArrayList<Token>();
+					RESULT.add(token);
+				:}
 			;
 
 type ::=
-			INT
-			| DOB
-			| BOOL
-			| CAD
-			| CAR
+			INT:token {: RESULT = token; :}
+			| DOB:token {: RESULT = token; :}
+			| BOOL:token {: RESULT = token; :}
+			| CAD:token {: RESULT = token; :}
+			| CAR:token {: RESULT = token; :}
 			;
 
 /* asignacion de variables */
 assign ::=
-			eol_ tab assignment
+			eol_ tab assignment:assign {: RESULT = assign; :}
 			;
 
 assignment ::=
-			ID EQUAL a
-			| ID PLUS_EQ a
-			| ID PLUS_PLUS
-			| ID MINUS_MINUS
+			ID:token EQUAL a:operation
+				{: RESULT = new Assignment(token, operation); :}
+			| ID:token PLUS_EQ a:operation
+				{:
+					/* Revisar esto */
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation);
+					RESULT = new Assignment(token, tmp);
+				:}
+			| ID:token PLUS_PLUS
+			| ID:token MINUS_MINUS
 			| l EQUAL a /* asignacion a arreglos */
 			| l PLUS_EQ a
 			| l PLUS_PLUS
@@ -256,8 +278,8 @@ boolean_val ::=
 /* Operaciones logicas y aritmeticas */
 
 keep ::=
-			KEEP
-			|
+			KEEP {: RESULT = true; :}
+			|{: RESULT = false; :}
 			;
 
 tab ::=
