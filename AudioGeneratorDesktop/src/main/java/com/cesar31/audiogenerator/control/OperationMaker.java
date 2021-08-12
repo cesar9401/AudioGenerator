@@ -91,6 +91,7 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
+        // cadena + cadena
         if (checkTypes(a, STRING, b, STRING)) {
             String value = a.getValue().concat(b.getValue());
             return new Variable(STRING, value);
@@ -103,9 +104,29 @@ public class OperationMaker {
         }
 
         // boolean + boolean
+        if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            Long value = booleanToLong(a) + booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         // caracter + caracter
+        if (checkTypes(a, CHAR, b, CHAR)) {
+            Long value = getAsciiCode(a) + getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         // caracter + boolean
+        if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            Long value = getAsciiCode(a) + booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         // boolean + caracter
+        if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            Long value = booleanToLong(a) + getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         // cadena + cadena
         System.out.println("No es posible suma");
         return null;
@@ -189,10 +210,30 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        // caracter - caracter
-        // caracter - boolean
-        // boolean - caracter
         // boolean - boolean
+        if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            Long value = booleanToLong(a) - booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // caracter - caracter
+        if (checkTypes(a, CHAR, b, CHAR)) {
+            Long value = getAsciiCode(a) - getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // caracter - boolean
+        if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            Long value = getAsciiCode(a) - booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // boolean - caracter
+        if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            Long value = booleanToLong(a) - getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         System.out.println("No es posible resta");
         return null;
     }
@@ -274,10 +315,30 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        // char * char
-        // char * boolean
-        // boolean * char
         // boolean * boolean
+        if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            Long value = booleanToLong(a) * booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // caracter * caracter
+        if (checkTypes(a, CHAR, b, CHAR)) {
+            Long value = getAsciiCode(a) * getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // caracter * boolean
+        if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            Long value = getAsciiCode(a) * booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // boolean * caracter
+        if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            Long value = booleanToLong(a) * getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         System.out.println("No es posible multiplicar");
         return null;
     }
@@ -359,10 +420,30 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        // char * char
-        // char * boolean
-        // boolean * char
         // boolean * boolean
+        if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            Long value = booleanToLong(a) / booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // caracter * caracter
+        if (checkTypes(a, CHAR, b, CHAR)) {
+            Long value = getAsciiCode(a) / getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // caracter * boolean
+        if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            Long value = getAsciiCode(a) / booleanToLong(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
+        // boolean * caracter
+        if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            Long value = booleanToLong(a) / getAsciiCode(b);
+            return new Variable(INTEGER, value.toString());
+        }
+
         System.out.println("No es posible dividir");
 
         return null;
@@ -482,15 +563,15 @@ public class OperationMaker {
         }
 
         //  comparing numbers
-        if ((a.getType() == INTEGER && b.getType() == DOUBLE) || (a.getType() == DOUBLE && b.getType() == INTEGER)) {
+        if (checkTypes(a, INTEGER, b, DOUBLE) || checkTypes(a, DOUBLE, b, INTEGER) || checkTypes(a, INTEGER, b, INTEGER) || checkTypes(a, DOUBLE, b, DOUBLE)) {
             Boolean value = true;
             Double valueA = getDouble(a), valueB = getDouble(b);
             switch (type) {
                 case GREATER:
                     value = valueA > valueB;
                     break;
-                case EQEQ:
-                    value = valueA.doubleValue() == valueB.doubleValue();
+                case SMALLER:
+                    value = valueA < valueB;
                     break;
                 case GREATER_OR_EQUAL:
                     value = valueA >= valueB;
@@ -498,17 +579,64 @@ public class OperationMaker {
                 case LESS_OR_EQUAL:
                     value = valueA <= valueB;
                     break;
+                case EQEQ:
+                    value = valueA.doubleValue() == valueB.doubleValue();
+                    break;
                 case NEQ:
                     value = valueA.doubleValue() != valueB.doubleValue();
-                    break;
-                case SMALLER:
-                    value = valueA < valueB;
                     break;
             }
             return new Variable(BOOLEAN, value.toString());
         }
 
         // comparing strings
+        if (checkTypes(a, STRING, b, STRING)) {
+            String valueA = a.getValue();
+            String valueB = b.getValue();
+            Boolean value = true;
+            switch (type) {
+                case GREATER:
+                    value = valueA.length() > valueB.length();
+                    break;
+                case SMALLER:
+                    value = valueA.length() < valueB.length();
+                    break;
+                case GREATER_OR_EQUAL:
+                    value = valueA.length() >= valueB.length();
+                    break;
+                case LESS_OR_EQUAL:
+                    value = valueA.length() <= valueB.length();
+                    break;
+                case EQEQ:
+                    value = valueA.compareTo(valueB) == 0;
+                    break;
+                case NEQ:
+                    value = valueA.compareTo(valueB) != 0;
+                    break;
+            }
+            return new Variable(BOOLEAN, value.toString());
+        }
+
+        // comparing char
+        if (checkTypes(a, CHAR, b, CHAR)) {
+            Variable a_ = new Variable(INTEGER, getAsciiCode(a).toString());
+            Variable b_ = new Variable(INTEGER, getAsciiCode(b).toString());
+            return compare(a_, b_, type);
+        }
+
+        // char comparing integer/double
+        if (checkTypes(a, CHAR, b, INTEGER) || checkTypes(a, CHAR, b, DOUBLE)) {
+            Variable a_ = new Variable(INTEGER, getAsciiCode(a).toString());
+            return compare(a_, b, type);
+        }
+
+        // comparing integer/double vs char
+        if (checkTypes(a, INTEGER, b, CHAR) || checkTypes(a, DOUBLE, b, CHAR)) {
+            Variable b_ = new Variable(INTEGER, getAsciiCode(b).toString());
+            return compare(a, b_, type);
+        }
+
+        System.out.println("No es posible comparacion " + type + ", entre: " + a.getType() + " y " + b.getType());
         return null;
     }
 

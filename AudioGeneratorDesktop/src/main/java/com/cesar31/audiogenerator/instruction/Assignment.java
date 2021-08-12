@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.control.EnvironmentHandler;
 import com.cesar31.audiogenerator.parser.Token;
 
 /**
@@ -32,7 +33,21 @@ public class Assignment implements Instruction {
 
     @Override
     public Object run(SymbolTable table) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Declaracion
+        if (this.type != null) {
+            EnvironmentHandler handler = new EnvironmentHandler();
+            // Declaracion y asignacion
+            if (value != null) {
+                Variable v = value.run(table);
+                handler.addSymbolTable(type, id, v, table, keep, true);
+            } else {
+                // Solo declaracion
+                handler.addSymbolTable(type, id, null, table, keep, false);
+            }
+        } else {
+            // Solo asignacion
+        }
+        return null;
     }
 
     public boolean isKeep() {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class SymbolTable extends ArrayList<Variable> {
 
     private SymbolTable father;
-    
+
     public SymbolTable() {
         super();
     }
@@ -20,20 +20,30 @@ public class SymbolTable extends ArrayList<Variable> {
     }
 
     public Variable getVariable(String id) {
-        for (Variable v : this) {
-            if (v.getId().equals(id)) {
-                return v;
+        SymbolTable tmp = this;
+        while (this != null) {
+            for (Variable v : tmp) {
+                if (v.getId().equals(id)) {
+                    return v;
+                }
             }
+            tmp = tmp.getFather();
         }
+
         return null;
     }
 
     public boolean containsVariable(String id) {
-        for (Variable v : this) {
-            if (v.getId().equals(id)) {
-                return true;
+        SymbolTable tmp = this;
+        while (tmp != null) {
+            for (Variable v : tmp) {
+                if (v.getId().equals(id)) {
+                    return true;
+                }
             }
+            tmp = tmp.getFather();
         }
+
         return false;
     }
 

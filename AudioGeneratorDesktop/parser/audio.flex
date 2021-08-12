@@ -81,7 +81,7 @@ Id = [a-zA-Z]\w*
 	"doble"|"Doble"
 	{ return symbol(DOB, yytext()); }
 
-	"boolean"|"Booean"
+	"boolean"|"Boolean"
 	{ return symbol(BOOL, yytext()); }
 
 	"caracter"|"Caracter"

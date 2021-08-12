@@ -46,19 +46,17 @@ non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement;
 non terminal Assignment assignment, assign;
-non terminal instruction, list_ins, ins;
 non terminal eol, eol_;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
 non terminal Operation a, b, c, d, e, f, g, h, i, j;
 non terminal Variable boolean_val;
 non terminal l;
-non terminal control, control_if, if_, else_, else_if, list_else_if;
+non terminal if_, else_, else_if;
 non terminal for_, for_assig, while_, do_while, switch_, case_, default_, exit_, continue_, return_;
-non terminal inicio1, extends_, list_id;
+non terminal inicio1, extends_;
 non terminal body, bod;
-non terminal type_f, function, params_f, params, param;
-non terminal main_body;
+non terminal function, params_f, params, param;
 
 start with inicio1;
 
@@ -76,13 +74,18 @@ bod ::=
 			| body eol_
 			;
 
-main_body ::=
-			main_body function body
-			|
-			;
-
 body ::=
 			body statement:list // statement -> ArrayList<Assignment>
+				{:
+					SymbolTable table = new SymbolTable();
+					for(Assignment a : list) {
+						a.run(table);
+					}
+
+					for(Variable v : table) {
+						System.out.println(v);
+					}
+				:}
 			| body assign
 			| body array_statement
 			| body for_

@@ -12,6 +12,7 @@ public class Variable {
     private String id;
     private String value;
     private Integer level;
+    private boolean keep;
 
     private Token token;
 
@@ -28,11 +29,6 @@ public class Variable {
         this.type = type;
         this.id = id;
         this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "Variable{" + "type=" + type + ", id=" + id + ", value=" + value + '}';
     }
 
     public Var getType() {
@@ -73,5 +69,18 @@ public class Variable {
 
     public void setToken(Token token) {
         this.token = token;
+    }
+
+    public boolean isKeep() {
+        return keep;
+    }
+
+    public void setKeep(boolean keep) {
+        this.keep = keep;
+    }
+
+    @Override
+    public String toString() {
+        return "Variable{" + "type=" + type + ", id=" + id + ", value=" + value + ", keep=" + keep + '}';
     }
 }
