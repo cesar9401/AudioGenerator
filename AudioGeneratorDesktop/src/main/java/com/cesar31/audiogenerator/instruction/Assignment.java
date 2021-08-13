@@ -32,6 +32,11 @@ public class Assignment implements Instruction {
     }
 
     @Override
+    public void sayName() {
+        System.out.println("Assignment");
+    }
+
+    @Override
     public Object run(SymbolTable table) {
         // Declaracion
         if (this.type != null) {
@@ -44,8 +49,9 @@ public class Assignment implements Instruction {
                 // Solo declaracion
                 handler.addSymbolTable(type, id, null, table, keep, false);
             }
-        } else {
+        } else if (id != null && value != null) {
             // Solo asignacion
+
         }
         return null;
     }

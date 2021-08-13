@@ -8,4 +8,6 @@ package com.cesar31.audiogenerator.instruction;
 public interface Instruction {
     
     public Object run(SymbolTable table);
+    
+    public void sayName();
 }

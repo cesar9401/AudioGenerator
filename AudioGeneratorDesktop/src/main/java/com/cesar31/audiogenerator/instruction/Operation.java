@@ -33,12 +33,24 @@ public class Operation implements Instruction {
     }
 
     @Override
+    public void sayName() {
+        System.out.println("operation");
+    }
+
+    @Override
     public Variable run(SymbolTable table) {
         OperationMaker maker = new OperationMaker();
         switch (type) {
             case ID:
-                System.out.println("Tabla de simbolos");
-                break;
+                Variable variable = table.getVariable(value.getToken().getValue());
+                if (variable == null) {
+                    // Variable no existe
+                    System.out.println("Variable no existe");
+                } else if (variable.getValue() == null) {
+                    // variable sin valor definido
+                    System.out.println("Variable no tiene valor definido");
+                }
+                return variable;
             case INTEGER:
             case STRING:
             case BOOLEAN:

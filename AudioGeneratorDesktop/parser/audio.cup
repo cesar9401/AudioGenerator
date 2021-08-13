@@ -9,8 +9,12 @@ import com.cesar31.audiogenerator.instruction.*;
 class AudioParser;
 
 parser code {:
+	private Integer min, max;
+
 	public AudioParser(AudioLex lex) {
 		super(lex);
+		this.min = 0;
+		this.max = 0;
 	}
 
 	public void syntax_error(Symbol cur_token) {
@@ -46,22 +50,26 @@ non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement;
 non terminal Assignment assignment, assign;
+non terminal List<Instruction> body, bod;
+non terminal If if_, else_, else_if;
+non terminal Variable boolean_val;
+non terminal Operation a, b, c, d, e, f, g, h, i, j;
+
 non terminal eol, eol_;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
-non terminal Operation a, b, c, d, e, f, g, h, i, j;
-non terminal Variable boolean_val;
 non terminal l;
-non terminal if_, else_, else_if;
 non terminal for_, for_assig, while_, do_while, switch_, case_, default_, exit_, continue_, return_;
 non terminal inicio1, extends_;
-non terminal body, bod;
 non terminal function, params_f, params, param;
 
 start with inicio1;
 
 inicio1 ::=
-			eol TRACK ID extends_ bod
+			eol TRACK ID extends_ bod:list_i
+				{:
+
+				:}
 			;
 
 extends_ ::=
@@ -70,44 +78,60 @@ extends_ ::=
 			;
 
 bod ::=
-			body
-			| body eol_
+			body:list_i
+				{: RESULT = list_i; :}
+			| body:list_i eol_
+				{: RESULT = list_i; :}
 			;
 
 body ::=
-			body statement:list // statement -> ArrayList<Assignment>
+			body:list_i statement:list // statement -> ArrayList<Assignment>
 				{:
-					SymbolTable table = new SymbolTable();
-					for(Assignment a : list) {
-						a.run(table);
-					}
-
-					for(Variable v : table) {
-						System.out.println(v);
-					}
+					System.out.println("statement");
+					RESULT = list_i;
+					list_i.addAll(list);
 				:}
-			| body assign
-			| body array_statement
-			| body for_
-			| body if_
-			| body else_
-			| body else_if
-			| body while_
-			| body do_while
-			| body switch_
-			| body case_
-			| body default_
-			| body exit_
-			| body continue_
-			| body return_
-			| body function
+			| body:list_i assign
+				{:
+					System.out.println("assignments");
+					RESULT = list_i;
+				:}
+			| body:list_i array_statement
+			| body:list_i for_
+			| body:list_i if_:if_
+				{:
+					System.out.println("if");
+					RESULT = list_i;
+				:}
+			| body:list_i else_
+			| body:list_i else_if
+			| body:list_i while_
+			| body:list_i do_while
+			| body:list_i switch_
+			| body:list_i case_
+			| body:list_i default_
+			| body:list_i exit_
+			| body:list_i continue_
+			| body:list_i return_
+			| body:list_i function
+				{:
+					System.out.println("function");
+					RESULT = list_i;
+				:}
 			|
+				{: RESULT = new ArrayList<Instruction>(); :}
 			;
 
 /* declaracion de variables */
 statement ::=
 			eol_ tab:t keep:keep VAR type:token id_list:list value:operation
 				{:
+					if(min <= t && t <= max) {
+						max = t;
+					} else {
+						System.out.println("statement mal identado");
+					}
+
 					RESULT = new ArrayList<Assignment>();
 					for(Token id : list) {
 						RESULT.add(new Assignment(keep, token, id, operation));
@@ -143,7 +167,15 @@ type ::=
 
 /* asignacion de variables */
 assign ::=
-			eol_ tab assignment:assign {: RESULT = assign; :}
+			eol_ tab:t assignment:assign
+				{:
+					RESULT = assign;
+					if(min <= t && t <= max) {
+						max = t;
+					} else {
+						System.out.println("Assignment mal identado!");
+					}
+				:}
 			;
 
 assignment ::=
@@ -301,21 +333,54 @@ eol ::=
 			;
 
 if_ ::=
-			eol_ tab IF LPAREN a RPAREN
+			eol_ tab:t IF LPAREN a:condition RPAREN
+				{:
+					RESULT = new If(condition);
+					if(t >= 1 && min <= t && t <= max) {
+						max = t + 1;
+					} else {
+						System.out.println("If mal identado");
+					}
+				:}
 			;
 
 else_ ::=
-			eol_ tab ELSE
+			eol_ tab:t ELSE
+				{:
+					System.out.println("else -> " + t);
+					if(t >=1 && min <= t && t <= max) {
+						max = t + 1;
+					} else {
+						System.out.println("Else mal identado");
+					}
+				:}
 			;
 
 else_if ::=
-			eol_ tab ELSE IF LPAREN a RPAREN
+			eol_ tab:t ELSE IF LPAREN a RPAREN
+				{:
+					System.out.println("else_if -> " + t);
+					if(t >=1 && min <=t && t <= max) {
+						max = t + 1;
+					} else {
+						System.out.println("Else_if mal identado");
+					}
+				:}
 			;
 /* if - si */
 
 /* for - para */
 for_ ::=
-			eol_ tab FOR LPAREN for_assig SEMI a SEMI assignment RPAREN
+			eol_ tab:t FOR LPAREN for_assig SEMI a SEMI assignment RPAREN
+				{:
+					System.out.println("for -> " + t);
+					if(t >=1 && min <= t && t <= max) {
+						System.out.println("For here!");
+						max = t + 1;
+					} else {
+						System.out.println("For mal identado");
+					}
+				:}
 			;
 
 for_assig ::=
@@ -326,12 +391,28 @@ for_assig ::=
 
 /* while - mientras */
 while_ ::=
-			eol_ tab WHILE LPAREN a RPAREN
+			eol_ tab:t WHILE LPAREN a RPAREN
+				{:
+					System.out.println("while -> " + t);
+					if(t >=1 && min <= t && t <= max) {
+						max = t + 1;
+					} else {
+						System.out.println("While mal identado");
+					}
+				:}
 			;
 
 /* do-while - hacer-mientras */
 do_while ::=
-			eol_ tab DO_WHILE
+			eol_ tab:t DO_WHILE
+				{:
+					System.out.println("do_while -> " + t);
+					if(t >= 1 && min <=t && t <= max) {
+						max = t + 1;
+					} else {
+						System.out.println("Do_while mal identado");
+					}
+				:}
 			;
 /* do-while - hacer-mientras */
 
@@ -369,7 +450,16 @@ function ::=
 			| eol_ tab KEEP type ID LPAREN params_f RPAREN // keep - type
 			| eol_ tab KEEP ID LPAREN params_f RPAREN // keep - void
 			| eol_ tab type ID LPAREN params_f RPAREN // no keep - type
-			| eol_ tab MAIN LPAREN RPAREN
+			| eol_ tab:t MAIN LPAREN RPAREN
+				{:
+					System.out.println("main -> " + t);
+					if(t != 0) {
+						System.out.println("Error, metodo main mal identado");
+					} else {
+						min = t + 1;
+						max = t + 1;
+					}
+				:}
 			;
 
 params_f ::=
