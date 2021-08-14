@@ -9,16 +9,21 @@ import com.cesar31.audiogenerator.parser.Token;
  */
 public class Assignment implements Instruction {
 
+    private Integer tab;
+
     private boolean keep;
     private Token type;
     private Token id;
     private Operation value;
 
     public Assignment() {
+        this.tab = 0;
     }
 
     // Declaracion y asignacion
-    public Assignment(boolean keep, Token type, Token id, Operation value) {
+    public Assignment(Integer tab, boolean keep, Token type, Token id, Operation value) {
+        this();
+        this.tab = tab;
         this.keep = keep;
         this.type = type;
         this.id = id;
@@ -27,8 +32,19 @@ public class Assignment implements Instruction {
 
     // Asignacion
     public Assignment(Token id, Operation value) {
+        this();
         this.id = id;
         this.value = value;
+    }
+
+    @Override
+    public void setTab(Integer tab) {
+        this.tab = tab;
+    }
+
+    @Override
+    public Integer getTab() {
+        return this.tab;
     }
 
     @Override

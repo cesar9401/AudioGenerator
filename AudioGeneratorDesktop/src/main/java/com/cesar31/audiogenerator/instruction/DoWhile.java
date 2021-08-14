@@ -44,4 +44,14 @@ public class DoWhile implements Instruction {
     public void setCondition(Operation condition) {
         this.condition = condition;
     }
+
+    @Override
+    public Integer getTab() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setTab(Integer tab) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

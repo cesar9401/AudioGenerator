@@ -5,16 +5,23 @@ import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
 import com.cesar31.audiogenerator.instruction.*;
+import java.util.Stack;
 
 class AudioParser;
 
 parser code {:
 	private Integer min, max;
+    private Stack<Ins> stack;
 
 	public AudioParser(AudioLex lex) {
 		super(lex);
 		this.min = 0;
 		this.max = 0;
+		this.stack = new Stack<>();
+	}
+
+	public Stack<Ins> getStack() {
+		return this.stack;
 	}
 
 	public void syntax_error(Symbol cur_token) {
@@ -50,17 +57,18 @@ non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement;
 non terminal Assignment assignment, assign;
-non terminal List<Instruction> body, bod;
+non terminal List<Instruction> body, bod, inicio1;
 non terminal If if_, else_, else_if;
 non terminal Variable boolean_val;
 non terminal Operation a, b, c, d, e, f, g, h, i, j;
+non terminal While while_;
 
 non terminal eol, eol_;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
 non terminal l;
-non terminal for_, for_assig, while_, do_while, switch_, case_, default_, exit_, continue_, return_;
-non terminal inicio1, extends_;
+non terminal for_, for_assig, do_while, switch_, case_, default_, exit_, continue_, return_;
+non terminal extends_;
 non terminal function, params_f, params, param;
 
 start with inicio1;
@@ -68,7 +76,7 @@ start with inicio1;
 inicio1 ::=
 			eol TRACK ID extends_ bod:list_i
 				{:
-
+					RESULT = list_i;
 				:}
 			;
 
@@ -87,25 +95,61 @@ bod ::=
 body ::=
 			body:list_i statement:list // statement -> ArrayList<Assignment>
 				{:
-					System.out.println("statement");
+					//System.out.println("statement");
 					RESULT = list_i;
-					list_i.addAll(list);
+					// list_i.addAll(list);
 				:}
-			| body:list_i assign
+			| body:list_i assign:assign
 				{:
-					System.out.println("assignments");
 					RESULT = list_i;
+					if(stack.isEmpty()) {
+						RESULT.add(assign);
+					} else if(stack.peek().getTab() + 1 == assign.getTab()) {
+						/* instruccion hijo */
+						stack.peek().getInstructions().add(assign);
+					} else if(stack.peek().getTab() == assign.getTab()) {
+						/* instruccion hermano */
+						Ins tmp = stack.pop();
+						RESULT.add((Instruction)tmp);
+						stack.peek().getInstructions().add(assign);
+					} else {
+						System.out.println("revisar posicion assig");
+					}
 				:}
 			| body:list_i array_statement
 			| body:list_i for_
 			| body:list_i if_:if_
 				{:
-					System.out.println("if");
+					// if(stack.peek() != null && stack.peek().getTab() + 1 == if_.getTab()) {
+					// 	stack.push(if_);
+					// } else if(stack.peek().getTab() == if_.getTab()) {
+					// 	stack.peek().getInstructions.add(if_);
+					// 	stack.push(if_);
+					// }
 					RESULT = list_i;
+					//RESULT.add(if_);
 				:}
 			| body:list_i else_
 			| body:list_i else_if
-			| body:list_i while_
+			| body:list_i while_:wh
+				{:
+					RESULT = list_i;
+					if(stack.isEmpty()) {
+						stack.push(wh);
+					} else if(stack.peek().getTab() + 1 == wh.getTab()) {
+						/* while hijo */
+						stack.peek().getInstructions().add(wh);
+						stack.push(wh);
+					} else if(stack.peek().getTab() == wh.getTab()) {
+						/* while hermano */
+						Ins tmp = stack.pop();
+						stack.peek().getInstructions().add(wh);
+						stack.push(wh);
+					} else {
+						/* revisar */
+						System.out.println("While afuera");
+					}
+				:}
 			| body:list_i do_while
 			| body:list_i switch_
 			| body:list_i case_
@@ -134,7 +178,7 @@ statement ::=
 
 					RESULT = new ArrayList<Assignment>();
 					for(Token id : list) {
-						RESULT.add(new Assignment(keep, token, id, operation));
+						RESULT.add(new Assignment(t, keep, token, id, operation));
 					}
 				:}
 			;
@@ -169,6 +213,7 @@ type ::=
 assign ::=
 			eol_ tab:t assignment:assign
 				{:
+					assign.setTab(t);
 					RESULT = assign;
 					if(min <= t && t <= max) {
 						max = t;
@@ -335,7 +380,7 @@ eol ::=
 if_ ::=
 			eol_ tab:t IF LPAREN a:condition RPAREN
 				{:
-					RESULT = new If(condition);
+					RESULT = new If(t, condition);
 					if(t >= 1 && min <= t && t <= max) {
 						max = t + 1;
 					} else {
@@ -391,8 +436,9 @@ for_assig ::=
 
 /* while - mientras */
 while_ ::=
-			eol_ tab:t WHILE LPAREN a RPAREN
+			eol_ tab:t WHILE LPAREN a:condition RPAREN
 				{:
+					RESULT = new While(t, condition);
 					System.out.println("while -> " + t);
 					if(t >=1 && min <= t && t <= max) {
 						max = t + 1;

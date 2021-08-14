@@ -34,4 +34,14 @@ public class IfInstruction implements Instruction {
     public void setInstructions(List<If> instructions) {
         this.instructions = instructions;
     }
+
+    @Override
+    public Integer getTab() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setTab(Integer tab) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

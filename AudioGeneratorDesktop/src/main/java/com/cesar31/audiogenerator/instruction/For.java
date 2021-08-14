@@ -6,7 +6,9 @@ import java.util.List;
  *
  * @author cesar31
  */
-public class For implements Instruction {
+public class For implements Instruction, Ins {
+
+    private Integer tab;
 
     private Assignment init;
     private Operation condition;
@@ -14,15 +16,18 @@ public class For implements Instruction {
     private List<Instruction> instructions;
 
     public For() {
+        this.tab = 0;
     }
 
     public For(Assignment init, Operation condition, Assignment increase) {
+        this();
         this.init = init;
         this.condition = condition;
         this.increase = increase;
     }
 
     public For(Assignment init, Operation condition, Assignment increase, List<Instruction> instructions) {
+        this();
         this.init = init;
         this.condition = condition;
         this.increase = increase;
@@ -63,11 +68,25 @@ public class For implements Instruction {
         this.increase = increase;
     }
 
+    @Override
     public List<Instruction> getInstructions() {
         return instructions;
     }
 
+    @Override
     public void setInstructions(List<Instruction> instructions) {
         this.instructions = instructions;
     }
+
+    @Override
+    public Integer getTab() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setTab(Integer tab) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }
