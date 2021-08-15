@@ -11,28 +11,28 @@ import com.cesar31.audiogenerator.parser.Token;
  * @author cesar31
  */
 public class EnvironmentHandler {
-
+    
     public void addSymbolTable(Token type, Token id, Variable value, SymbolTable e, boolean keep, boolean assignment) {
         if (type != null) {
             Var kind = getType(type);
             if (value != null) {
                 Variable newType = typeConversion(kind, value);
                 if (newType != null) {
-                    // En este punto las el tipo declarado es igual que el tipo de variable
-
+                    // En este punto el tipo de variable declarado es igual que el tipo de variable a asignar
+                    
                     // Agregar id y keep
                     newType.setId(id.getValue());
                     newType.setKeep(keep);
-
                     if (!e.containsVariable(newType.getId())) {
                         /* Agregar variable a table de simbolos */
                         e.add(newType);
+                        //e.forEach(System.out::println);
                     } else {
-                        System.out.println("Error, ya existe variable");
+                        System.out.println("Error, ya existe variable " + newType.getId());
                     }
                 } else {
                     // Error, no es posible asignar
-                    System.out.println("No es posible asignacion: " + type + " = " + value.getType());
+                    System.out.println("No es posible asignacion: " + kind + " = " + value.getType());
                 }
             } else if (!assignment) {
                 // Solo declaracion (no se asigno valor)
@@ -45,10 +45,52 @@ public class EnvironmentHandler {
                     System.out.println("Error ya existe variable en declaracion");
                 }
             }
-
+            
         } else {
             System.out.println("No se indico tipo");
         }
+    }
+    
+    public void makeAssignment(Token id, Variable a, SymbolTable e) {
+        Variable v = this.getFromSymbolTable(id, e, false);
+        if (v != null) {
+            if (a != null) {
+                if (a.getValue() != null) {
+                    Variable newType = this.typeConversion(v.getType(), a);
+                    if (newType != null) {
+                        v.setValue(newType.getValue());
+                    } else {
+                        System.out.println("No es posible asignar " + v.getId() + " = " + a.getType());
+                    }                    
+                }
+            }
+        } else {
+            // Error se verifica en getFromSymbolTable
+        }
+    }
+
+    /**
+     * Obtener variable de la tabla de simbolos
+     *
+     * @param id
+     * @param e
+     * @param assignment
+     * @return
+     */
+    public Variable getFromSymbolTable(Token id, SymbolTable e, boolean assignment) {
+        Variable v = e.getVariable(id.getValue());
+        
+        if (v != null) {
+            if (v.getValue() == null && assignment) {
+                System.out.println("La variable " + id.getValue() + ", no existe. No es posible realizar asignacion");
+                return null;
+            }
+            
+            return v;
+        }
+        
+        System.out.println("No existe variable " + id.getValue());
+        return null;
     }
 
     /**
@@ -62,7 +104,8 @@ public class EnvironmentHandler {
     private Variable typeConversion(Var type, Variable value) {
         // asignacion del mismo tipo
         if (value.getType() == type) {
-            return value;
+            return new Variable(type, value.getValue());
+            //return value;
         }
 
         // Asignacion a tipo entero
@@ -96,7 +139,7 @@ public class EnvironmentHandler {
         if (type == STRING) {
             return new Variable(STRING, value.getValue());
         }
-
+        
         if (type == CHAR) {
             switch (value.getType()) {
                 case INTEGER:
@@ -105,10 +148,10 @@ public class EnvironmentHandler {
                     return null;
             }
         }
-
+        
         return null;
     }
-
+    
     private Var getType(Token type) {
         String value = type.getValue();
         switch (value) {
@@ -126,34 +169,34 @@ public class EnvironmentHandler {
                 return VOID;
         }
     }
-
+    
     private Double getDouble(Variable v) {
         return Double.valueOf(v.getValue());
     }
-
+    
     private Long getLong(Variable v) {
         return Long.valueOf(v.getValue());
     }
-
+    
     private Boolean getBoolean(Variable v) {
         String value = v.getValue();
         return value.equalsIgnoreCase("verdadero") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("1");
     }
-
+    
     private Long booleanToLong(Variable v) {
         Boolean value = getBoolean(v);
         return value ? Long.valueOf(1) : Long.valueOf(0);
     }
-
+    
     private Long getAsciiCode(Variable v) {
         return (long) v.getValue().charAt(0);
     }
-
-    private Long integerToAsciiCode(Variable v) {
-        long value = getLong(v);
-        return (long) (value % 255);
+    
+    private Character integerToAsciiCode(Variable v) {
+        int value = getLong(v).intValue();
+        return (char) value;
     }
-
+    
     private Double formatDouble(Double value) {
         return Math.round(value * 100_000d) / 100_000d;
     }

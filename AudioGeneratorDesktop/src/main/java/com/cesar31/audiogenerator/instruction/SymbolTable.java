@@ -21,7 +21,7 @@ public class SymbolTable extends ArrayList<Variable> {
 
     public Variable getVariable(String id) {
         SymbolTable tmp = this;
-        while (this != null) {
+        while (tmp != null) {
             for (Variable v : tmp) {
                 if (v.getId().equals(id)) {
                     return v;
@@ -38,6 +38,7 @@ public class SymbolTable extends ArrayList<Variable> {
         while (tmp != null) {
             for (Variable v : tmp) {
                 if (v.getId().equals(id)) {
+                    //System.out.println(v);
                     return true;
                 }
             }

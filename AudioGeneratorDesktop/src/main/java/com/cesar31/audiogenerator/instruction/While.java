@@ -23,7 +23,7 @@ public class While implements Instruction, Ins {
         this.tab = tab;
         this.condition = condition;
     }
-    
+
     public While(Operation condition, List<Instruction> instructions) {
         this();
         this.condition = condition;
@@ -37,7 +37,25 @@ public class While implements Instruction, Ins {
 
     @Override
     public Object run(SymbolTable table) {
+        
+        while (getValue(this.condition.run(table))) {
+            SymbolTable local = new SymbolTable(table);
+            for (Instruction i : instructions) {
+                i.run(local);
+            }
+        }
+
         return null;
+    }
+
+    public boolean getValue(Variable cond) {
+        if (cond.getType() == Var.BOOLEAN) {
+            String value = cond.getValue().toLowerCase();
+            return value.equals("true") || value.equals("verdadero") || value.equals("1");
+        }
+
+        System.out.println("While condition no BOOLEAN type");
+        return false;
     }
 
     public Operation getCondition() {
@@ -66,5 +84,10 @@ public class While implements Instruction, Ins {
     @Override
     public void setTab(Integer tab) {
         this.tab = tab;
+    }
+
+    @Override
+    public boolean isInAst() {
+        return false;
     }
 }

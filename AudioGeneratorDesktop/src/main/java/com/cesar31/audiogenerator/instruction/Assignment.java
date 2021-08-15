@@ -37,6 +37,13 @@ public class Assignment implements Instruction {
         this.value = value;
     }
 
+    // para declaracion y asignacion ciclo for
+    public Assignment(Token type, Token id, Operation value) {
+        this.type = type;
+        this.id = id;
+        this.value = value;
+    }
+
     @Override
     public void setTab(Integer tab) {
         this.tab = tab;
@@ -55,8 +62,8 @@ public class Assignment implements Instruction {
     @Override
     public Object run(SymbolTable table) {
         // Declaracion
+        EnvironmentHandler handler = new EnvironmentHandler();
         if (this.type != null) {
-            EnvironmentHandler handler = new EnvironmentHandler();
             // Declaracion y asignacion
             if (value != null) {
                 Variable v = value.run(table);
@@ -67,7 +74,8 @@ public class Assignment implements Instruction {
             }
         } else if (id != null && value != null) {
             // Solo asignacion
-
+            Variable v = value.run(table);
+            handler.makeAssignment(id, v, table);
         }
         return null;
     }

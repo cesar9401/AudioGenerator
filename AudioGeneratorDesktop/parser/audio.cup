@@ -4,20 +4,24 @@ package com.cesar31.audiogenerator.parser;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
-import com.cesar31.audiogenerator.instruction.*;
 import java.util.Stack;
+
+import com.cesar31.audiogenerator.instruction.*;
+import com.cesar31.audiogenerator.control.*;
 
 class AudioParser;
 
 parser code {:
 	private Integer min, max;
     private Stack<Ins> stack;
+	private StackHandler stackHandler;
 
 	public AudioParser(AudioLex lex) {
 		super(lex);
 		this.min = 0;
 		this.max = 0;
 		this.stack = new Stack<>();
+		this.stackHandler = new StackHandler(this.stack);
 	}
 
 	public Stack<Ins> getStack() {
@@ -56,20 +60,24 @@ non terminal Boolean keep;
 non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement;
-non terminal Assignment assignment, assign;
+non terminal Assignment assignment, assign, for_assign;
 non terminal List<Instruction> body, bod, inicio1;
 non terminal If if_, else_, else_if;
 non terminal Variable boolean_val;
 non terminal Operation a, b, c, d, e, f, g, h, i, j;
 non terminal While while_;
+non terminal Instruction function;
+non terminal Principal principal;
+non terminal Message message;
+non terminal For for_;
 
 non terminal eol, eol_;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
 non terminal l;
-non terminal for_, for_assig, do_while, switch_, case_, default_, exit_, continue_, return_;
+non terminal do_while, switch_, case_, default_, exit_, continue_, return_;
 non terminal extends_;
-non terminal function, params_f, params, param;
+non terminal params_f, params, param;
 
 start with inicio1;
 
@@ -77,6 +85,13 @@ inicio1 ::=
 			eol TRACK ID extends_ bod:list_i
 				{:
 					RESULT = list_i;
+					if(!stack.isEmpty()) {
+						for(Ins i : stack) {
+							if(i.isInAst()) {
+								RESULT.add((Instruction) i);
+							}
+						}
+					}
 				:}
 			;
 
@@ -95,61 +110,22 @@ bod ::=
 body ::=
 			body:list_i statement:list // statement -> ArrayList<Assignment>
 				{:
-					//System.out.println("statement");
 					RESULT = list_i;
-					// list_i.addAll(list);
-				:}
-			| body:list_i assign:assign
-				{:
-					RESULT = list_i;
-					if(stack.isEmpty()) {
-						RESULT.add(assign);
-					} else if(stack.peek().getTab() + 1 == assign.getTab()) {
-						/* instruccion hijo */
-						stack.peek().getInstructions().add(assign);
-					} else if(stack.peek().getTab() == assign.getTab()) {
-						/* instruccion hermano */
-						Ins tmp = stack.pop();
-						RESULT.add((Instruction)tmp);
-						stack.peek().getInstructions().add(assign);
-					} else {
-						System.out.println("revisar posicion assig");
+					for(Assignment a : list) {
+						stackHandler.checkStackForInstructionsNonFather(RESULT , a);
 					}
 				:}
+			| body:list_i assign:assign
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsNonFather(RESULT, assign); :}
 			| body:list_i array_statement
-			| body:list_i for_
+			| body:list_i for_:for_
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, for_); :}
 			| body:list_i if_:if_
-				{:
-					// if(stack.peek() != null && stack.peek().getTab() + 1 == if_.getTab()) {
-					// 	stack.push(if_);
-					// } else if(stack.peek().getTab() == if_.getTab()) {
-					// 	stack.peek().getInstructions.add(if_);
-					// 	stack.push(if_);
-					// }
-					RESULT = list_i;
-					//RESULT.add(if_);
-				:}
+				{: RESULT = list_i; :}
 			| body:list_i else_
 			| body:list_i else_if
 			| body:list_i while_:wh
-				{:
-					RESULT = list_i;
-					if(stack.isEmpty()) {
-						stack.push(wh);
-					} else if(stack.peek().getTab() + 1 == wh.getTab()) {
-						/* while hijo */
-						stack.peek().getInstructions().add(wh);
-						stack.push(wh);
-					} else if(stack.peek().getTab() == wh.getTab()) {
-						/* while hermano */
-						Ins tmp = stack.pop();
-						stack.peek().getInstructions().add(wh);
-						stack.push(wh);
-					} else {
-						/* revisar */
-						System.out.println("While afuera");
-					}
-				:}
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, wh); :}
 			| body:list_i do_while
 			| body:list_i switch_
 			| body:list_i case_
@@ -158,13 +134,15 @@ body ::=
 			| body:list_i continue_
 			| body:list_i return_
 			| body:list_i function
-				{:
-					System.out.println("function");
-					RESULT = list_i;
-				:}
+				{: RESULT = list_i; :}
+			| body:list_i principal:principal
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, principal); :}
+			| body:list_i message:message
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsNonFather(RESULT, message); :}
 			|
 				{: RESULT = new ArrayList<Instruction>(); :}
 			;
+
 
 /* declaracion de variables */
 statement ::=
@@ -172,6 +150,9 @@ statement ::=
 				{:
 					if(min <= t && t <= max) {
 						max = t;
+					} else if(t == 0) {
+						min = 0;
+						max = 0;
 					} else {
 						System.out.println("statement mal identado");
 					}
@@ -215,7 +196,7 @@ assign ::=
 				{:
 					assign.setTab(t);
 					RESULT = assign;
-					if(min <= t && t <= max) {
+					if(t >= 1 && min <= t && t <= max) {
 						max = t;
 					} else {
 						System.out.println("Assignment mal identado!");
@@ -228,12 +209,19 @@ assignment ::=
 				{: RESULT = new Assignment(token, operation); :}
 			| ID:token PLUS_EQ a:operation
 				{:
-					/* Revisar esto */
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation);
 					RESULT = new Assignment(token, tmp);
 				:}
 			| ID:token PLUS_PLUS
+				{:
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")));
+					RESULT = new Assignment(token, tmp);
+				:}
 			| ID:token MINUS_MINUS
+				{:
+					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")));
+					RESULT = new Assignment(token, tmp);
+				:}
 			| l EQUAL a /* asignacion a arreglos */
 			| l PLUS_EQ a
 			| l PLUS_PLUS
@@ -416,11 +404,10 @@ else_if ::=
 
 /* for - para */
 for_ ::=
-			eol_ tab:t FOR LPAREN for_assig SEMI a SEMI assignment RPAREN
+			eol_ tab:t FOR LPAREN for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN
 				{:
-					System.out.println("for -> " + t);
+					RESULT = new For(t, assign, condition, increase);
 					if(t >=1 && min <= t && t <= max) {
-						System.out.println("For here!");
 						max = t + 1;
 					} else {
 						System.out.println("For mal identado");
@@ -428,9 +415,11 @@ for_ ::=
 				:}
 			;
 
-for_assig ::=
-			VAR INT ID EQUAL a
-			| assignment
+for_assign ::=
+			VAR INT:type ID:id EQUAL a:operation
+				{: RESULT = new Assignment(type, id, operation); :}
+			| assignment:assign
+				{: RESULT = assign; :}
 			;
 /* for - para */
 
@@ -439,7 +428,6 @@ while_ ::=
 			eol_ tab:t WHILE LPAREN a:condition RPAREN
 				{:
 					RESULT = new While(t, condition);
-					System.out.println("while -> " + t);
 					if(t >=1 && min <= t && t <= max) {
 						max = t + 1;
 					} else {
@@ -496,14 +484,32 @@ function ::=
 			| eol_ tab KEEP type ID LPAREN params_f RPAREN // keep - type
 			| eol_ tab KEEP ID LPAREN params_f RPAREN // keep - void
 			| eol_ tab type ID LPAREN params_f RPAREN // no keep - type
-			| eol_ tab:t MAIN LPAREN RPAREN
+			// | eol_ tab:t MAIN LPAREN RPAREN
+			;
+
+/* principal */
+principal ::=
+			eol_ tab:t MAIN LPAREN RPAREN
 				{:
-					System.out.println("main -> " + t);
+					RESULT = new Principal(t);
 					if(t != 0) {
 						System.out.println("Error, metodo main mal identado");
 					} else {
 						min = t + 1;
 						max = t + 1;
+					}
+				:}
+			;
+
+/* principal */
+message ::=
+			eol_ tab:t MSG LPAREN a:operation RPAREN
+				{:
+					RESULT = new Message(t, operation);
+					if(t >= 1 && min <= t && t <= max) {
+						max = t;
+					} else {
+						System.out.println("Message mal identado!");
 					}
 				:}
 			;

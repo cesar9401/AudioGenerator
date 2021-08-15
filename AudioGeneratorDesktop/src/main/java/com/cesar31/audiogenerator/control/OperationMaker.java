@@ -654,7 +654,7 @@ public class OperationMaker {
 
     private Boolean getBoolean(Variable v) {
         String value = v.getValue();
-        return value.equalsIgnoreCase("verdadero") || value.equalsIgnoreCase("false") || value.equalsIgnoreCase("1");
+        return value.equalsIgnoreCase("verdadero") || value.equalsIgnoreCase("true") || value.equalsIgnoreCase("1");
     }
 
     private Long booleanToLong(Variable v) {

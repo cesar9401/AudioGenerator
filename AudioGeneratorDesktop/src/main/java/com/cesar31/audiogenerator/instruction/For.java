@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,21 +18,15 @@ public class For implements Instruction, Ins {
 
     public For() {
         this.tab = 0;
+        this.instructions = new ArrayList<>();
     }
 
-    public For(Assignment init, Operation condition, Assignment increase) {
+    public For(Integer tab, Assignment init, Operation condition, Assignment increase) {
         this();
+        this.tab = tab;
         this.init = init;
         this.condition = condition;
         this.increase = increase;
-    }
-
-    public For(Assignment init, Operation condition, Assignment increase, List<Instruction> instructions) {
-        this();
-        this.init = init;
-        this.condition = condition;
-        this.increase = increase;
-        this.instructions = instructions;
     }
 
     @Override
@@ -41,7 +36,27 @@ public class For implements Instruction, Ins {
 
     @Override
     public Object run(SymbolTable table) {
+        SymbolTable local = new SymbolTable(table);
+        this.init.run(local);
+        while(getValue(condition.run(local))) {
+            SymbolTable local1 = new SymbolTable(local);
+            for(Instruction i : instructions) {
+                i.run(local1);
+            }
+            increase.run(local1);
+        }
+        
         return null;
+    }
+
+    public boolean getValue(Variable cond) {
+        if (cond.getType() == Var.BOOLEAN) {
+            String value = cond.getValue().toLowerCase();
+            return value.equals("true") || value.equals("verdadero") || value.equals("1");
+        }
+
+        System.out.println("For condition no BOOLEAN type");
+        return false;
     }
 
     public Assignment getInit() {
@@ -80,13 +95,16 @@ public class For implements Instruction, Ins {
 
     @Override
     public Integer getTab() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.tab;
     }
 
     @Override
     public void setTab(Integer tab) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tab = tab;
     }
 
-    
+    @Override
+    public boolean isInAst() {
+        return false;
+    }
 }

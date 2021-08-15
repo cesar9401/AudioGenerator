@@ -10,6 +10,7 @@ import java.util.List;
 public class If implements Ins {
 
     private Integer tab;
+
     private Operation condition;
     private List<Instruction> instructions;
 
@@ -56,5 +57,10 @@ public class If implements Ins {
     @Override
     public void setTab(Integer tab) {
         this.tab = tab;
+    }
+
+    @Override
+    public boolean isInAst() {
+        return false;
     }
 }

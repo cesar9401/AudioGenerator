@@ -42,10 +42,12 @@ public class Operation implements Instruction {
         OperationMaker maker = new OperationMaker();
         switch (type) {
             case ID:
+                //System.out.println(value.getToken());
                 Variable variable = table.getVariable(value.getToken().getValue());
+                // System.out.println(variable);
                 if (variable == null) {
                     // Variable no existe
-                    System.out.println("Variable no existe");
+                    System.out.println("Variable no existe -> " + value.getToken().getValue());
                 } else if (variable.getValue() == null) {
                     // variable sin valor definido
                     System.out.println("Variable no tiene valor definido");
