@@ -42,6 +42,14 @@ public class StackHandler {
                 if (stack.peek().getTab().intValue() == ins.getTab().intValue()) {
                     // instrucciones hermanos
                     Ins tmp = stack.pop();
+                    
+                    if(!doStack.isEmpty()) {
+                        if(tmp == doStack.peek()) {
+                            System.out.println("Cerrar aqui tambien");
+                            //doStack.pop(); // quitar para evualuar los demas
+                        }
+                    }
+                    
                     if (stack.isEmpty()) {
                         // instrucciones hermanos huerfanos
                         RESULT.add((Instruction) tmp);
@@ -75,6 +83,10 @@ public class StackHandler {
                     break;
                 }
                 stack.pop();
+                if(!doStack.isEmpty()) {
+                    System.out.println("no se cerro do-while");
+                    //doStack.pop(); // quitar para evualar siguientes
+                }
             }
         }
     }
@@ -97,6 +109,13 @@ public class StackHandler {
                 if (stack.peek().getTab().intValue() == instruction.getTab().intValue()) {
                     /* instrucciones hermanos */
                     Ins tmp = stack.pop();
+                    if(!doStack.isEmpty()) {
+                        if(tmp == doStack.peek()) {
+                            System.out.println("Here too!!");
+                            //doStack.pop(); //quitar para evaluar siguientes
+                        }
+                    }
+                    
                     if (stack.isEmpty()) {
                         RESULT.add((Instruction) tmp);
                         RESULT.add(instruction);
@@ -105,7 +124,14 @@ public class StackHandler {
                     }
                     break;
                 }
-                stack.pop();
+                
+                Ins aux = stack.pop();
+                if(!doStack.isEmpty()) {
+                    if(aux == doStack.peek()) {
+                        System.out.println("here!!!");
+                        //doStack.pop(); // quitar para evaluar siguientes
+                    }
+                }
             }
         }
     }
@@ -147,11 +173,20 @@ public class StackHandler {
                 if (stack.peek().getTab().intValue() == ins.getTab().intValue()) {
                     // instrucciones hermanos
                     Ins tmp = stack.pop();
+                    
+                    if(!doStack.isEmpty()) {
+                        if(tmp == doStack.peek()) {
+                            System.out.println("Cerrar do en if x1");
+                            //doStack.pop(); // quitar para evualar los demas
+                        }
+                    }
+                    
+                    
                     if (stack.isEmpty()) {
                         // stack is never emtpy with if
                     } else {
                         // Instrucciones hermanos con padres
-                        System.out.println("stack is never empty with if");
+                        //System.out.println("stack is never empty with if");
                         switch (ins.getType()) {
                             case IF:
                                 IfInstruction if_ = new IfInstruction(ins.getTab(), ins.getType()); // If.Type.IF
@@ -225,6 +260,11 @@ public class StackHandler {
                     break;
                 }
                 stack.pop();
+                if(!doStack.isEmpty()) {
+                    System.out.println("Cerrar en do antes de if");
+                    // doStack.pop(); // para evaluar los demas
+                }
+                
             }
         }
     }

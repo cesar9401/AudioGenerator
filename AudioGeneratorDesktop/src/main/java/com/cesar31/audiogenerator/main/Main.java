@@ -7,6 +7,7 @@ import com.cesar31.audiogenerator.instruction.SymbolTable;
 import com.cesar31.audiogenerator.parser.AudioLex;
 import com.cesar31.audiogenerator.parser.AudioParser;
 import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Stack;
 

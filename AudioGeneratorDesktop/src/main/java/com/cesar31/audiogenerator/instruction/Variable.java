@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.parser.Token;
+import java.util.List;
 
 /**
  *
@@ -16,6 +17,10 @@ public class Variable {
 
     private Token token;
 
+    // variables para arreglos
+    private List<Integer> dimensions;
+    private Object array;
+    
     public Variable(Token token) {
         this.token = token;
     }
@@ -77,6 +82,22 @@ public class Variable {
 
     public void setKeep(boolean keep) {
         this.keep = keep;
+    }
+
+    public List<Integer> getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(List<Integer> dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    public Object getArray() {
+        return array;
+    }
+
+    public void setArray(Object array) {
+        this.array = array;
     }
 
     @Override

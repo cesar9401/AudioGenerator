@@ -5,6 +5,7 @@ import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.lang.reflect.Array;
 
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.control.*;
@@ -19,7 +20,6 @@ parser code {:
 		super(lex);
 		this.min = 0;
 		this.max = 0;
-		this.stack = new Stack<>();
 		this.stackHandler = new StackHandler();
 	}
 
@@ -63,17 +63,20 @@ non terminal Assignment assignment, assign, for_assign;
 non terminal List<Instruction> body, bod, inicio1;
 non terminal If if_, else_, else_if;
 non terminal Variable boolean_val;
-non terminal Operation a, b, c, d, e, f, g, h, i, j;
+non terminal Operation a, b, c, d, e, f, g, h, i, j, dimension;
+non terminal List<Operation> dimensions, value_list;
 non terminal While while_;
 non terminal Instruction function;
 non terminal Principal principal;
 non terminal Message message;
 non terminal For for_;
 non terminal DoWhile do_while;
+non terminal List<ArrayAssignment> array_statement;
+non terminal Object list, fn;
+non terminal List<Object> list_fn;
 
 non terminal eol, eol_;
-non terminal array_statement, dimension, dimensions, array_value, value_list;
-non terminal list, fn, list_fn;
+non terminal array_value;
 non terminal l;
 non terminal switch_, case_, default_, exit_, continue_, return_;
 non terminal extends_;
@@ -85,7 +88,7 @@ inicio1 ::=
 			eol TRACK ID extends_ bod:list_i
 				{:
 					RESULT = list_i;
-					if(!stack.isEmpty()) {
+					if(!getStack().isEmpty()) {
 						for(Ins i : getStack()) {
 							if(i.isInAst()) {
 								RESULT.add((Instruction) i);
@@ -117,7 +120,13 @@ body ::=
 				:}
 			| body:list_i assign:assign
 				{: RESULT = list_i; stackHandler.checkStackForInstructionsNonFather(RESULT, assign); :}
-			| body:list_i array_statement
+			| body:list_i array_statement:array_assign // array_statement -> ArrayList<ArrayAssignment>
+				{:
+					RESULT = list_i;
+					for(ArrayAssignment a : array_assign) {
+						stackHandler.checkStackForInstructionsNonFather(RESULT, a);
+					}
+				:}
 			| body:list_i for_:for_
 				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, for_); :}
 			| body:list_i if_:if_
@@ -237,40 +246,75 @@ l ::=
 
 /* declaracion de arreglos */
 array_statement ::=
-			eol_ tab keep VAR type ARRAY id_list dimensions array_value
+			eol_ tab:t keep:keep VAR type:type ARRAY id_list:list_token dimensions:dimensions array_value:array_list
+				{:
+					if(min <= t && t <= max) {
+						max = t;
+					} else if(t == 0) {
+						min = 0;
+						max = 0;
+					} else {
+						System.out.println("Array-Assignment mal identado");
+					}
+
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list));
+					}
+				:}
 			;
 
 dimensions ::=
-			dimensions dimension
-			| dimension
+			dimensions:list_op dimension:operation
+				{: RESULT = list_op; RESULT.add(operation); :}
+			| dimension:operation
+				{: RESULT = new ArrayList<>(); RESULT.add(operation); :}
 			;
 
 dimension ::=
-			LBRACKET a RBRACKET
+			LBRACKET a:operation RBRACKET
+				{: RESULT = operation; :}
 			;
 
 array_value ::=
-			EQUAL list
-			|
+			EQUAL list:list {: RESULT = list; :}
+			| {: RESULT = null; :}
 			;
 
 list ::=
-			LBRACE value_list RBRACE
-			| LBRACE list_fn RBRACE
+			LBRACE value_list:list_op RBRACE
+				{:
+					RESULT = Array.newInstance(Operation.class, list_op.size());
+					for(int i = 0; i < list_op.size(); i++) {
+						Array.set(RESULT, i, list_op.get(i));
+					}
+				:}
+			| LBRACE list_fn:list_fn RBRACE
+				{:
+					RESULT = Array.newInstance(Object.class, list_fn.size());
+					for(int i = 0; i < list_fn.size(); i++) {
+						Array.set(RESULT, i, list_fn.get(i));
+					}
+				:}
 			;
 
 list_fn ::=
-			list_fn COMMA fn
-			| fn
+			list_fn:list_fn COMMA fn:fn
+				{: RESULT = list_fn; RESULT.add(fn); :}
+			| fn:fn
+				{: RESULT = new ArrayList<>(); RESULT.add(fn); :}
 			;
 
 fn ::=
-			list
+			list:list_op
+				{: RESULT = list_op; :}
 			;
 
 value_list ::=
-			value_list COMMA a
-			| a
+			value_list:list COMMA a:operation
+				{: RESULT = list; RESULT.add(operation); :}
+			| a:operation
+				{: RESULT = new ArrayList<>(); RESULT.add(operation); :}
 			;
 /* declaracion de arreglos */
 
