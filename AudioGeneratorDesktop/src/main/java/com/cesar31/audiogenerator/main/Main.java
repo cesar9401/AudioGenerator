@@ -17,7 +17,8 @@ import java.util.Stack;
 public class Main {
 
     public static void main(String[] args) {
-        String input = FileControl.readData("input_files/input4.txt");
+        long t = System.currentTimeMillis();
+        String input = FileControl.readData("input_files/input5.txt");
         System.out.println(input);
         System.out.println("");
 
@@ -28,13 +29,16 @@ public class Main {
         try {
             List<Instruction> ast = (List<Instruction>) parser.parse().value;
             run(ast);
-            
+
             Stack<Ins> ins = parser.getStack();
             System.out.println("stack size -> " + ins.size());
+            System.out.println("");
             //checkStack(ins);
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
+        long t1 = System.currentTimeMillis() - t;
+        System.out.println(t1);
     }
 
     private static void run(List<Instruction> ast) {
@@ -51,7 +55,7 @@ public class Main {
     }
 
     private static void checkStack(Stack<Ins> ins) {
-        System.out.println("stack size -> " + ins.size());
+        // System.out.println("stack size -> " + ins.size());
 
         for (Ins i : ins) {
             System.out.println(i.getClass().getSimpleName());

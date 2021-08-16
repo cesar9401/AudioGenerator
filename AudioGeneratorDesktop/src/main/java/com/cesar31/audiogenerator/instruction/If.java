@@ -9,8 +9,12 @@ import java.util.List;
  */
 public class If implements Ins {
 
-    private Integer tab;
+    public enum Type {
+        IF, ELSE_IF, ELSE
+    }
 
+    private Integer tab;
+    private Type type;
     private Operation condition;
     private List<Instruction> instructions;
 
@@ -19,14 +23,16 @@ public class If implements Ins {
         this.instructions = new ArrayList<>();
     }
 
-    public If(Integer tab, Operation condition) {
+    public If(Integer tab, Type type, Operation condition) {
         this();
         this.tab = tab;
+        this.type = type;
         this.condition = condition;
     }
 
-    public If(Operation condition, List<Instruction> instructions) {
+    public If(Type type, Operation condition, List<Instruction> instructions) {
         this();
+        this.type = type;
         this.condition = condition;
         this.instructions = instructions;
     }
@@ -37,6 +43,14 @@ public class If implements Ins {
 
     public void setCondition(Operation condition) {
         this.condition = condition;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Override

@@ -26,6 +26,7 @@ public class Principal implements Instruction, Ins {
     public Object run(SymbolTable table) {
         //Crear SymbolTable local
         System.out.println("run principal -> " + instructions.size());
+        System.out.println("");
         SymbolTable local = new SymbolTable(table);
         for (Instruction i : instructions) {
             //System.out.println(i.getClass().getSimpleName());

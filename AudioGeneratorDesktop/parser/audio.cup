@@ -13,7 +13,6 @@ class AudioParser;
 
 parser code {:
 	private Integer min, max;
-    private Stack<Ins> stack;
 	private StackHandler stackHandler;
 
 	public AudioParser(AudioLex lex) {
@@ -21,11 +20,11 @@ parser code {:
 		this.min = 0;
 		this.max = 0;
 		this.stack = new Stack<>();
-		this.stackHandler = new StackHandler(this.stack);
+		this.stackHandler = new StackHandler();
 	}
 
 	public Stack<Ins> getStack() {
-		return this.stack;
+		return this.stackHandler.getStack();
 	}
 
 	public void syntax_error(Symbol cur_token) {
@@ -70,12 +69,13 @@ non terminal Instruction function;
 non terminal Principal principal;
 non terminal Message message;
 non terminal For for_;
+non terminal DoWhile do_while;
 
 non terminal eol, eol_;
 non terminal array_statement, dimension, dimensions, array_value, value_list;
 non terminal list, fn, list_fn;
 non terminal l;
-non terminal do_while, switch_, case_, default_, exit_, continue_, return_;
+non terminal switch_, case_, default_, exit_, continue_, return_;
 non terminal extends_;
 non terminal params_f, params, param;
 
@@ -86,7 +86,7 @@ inicio1 ::=
 				{:
 					RESULT = list_i;
 					if(!stack.isEmpty()) {
-						for(Ins i : stack) {
+						for(Ins i : getStack()) {
 							if(i.isInAst()) {
 								RESULT.add((Instruction) i);
 							}
@@ -121,12 +121,15 @@ body ::=
 			| body:list_i for_:for_
 				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, for_); :}
 			| body:list_i if_:if_
-				{: RESULT = list_i; :}
-			| body:list_i else_
-			| body:list_i else_if
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, if_); :}
+			| body:list_i else_:else_
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, else_); :}
+			| body:list_i else_if:else_if
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, else_if); :}
 			| body:list_i while_:wh
 				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, wh); :}
-			| body:list_i do_while
+			| body:list_i do_while:do_while
+				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, do_while); :}
 			| body:list_i switch_
 			| body:list_i case_
 			| body:list_i default_
@@ -368,7 +371,7 @@ eol ::=
 if_ ::=
 			eol_ tab:t IF LPAREN a:condition RPAREN
 				{:
-					RESULT = new If(t, condition);
+					RESULT = new If(t, If.Type.IF, condition);
 					if(t >= 1 && min <= t && t <= max) {
 						max = t + 1;
 					} else {
@@ -380,7 +383,7 @@ if_ ::=
 else_ ::=
 			eol_ tab:t ELSE
 				{:
-					System.out.println("else -> " + t);
+					RESULT = new If(t, If.Type.ELSE, null);
 					if(t >=1 && min <= t && t <= max) {
 						max = t + 1;
 					} else {
@@ -390,9 +393,9 @@ else_ ::=
 			;
 
 else_if ::=
-			eol_ tab:t ELSE IF LPAREN a RPAREN
+			eol_ tab:t ELSE IF LPAREN a:condition RPAREN
 				{:
-					System.out.println("else_if -> " + t);
+					RESULT = new If(t, If.Type.ELSE_IF, condition);
 					if(t >=1 && min <=t && t <= max) {
 						max = t + 1;
 					} else {
@@ -440,7 +443,7 @@ while_ ::=
 do_while ::=
 			eol_ tab:t DO_WHILE
 				{:
-					System.out.println("do_while -> " + t);
+					RESULT = new DoWhile(t);
 					if(t >= 1 && min <=t && t <= max) {
 						max = t + 1;
 					} else {

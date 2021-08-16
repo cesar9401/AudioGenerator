@@ -49,11 +49,11 @@ public class AudioParser extends java_cup.runtime.lr_parser {
     "\000\002\003\003\000\002\003\003\000\002\003\003\000" +
     "\002\011\005\000\002\010\005\000\002\010\005\000\002" +
     "\010\004\000\002\010\004\000\002\010\005\000\002\010" +
-    "\005\000\002\010\004\000\002\010\004\000\002\053\004" +
-    "\000\002\043\013\000\002\045\004\000\002\045\003\000" +
-    "\002\044\005\000\002\046\004\000\002\046\002\000\002" +
-    "\050\005\000\002\050\005\000\002\052\005\000\002\052" +
-    "\003\000\002\051\003\000\002\047\005\000\002\047\003" +
+    "\005\000\002\010\004\000\002\010\004\000\002\054\004" +
+    "\000\002\044\013\000\002\046\004\000\002\046\003\000" +
+    "\002\045\005\000\002\047\004\000\002\047\002\000\002" +
+    "\051\005\000\002\051\005\000\002\053\005\000\002\053" +
+    "\003\000\002\052\003\000\002\050\005\000\002\050\003" +
     "\000\002\022\005\000\002\022\005\000\002\022\005\000" +
     "\002\022\003\000\002\023\005\000\002\023\005\000\002" +
     "\023\003\000\002\024\005\000\002\024\005\000\002\024" +
@@ -67,10 +67,10 @@ public class AudioParser extends java_cup.runtime.lr_parser {
     "\033\003\000\002\033\003\000\002\033\003\000\002\033" +
     "\003\000\002\033\005\000\002\021\003\000\002\021\003" +
     "\000\002\004\003\000\002\004\002\000\002\002\004\000" +
-    "\002\002\003\000\002\042\004\000\002\042\003\000\002" +
-    "\041\004\000\002\041\002\000\002\016\010\000\002\017" +
+    "\002\002\003\000\002\043\004\000\002\043\003\000\002" +
+    "\042\004\000\002\042\002\000\002\016\010\000\002\017" +
     "\005\000\002\020\011\000\002\040\014\000\002\012\007" +
-    "\000\002\012\003\000\002\034\010\000\002\054\005\000" +
+    "\000\002\012\003\000\002\034\010\000\002\041\005\000" +
     "\002\055\010\000\002\056\006\000\002\057\005\000\002" +
     "\060\005\000\002\061\005\000\002\062\006\000\002\035" +
     "\010\000\002\035\012\000\002\035\011\000\002\035\011" +
@@ -435,14 +435,14 @@ public class AudioParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\336\000\006\015\004\041\003\001\001\000\002\001" +
+    "\000\336\000\006\015\004\042\003\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\004\063\011\001\001\000\006\013" +
     "\017\014\020\001\001\000\004\006\014\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\050\007\021\011\035\016\037\017\025\020\040" +
-    "\034\034\035\023\036\042\037\030\040\024\042\022\043" +
-    "\043\054\031\055\026\056\033\057\041\060\036\061\032" +
+    "\034\034\035\023\036\042\037\030\040\024\041\031\043" +
+    "\022\044\043\055\026\056\033\057\041\060\036\061\032" +
     "\062\044\001\001\000\002\001\001\000\002\001\001\000" +
     "\004\002\047\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
@@ -451,103 +451,103 @@ public class AudioParser extends java_cup.runtime.lr_parser {
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\012\003\056\004\076" +
-    "\010\071\053\072\001\001\000\002\001\001\000\002\001" +
+    "\010\071\054\072\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\004\003\324" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\032\021\115\022\313\023\134" +
     "\024\133\025\131\026\130\027\126\030\125\031\124\032" +
-    "\123\033\121\053\120\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\006\044\206\045\205\001" +
+    "\123\033\121\054\120\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\006\045\206\046\205\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\032\021\115\022" +
     "\260\023\134\024\133\025\131\026\130\027\126\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\002\001" +
+    "\031\124\032\123\033\121\054\120\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\010\010\105\012\104\053\072\001" +
-    "\001\000\006\044\206\045\205\001\001\000\002\001\001" +
+    "\000\002\001\001\000\010\010\105\012\104\054\072\001" +
+    "\001\000\006\045\206\046\205\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\032\021\115\022" +
     "\135\023\134\024\133\025\131\026\130\027\126\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\002\001" +
+    "\031\124\032\123\033\121\054\120\001\001\000\002\001" +
     "\001\000\002\001\001\000\012\021\115\032\215\033\121" +
-    "\053\120\001\001\000\002\001\001\000\032\021\115\022" +
+    "\054\120\001\001\000\002\001\001\000\032\021\115\022" +
     "\213\023\134\024\133\025\131\026\130\027\126\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\006\044" +
-    "\206\045\205\001\001\000\002\001\001\000\014\021\115" +
-    "\031\204\032\123\033\121\053\120\001\001\000\002\001" +
+    "\031\124\032\123\033\121\054\120\001\001\000\006\045" +
+    "\206\046\205\001\001\000\002\001\001\000\014\021\115" +
+    "\031\204\032\123\033\121\054\120\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\010\021\115\033\201\053\120\001\001\000" +
+    "\001\001\000\010\021\115\033\201\054\120\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\030" +
     "\021\115\023\200\024\133\025\131\026\130\027\126\030" +
-    "\125\031\124\032\123\033\121\053\120\001\001\000\006" +
-    "\010\176\053\072\001\001\000\030\021\115\023\175\024" +
+    "\125\031\124\032\123\033\121\054\120\001\001\000\006" +
+    "\010\176\054\072\001\001\000\030\021\115\023\175\024" +
     "\133\025\131\026\130\027\126\030\125\031\124\032\123" +
-    "\033\121\053\120\001\001\000\030\021\115\023\142\024" +
+    "\033\121\054\120\001\001\000\030\021\115\023\142\024" +
     "\133\025\131\026\130\027\126\030\125\031\124\032\123" +
-    "\033\121\053\120\001\001\000\002\001\001\000\026\021" +
+    "\033\121\054\120\001\001\000\002\001\001\000\026\021" +
     "\115\024\174\025\131\026\130\027\126\030\125\031\124" +
-    "\032\123\033\121\053\120\001\001\000\026\021\115\024" +
+    "\032\123\033\121\054\120\001\001\000\026\021\115\024" +
     "\145\025\131\026\130\027\126\030\125\031\124\032\123" +
-    "\033\121\053\120\001\001\000\002\001\001\000\024\021" +
+    "\033\121\054\120\001\001\000\002\001\001\000\024\021" +
     "\115\025\173\026\130\027\126\030\125\031\124\032\123" +
-    "\033\121\053\120\001\001\000\024\021\115\025\172\026" +
-    "\130\027\126\030\125\031\124\032\123\033\121\053\120" +
+    "\033\121\054\120\001\001\000\024\021\115\025\172\026" +
+    "\130\027\126\030\125\031\124\032\123\033\121\054\120" +
     "\001\001\000\024\021\115\025\171\026\130\027\126\030" +
-    "\125\031\124\032\123\033\121\053\120\001\001\000\024" +
+    "\125\031\124\032\123\033\121\054\120\001\001\000\024" +
     "\021\115\025\170\026\130\027\126\030\125\031\124\032" +
-    "\123\033\121\053\120\001\001\000\024\021\115\025\167" +
-    "\026\130\027\126\030\125\031\124\032\123\033\121\053" +
+    "\123\033\121\054\120\001\001\000\024\021\115\025\167" +
+    "\026\130\027\126\030\125\031\124\032\123\033\121\054" +
     "\120\001\001\000\024\021\115\025\154\026\130\027\126" +
-    "\030\125\031\124\032\123\033\121\053\120\001\001\000" +
+    "\030\125\031\124\032\123\033\121\054\120\001\001\000" +
     "\002\001\001\000\022\021\115\026\166\027\126\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\022\021" +
+    "\031\124\032\123\033\121\054\120\001\001\000\022\021" +
     "\115\026\157\027\126\030\125\031\124\032\123\033\121" +
-    "\053\120\001\001\000\002\001\001\000\020\021\115\027" +
-    "\165\030\125\031\124\032\123\033\121\053\120\001\001" +
+    "\054\120\001\001\000\002\001\001\000\020\021\115\027" +
+    "\165\030\125\031\124\032\123\033\121\054\120\001\001" +
     "\000\020\021\115\027\164\030\125\031\124\032\123\033" +
-    "\121\053\120\001\001\000\020\021\115\027\163\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\002\001" +
+    "\121\054\120\001\001\000\020\021\115\027\163\030\125" +
+    "\031\124\032\123\033\121\054\120\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\020\021\115\027\203\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\002\001" +
-    "\001\000\002\001\001\000\004\044\212\001\001\000\002" +
+    "\031\124\032\123\033\121\054\120\001\001\000\002\001" +
+    "\001\000\002\001\001\000\004\045\212\001\001\000\002" +
     "\001\001\000\032\021\115\022\210\023\134\024\133\025" +
     "\131\026\130\027\126\030\125\031\124\032\123\033\121" +
-    "\053\120\001\001\000\002\001\001\000\002\001\001\000" +
+    "\054\120\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\032\021" +
     "\115\022\221\023\134\024\133\025\131\026\130\027\126" +
-    "\030\125\031\124\032\123\033\121\053\120\001\001\000" +
+    "\030\125\031\124\032\123\033\121\054\120\001\001\000" +
     "\002\001\001\000\002\001\001\000\032\021\115\022\227" +
     "\023\134\024\133\025\131\026\130\027\126\030\125\031" +
-    "\124\032\123\033\121\053\120\001\001\000\002\001\001" +
+    "\124\032\123\033\121\054\120\001\001\000\002\001\001" +
     "\000\032\021\115\022\226\023\134\024\133\025\131\026" +
-    "\130\027\126\030\125\031\124\032\123\033\121\053\120" +
+    "\130\027\126\030\125\031\124\032\123\033\121\054\120" +
     "\001\001\000\002\001\001\000\002\001\001\000\004\003" +
     "\231\001\001\000\004\006\232\001\001\000\004\005\256" +
-    "\001\001\000\004\006\234\001\001\000\006\044\206\045" +
-    "\235\001\001\000\006\044\212\046\237\001\001\000\004" +
-    "\050\241\001\001\000\002\001\001\000\042\021\115\022" +
+    "\001\001\000\004\006\234\001\001\000\006\045\206\046" +
+    "\235\001\001\000\006\045\212\047\237\001\001\000\004" +
+    "\051\241\001\001\000\002\001\001\000\042\021\115\022" +
     "\246\023\134\024\133\025\131\026\130\027\126\030\125" +
-    "\031\124\032\123\033\121\047\242\050\245\051\243\052" +
-    "\244\053\120\001\001\000\002\001\001\000\002\001\001" +
+    "\031\124\032\123\033\121\050\242\051\245\052\243\053" +
+    "\244\054\120\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\006\050\245\051\251\001\001\000\002" +
+    "\002\001\001\000\006\051\245\052\251\001\001\000\002" +
     "\001\001\000\002\001\001\000\032\021\115\022\254\023" +
     "\134\024\133\025\131\026\130\027\126\030\125\031\124" +
-    "\032\123\033\121\053\120\001\001\000\002\001\001\000" +
+    "\032\123\033\121\054\120\001\001\000\002\001\001\000" +
     "\002\001\001\000\032\021\115\022\257\023\134\024\133" +
     "\025\131\026\130\027\126\030\125\031\124\032\123\033" +
-    "\121\053\120\001\001\000\002\001\001\000\002\001\001" +
+    "\121\054\120\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\032\021\115\022" +
     "\266\023\134\024\133\025\131\026\130\027\126\030\125" +
-    "\031\124\032\123\033\121\053\120\001\001\000\002\001" +
+    "\031\124\032\123\033\121\054\120\001\001\000\002\001" +
     "\001\000\032\021\115\022\265\023\134\024\133\025\131" +
-    "\026\130\027\126\030\125\031\124\032\123\033\121\053" +
+    "\026\130\027\126\030\125\031\124\032\123\033\121\054" +
     "\120\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\012\003\275\064\272\065" +
     "\274\066\273\001\001\000\002\001\001\000\002\001\001" +
@@ -555,15 +555,15 @@ public class AudioParser extends java_cup.runtime.lr_parser {
     "\006\003\275\066\300\001\001\000\002\001\001\000\002" +
     "\001\001\000\032\021\115\022\303\023\134\024\133\025" +
     "\131\026\130\027\126\030\125\031\124\032\123\033\121" +
-    "\053\120\001\001\000\002\001\001\000\002\001\001\000" +
+    "\054\120\001\001\000\002\001\001\000\002\001\001\000" +
     "\032\021\115\022\306\023\134\024\133\025\131\026\130" +
-    "\027\126\030\125\031\124\032\123\033\121\053\120\001" +
+    "\027\126\030\125\031\124\032\123\033\121\054\120\001" +
     "\001\000\002\001\001\000\002\001\001\000\032\021\115" +
     "\022\311\023\134\024\133\025\131\026\130\027\126\030" +
-    "\125\031\124\032\123\033\121\053\120\001\001\000\002" +
+    "\125\031\124\032\123\033\121\054\120\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\032\021" +
     "\115\022\315\023\134\024\133\025\131\026\130\027\126" +
-    "\030\125\031\124\032\123\033\121\053\120\001\001\000" +
+    "\030\125\031\124\032\123\033\121\054\120\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\012" +
     "\003\275\064\321\065\274\066\273\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
@@ -572,7 +572,7 @@ public class AudioParser extends java_cup.runtime.lr_parser {
     "\003\275\064\332\065\274\066\273\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\032\021\115" +
     "\022\336\023\134\024\133\025\131\026\130\027\126\030" +
-    "\125\031\124\032\123\033\121\053\120\001\001\000\002" +
+    "\125\031\124\032\123\033\121\054\120\001\001\000\002" +
     "\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
@@ -613,7 +613,6 @@ public class AudioParser extends java_cup.runtime.lr_parser {
 
 
 	private Integer min, max;
-    private Stack<Ins> stack;
 	private StackHandler stackHandler;
 
 	public AudioParser(AudioLex lex) {
@@ -621,11 +620,11 @@ public class AudioParser extends java_cup.runtime.lr_parser {
 		this.min = 0;
 		this.max = 0;
 		this.stack = new Stack<>();
-		this.stackHandler = new StackHandler(this.stack);
+		this.stackHandler = new StackHandler();
 	}
 
 	public Stack<Ins> getStack() {
-		return this.stack;
+		return this.stackHandler.getStack();
 	}
 
 	public void syntax_error(Symbol cur_token) {
@@ -693,7 +692,7 @@ class CUP$AudioParser$actions {
 		
 					RESULT = list_i;
 					if(!stack.isEmpty()) {
-						for(Ins i : stack) {
+						for(Ins i : getStack()) {
 							if(i.isInAst()) {
 								RESULT.add((Instruction) i);
 							}
@@ -818,7 +817,7 @@ class CUP$AudioParser$actions {
 		int if_left = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int if_right = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		If if_ = (If)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = list_i; 
+		 RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, if_); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("body",9, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -830,7 +829,10 @@ class CUP$AudioParser$actions {
 		int list_ileft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int list_iright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		List<Instruction> list_i = (List<Instruction>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-
+		int else_left = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int else_right = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		If else_ = (If)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, else_); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("body",9, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -842,7 +844,10 @@ class CUP$AudioParser$actions {
 		int list_ileft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int list_iright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		List<Instruction> list_i = (List<Instruction>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-
+		int else_ifleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int else_ifright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		If else_if = (If)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, else_if); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("body",9, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -869,7 +874,10 @@ class CUP$AudioParser$actions {
 		int list_ileft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int list_iright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		List<Instruction> list_i = (List<Instruction>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-
+		int do_whileleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int do_whileright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		DoWhile do_while = (DoWhile)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, do_while); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("body",9, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1276,7 +1284,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("l",41, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("l",42, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1285,7 +1293,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_statement",33, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-8)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_statement",34, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-8)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1294,7 +1302,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",35, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",36, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1303,7 +1311,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",35, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",36, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1312,7 +1320,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimension",34, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimension",35, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1321,7 +1329,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_value",36, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_value",37, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1330,7 +1338,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_value",36, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_value",37, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1339,7 +1347,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list",38, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list",39, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1348,7 +1356,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list",38, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list",39, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1357,7 +1365,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list_fn",40, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list_fn",41, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1366,7 +1374,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list_fn",40, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("list_fn",41, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1375,7 +1383,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("fn",39, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("fn",40, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1384,7 +1392,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value_list",37, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value_list",38, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1393,7 +1401,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value_list",37, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("value_list",38, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1957,7 +1965,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol_",32, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol_",33, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1966,7 +1974,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol_",32, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol_",33, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1975,7 +1983,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol",31, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol",32, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1984,7 +1992,7 @@ class CUP$AudioParser$actions {
             {
               Object RESULT =null;
 
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol",31, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("eol",32, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
@@ -1999,7 +2007,7 @@ class CUP$AudioParser$actions {
 		int conditionright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		Operation condition = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
 		
-					RESULT = new If(t, condition);
+					RESULT = new If(t, If.Type.IF, condition);
 					if(t >= 1 && min <= t && t <= max) {
 						max = t + 1;
 					} else {
@@ -2018,7 +2026,7 @@ class CUP$AudioParser$actions {
 		int tright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		Integer t = (Integer)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
 		
-					System.out.println("else -> " + t);
+					RESULT = new If(t, If.Type.ELSE, null);
 					if(t >=1 && min <= t && t <= max) {
 						max = t + 1;
 					} else {
@@ -2036,8 +2044,11 @@ class CUP$AudioParser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-5)).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-5)).right;
 		Integer t = (Integer)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-5)).value;
+		int conditionleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
+		int conditionright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
+		Operation condition = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
 		
-					System.out.println("else_if -> " + t);
+					RESULT = new If(t, If.Type.ELSE_IF, condition);
 					if(t >=1 && min <=t && t <= max) {
 						max = t + 1;
 					} else {
@@ -2131,19 +2142,19 @@ class CUP$AudioParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 112: // do_while ::= eol_ tab DO_WHILE 
             {
-              Object RESULT =null;
+              DoWhile RESULT =null;
 		int tleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		Integer t = (Integer)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
 		
-					System.out.println("do_while -> " + t);
+					RESULT = new DoWhile(t);
 					if(t >= 1 && min <=t && t <= max) {
 						max = t + 1;
 					} else {
 						System.out.println("Do_while mal identado");
 					}
 				
-              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("do_while",42, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
+              CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("do_while",31, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
 
