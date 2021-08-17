@@ -615,12 +615,15 @@ public class AudioParser extends java_cup.runtime.lr_parser {
 
 	private Integer min, max;
 	private StackHandler stackHandler;
+	private List<Integer> ind;
 
 	public AudioParser(AudioLex lex) {
 		super(lex);
 		this.min = 0;
 		this.max = 0;
 		this.stackHandler = new StackHandler();
+
+		this.ind = new ArrayList<>();
 	}
 
 	public Stack<Ins> getStack() {
@@ -1325,13 +1328,14 @@ class CUP$AudioParser$actions {
 						min = 0;
 						max = 0;
 					} else {
-						System.out.println("Arrat-Assignment mal identado");
+						System.out.println("Array-Assignment mal identado");
 					}
 
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list));
+						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list, ind));
 					}
+					ind = new ArrayList<>();
 				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("array_statement",35, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-8)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
@@ -1406,6 +1410,8 @@ class CUP$AudioParser$actions {
 		List<Operation> list_op = (List<Operation>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
 		
 					RESULT = Array.newInstance(Operation.class, list_op.size());
+					ind.add(list_op.size());
+					System.out.println(list_op.size());
 					for(int i = 0; i < list_op.size(); i++) {
 						Array.set(RESULT, i, list_op.get(i));
 					}

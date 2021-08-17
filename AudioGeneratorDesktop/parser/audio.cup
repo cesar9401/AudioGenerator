@@ -15,12 +15,15 @@ class AudioParser;
 parser code {:
 	private Integer min, max;
 	private StackHandler stackHandler;
+	private List<Integer> ind;
 
 	public AudioParser(AudioLex lex) {
 		super(lex);
 		this.min = 0;
 		this.max = 0;
 		this.stackHandler = new StackHandler();
+
+		this.ind = new ArrayList<>();
 	}
 
 	public Stack<Ins> getStack() {
@@ -259,8 +262,9 @@ array_statement ::=
 
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list));
+						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list, ind));
 					}
+					ind = new ArrayList<>();
 				:}
 			;
 
@@ -285,6 +289,8 @@ list ::=
 			LBRACE value_list:list_op RBRACE
 				{:
 					RESULT = Array.newInstance(Operation.class, list_op.size());
+					ind.add(list_op.size());
+					System.out.println(list_op.size());
 					for(int i = 0; i < list_op.size(); i++) {
 						Array.set(RESULT, i, list_op.get(i));
 					}

@@ -30,35 +30,25 @@ public class Test {
 //        setValue(arreglo, "hello there!");
 //        getValue(arreglo);
         //test1();
-        int[] dimensions = {3, 3, 3};
-        int[] dimensions2 = {0, 0, 0};
-        HashMap<Integer, int[]> map = new HashMap<>();
-        travel(3, 0, dimensions, dimensions2, map);
+        int[] dimensions = {4, 3};
+        int[] dimensions2 = {0, 0};
+        HashMap<String, String> map = new HashMap<>();
+        travel(dimensions.length - 1, 0, dimensions, dimensions2, map);
     }
 
-    private static void travel(int total, int current, int[] dimensions, int[] dim2, HashMap<Integer, int[]> map) {
-        if (current < total) {
-            for (int i = 0; i < dimensions[current]; i++) {
-                dim2[current] = i;
-                travel(total, current + 1, dimensions, dim2, map);
+    private static void travel(int total, int current, int[] dimensions, int[] dim2, HashMap<String, String> map) {
+        for (int i = 0; i < dimensions[current]; i++) {
+            dim2[current] = i;
 
-                int n = getN(dim2);
-                if (!map.containsKey(n)) {
-                    System.out.println(Arrays.toString(dim2));
-                    map.put(n, dim2);
-                }
+            if (current < total) {
+                travel(total, current + 1, dimensions, dim2, map);
+            }
+
+            if (!map.containsKey(Arrays.toString(dim2))) {
+                System.out.println(Arrays.toString(dim2));
+                map.put(Arrays.toString(dim2), Arrays.toString(dim2));
             }
         }
-    }
-
-    private static int getN(int[] dim) {
-        int num = 0;
-        for (int i = 0; i < dim.length; i++) {
-            num *= 10;
-            num += dim[i];
-        }
-
-        return num;
     }
 
     private static void setValue(Object array, String value) {
