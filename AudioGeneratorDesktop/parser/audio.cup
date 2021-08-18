@@ -9,12 +9,15 @@ import java.lang.reflect.Array;
 
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.control.*;
+import com.cesar31.audiogenerator.error.*;
 
 class AudioParser;
 
 parser code {:
 	private Integer min, max;
 	private StackHandler stackHandler;
+	private ErrorHandler errorHandler;
+
 	private List<Integer> ind;
 
 	public AudioParser(AudioLex lex) {
@@ -22,7 +25,7 @@ parser code {:
 		this.min = 0;
 		this.max = 0;
 		this.stackHandler = new StackHandler();
-
+		this.errorHandler = new ErrorHandler();
 		this.ind = new ArrayList<>();
 	}
 
@@ -30,16 +33,20 @@ parser code {:
 		return this.stackHandler.getStack();
 	}
 
+	public List<Err> getErrors() {
+		return this.errorHandler.getErrors();
+	}
+
 	public void syntax_error(Symbol cur_token) {
 		List<String> expected = new ArrayList<>();
 		List<Integer> tokens = expected_token_ids();
 
-		System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		// System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
 		for(Integer i : tokens) {
-			// expected.add(symbl_name_from_id(i));
-			System.out.printf("%s, ", symbl_name_from_id(i));
+			expected.add(symbl_name_from_id(i));
+			// System.out.printf("%s, ", symbl_name_from_id(i));
 		}
-		System.out.println("");
+		this.errorHandler.setError((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
 	}
 
 	protected int error_sync_size() {

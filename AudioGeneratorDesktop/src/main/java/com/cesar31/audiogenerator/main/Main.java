@@ -1,13 +1,13 @@
 package com.cesar31.audiogenerator.main;
 
 import com.cesar31.audiogenerator.control.FileControl;
+import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.Ins;
 import com.cesar31.audiogenerator.instruction.Instruction;
 import com.cesar31.audiogenerator.instruction.SymbolTable;
 import com.cesar31.audiogenerator.parser.AudioLex;
 import com.cesar31.audiogenerator.parser.AudioParser;
 import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Stack;
 
@@ -29,12 +29,20 @@ public class Main {
         AudioParser parser = new AudioParser(lex);
         try {
             List<Instruction> ast = (List<Instruction>) parser.parse().value;
-            run(ast);
+            List<Err> errors = parser.getErrors();
+            if (!errors.isEmpty()) {
+                for (Err e : errors) {
+                    System.out.println(e.toString());
+                }
+            } else {
+                run(ast);
 
-            Stack<Ins> ins = parser.getStack();
-            System.out.println("stack size -> " + ins.size());
-            System.out.println("");
-            //checkStack(ins);
+                // Stack<Ins> ins = parser.getStack();
+                // System.out.println("stack size -> " + ins.size());
+                // System.out.println("");
+                //checkStack(ins);
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
