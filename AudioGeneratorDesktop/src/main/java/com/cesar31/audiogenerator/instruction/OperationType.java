@@ -12,6 +12,7 @@ public enum OperationType {
     CHAR,
     BOOLEAN,
     ID,
+    ARRAY_ACCESS,
     
     // relacionales
     EQEQ,

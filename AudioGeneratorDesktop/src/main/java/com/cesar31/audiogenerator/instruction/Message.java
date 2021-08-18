@@ -17,7 +17,16 @@ public class Message implements Instruction {
     @Override
     public Object run(SymbolTable table) {
         Variable v = operation.run(table);
-        System.out.println(v.getValue());
+        if (v != null) {
+            if (v.getValue() != null) {
+                System.out.println(v.getValue());
+            } else {
+                // variable no tiene valor definido, no es posible emitir mensaje
+            }
+        } else {
+            // No es posible emitir mensaje
+        }
+
         return null;
     }
 

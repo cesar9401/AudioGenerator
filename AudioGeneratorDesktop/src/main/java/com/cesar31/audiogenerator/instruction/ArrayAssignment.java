@@ -3,7 +3,6 @@ package com.cesar31.audiogenerator.instruction;
 import com.cesar31.audiogenerator.control.ArrayHandler;
 import com.cesar31.audiogenerator.parser.Token;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -62,24 +61,10 @@ public class ArrayAssignment implements Instruction {
             }
         } else {
             if (!error) {
-                handler.addArrayAssignmentTSymbolTable(type, id, keep, dimension, value, ind, table);
+                // Declaracion y asignacionH
+                handler.addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table);
             }
         }
-
-//        if (value != null) {
-//            // Verificar errores, que las dimensiones esten completas y que todos los valores esten agregados
-//            // y crear nuevas variables Variable para que los valores no cambien
-//            int[] aux = new int[dimension.length];
-//            HashMap<String, String> map = new HashMap<>();
-//            List<int[]> indexes = new ArrayList<>();
-//            travel(dimension.length - 1, 0, dimension, aux, map, indexes);
-//
-//            System.out.println("Elementos: " + indexes.size());
-//            for (int[] i : indexes) {
-//                Operation tmp = getValue(i);
-//                Variable v = tmp.run(table);
-//            }
-//        }
 
         return null;
     }

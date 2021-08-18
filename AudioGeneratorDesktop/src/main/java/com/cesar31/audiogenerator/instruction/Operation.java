@@ -13,6 +13,8 @@ public class Operation implements Instruction {
     private Operation left;
     private Operation right;
 
+    private ArrayAccess arrayItem;
+
     // Operaciones definidas con un valor o id
     public Operation(OperationType type, Variable value) {
         this.type = type;
@@ -32,6 +34,12 @@ public class Operation implements Instruction {
         this.right = right;
     }
 
+    // Para acceso arreglos
+    public Operation(OperationType type, ArrayAccess arrayItem) {
+        this.type = type;
+        this.arrayItem = arrayItem;
+    }
+
     @Override
     public void sayName() {
         System.out.println("operation");
@@ -41,6 +49,9 @@ public class Operation implements Instruction {
     public Variable run(SymbolTable table) {
         OperationMaker maker = new OperationMaker();
         switch (type) {
+            case ARRAY_ACCESS:
+                Variable v = this.arrayItem.run(table);
+                return v;
             case ID:
                 //System.out.println(value.getToken());
                 Variable variable = table.getVariable(value.getToken().getValue());
@@ -51,6 +62,7 @@ public class Operation implements Instruction {
                 } else if (variable.getValue() == null) {
                     // variable sin valor definido
                     System.out.println("Variable no tiene valor definido");
+                    return null;
                 }
                 return variable;
             case INTEGER:

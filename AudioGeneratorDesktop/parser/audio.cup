@@ -77,10 +77,10 @@ non terminal DoWhile do_while;
 non terminal List<ArrayAssignment> array_statement;
 non terminal Object list, fn;
 non terminal List<Object> list_fn;
+non terminal ArrayAccess l;
 
 non terminal eol, eol_;
 non terminal array_value;
-non terminal l;
 non terminal switch_, case_, default_, exit_, continue_, return_;
 non terminal extends_;
 non terminal params_f, params, param;
@@ -237,14 +237,16 @@ assignment ::=
 					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")));
 					RESULT = new Assignment(token, tmp);
 				:}
-			| l EQUAL a /* asignacion a arreglos */
-			| l PLUS_EQ a
-			| l PLUS_PLUS
-			| l MINUS_MINUS
+			/* asignacion a arreglos */
+			| l:array_access EQUAL a
+			| l:array_access PLUS_EQ a
+			| l:array_access PLUS_PLUS
+			| l:array_access MINUS_MINUS
 			;
 
 l ::=
-			ID dimensions
+			ID:token_id dimensions:list_operation
+				{: RESULT = new ArrayAccess(token_id, list_operation); :}
 			;
 
 /* declaracion de arreglos */
@@ -290,7 +292,7 @@ list ::=
 				{:
 					RESULT = Array.newInstance(Operation.class, list_op.size());
 					ind.add(list_op.size());
-					System.out.println(list_op.size());
+					// System.out.println(list_op.size());
 					for(int i = 0; i < list_op.size(); i++) {
 						Array.set(RESULT, i, list_op.get(i));
 					}
@@ -388,7 +390,7 @@ j ::=
 			| CHAR:var {: RESULT = new Operation(OperationType.CHAR, new Variable(Var.CHAR, var.getValue())); :}
 			| boolean_val:var {: RESULT = new Operation(OperationType.BOOLEAN, var); :}
 			| ID:token {: RESULT = new Operation(OperationType.ID, new Variable(token)); :}
-			| l /* arreglo */
+			| l:array_access {: RESULT = new Operation(OperationType.ARRAY_ACCESS, array_access); :} /* arreglo */
 			| LPAREN a:var RPAREN {: RESULT = var; :}
 			;
 
