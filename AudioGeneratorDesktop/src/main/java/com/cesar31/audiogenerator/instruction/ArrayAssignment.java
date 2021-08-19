@@ -1,6 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
-import com.cesar31.audiogenerator.control.ArrayHandler;
+import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -36,14 +36,13 @@ public class ArrayAssignment implements Instruction {
     }
 
     @Override
-    public Object run(SymbolTable table) {
+    public Object run(SymbolTable table, OperationHandler handler) {
         // ArrayHandler
-        ArrayHandler handler = new ArrayHandler();
         int[] dimension = new int[dimensions.size()];
         boolean error = false;
 
         for (int i = 0; i < dimensions.size(); i++) {
-            Variable v = dimensions.get(i).run(table);
+            Variable v = dimensions.get(i).run(table, handler);
             if (v.getType() == Var.INTEGER) {
                 dimension[i] = Integer.valueOf(v.getValue());
             } else {
@@ -57,45 +56,16 @@ public class ArrayAssignment implements Instruction {
         if (value == null) {
             if (!error) {
                 // crear arreglo
-                handler.addArrayStatementToSymbolTable(type, id, keep, dimension, table);
+                handler.getArray().addArrayStatementToSymbolTable(type, id, keep, dimension, table);
             }
         } else {
             if (!error) {
                 // Declaracion y asignacionH
-                handler.addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table);
+                handler.getArray().addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table, handler);
             }
         }
 
         return null;
-    }
-
-    public void travel(int total, int current, int[] dimensions, int[] aux, HashMap<String, String> map, List<int[]> indexes) {
-        for (int i = 0; i < dimensions[current]; i++) {
-            aux[current] = i;
-
-            if (current < total) {
-                travel(total, current + 1, dimensions, aux, map, indexes);
-            }
-
-            String tmp = Arrays.toString(aux);
-            if (!map.containsKey(tmp)) {
-                map.put(tmp, tmp);
-
-                int[] newArray = Arrays.copyOf(aux, aux.length);
-                System.out.println(Arrays.toString(newArray));
-                indexes.add(newArray);
-            }
-        }
-    }
-
-    private Operation getValue(int[] dimension) {
-        int i = 1;
-        Object tmp = Array.get(value, dimension[0]);
-        while (i < dimension.length) {
-            tmp = Array.get(tmp, dimension[i]);
-            i++;
-        }
-        return (Operation) tmp;
     }
 
     @Override
@@ -106,11 +76,6 @@ public class ArrayAssignment implements Instruction {
     @Override
     public void setTab(Integer tab) {
         this.tab = tab;
-    }
-
-    @Override
-    public void sayName() {
-        System.out.println("Array-Assignment");
     }
 
     public boolean isKeep() {

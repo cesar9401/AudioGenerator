@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.ArrayHandler;
+import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
 import java.util.List;
 
@@ -19,9 +20,8 @@ public class ArrayAccess implements Instruction {
     }
 
     @Override
-    public Variable run(SymbolTable table) {
-        ArrayHandler handler = new ArrayHandler();
-        return handler.getItemFromArray(id, indexes, table);
+    public Variable run(SymbolTable table, OperationHandler handler) {
+        return handler.getArray().getItemFromArray(id, indexes, table, handler);
     }
 
     @Override
@@ -32,10 +32,5 @@ public class ArrayAccess implements Instruction {
     @Override
     public void setTab(Integer tab) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void sayName() {
-        System.out.println("Array-Access");
     }
 }

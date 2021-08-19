@@ -52,8 +52,9 @@ public class ArrayHandler {
      * @param value objecto con valores del arreglo
      * @param ind dimension de cada arreglo individual
      * @param e tabla de simbolos
+     * @param handler
      */
-    public void addArrayAssignmentToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, Object value, List<Integer> ind, SymbolTable e) {
+    public void addArrayAssignmentToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, Object value, List<Integer> ind, SymbolTable e, OperationHandler handler) {
         if (type != null) {
             Var kind = cast.getType(type);
 
@@ -70,7 +71,7 @@ public class ArrayHandler {
                     aux = new int[dimensions.length];
                     arrayTour(dimensions.length - 1, 0, dimensions, aux, new HashMap<>(), indexes);
 
-                    List<String> values = getValuesForArray(indexes, kind, value, e);
+                    List<String> values = getValuesForArray(indexes, kind, value, e, handler);
                     Object array = Array.newInstance(String.class, dimensions);
 
                     // Agregar elementos al arreglo
@@ -90,7 +91,7 @@ public class ArrayHandler {
         }
     }
 
-    public Variable getItemFromArray(Token id, List<Operation> indexes, SymbolTable e) {
+    public Variable getItemFromArray(Token id, List<Operation> indexes, SymbolTable e, OperationHandler handler) {
         Variable v = e.getVariable(id.getValue());
         if (v != null) {
             if (v.getArray() != null) {
@@ -98,7 +99,7 @@ public class ArrayHandler {
                 boolean error = false;
 
                 for (int i = 0; i < indexes.size(); i++) {
-                    Variable tmp = indexes.get(i).run(e);
+                    Variable tmp = indexes.get(i).run(e, handler);
 
                     if (tmp != null) {
                         if (tmp.getType() == Var.INTEGER) {
@@ -146,14 +147,14 @@ public class ArrayHandler {
         return null;
     }
 
-    private List<String> getValuesForArray(List<int[]> indexes, Var kind, Object value, SymbolTable e) {
+    private List<String> getValuesForArray(List<int[]> indexes, Var kind, Object value, SymbolTable e, OperationHandler handler) {
         List<String> values = new ArrayList<>();
 
         for (int[] i : indexes) {
             Object obj = getValueFromArray(i, value);
             if (obj != null) {
                 Operation op = (Operation) obj;
-                Variable v = op.run(e);
+                Variable v = op.run(e, handler);
                 Variable variable = cast.typeConversion(kind, v);
                 values.add(variable.getValue());
             }

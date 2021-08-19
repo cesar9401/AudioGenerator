@@ -40,6 +40,8 @@ LineTerminator = \r|\n|\r\n
 Tab = \t|"    "
 WhiteSpace = [ ]
 
+LineWithTab = \t+\n
+
 /* Coments */
 InputCharacter = [^\r\n]
 LineComment = [ \t]* ">>" {InputCharacter}* {LineTerminator}?
@@ -220,9 +222,6 @@ Id = [a-zA-Z]\w*
 	{Decimal}
 	{ return symbol(DECIMAL, yytext()); }
 
-	{Tab}
-	{ return symbol(TAB, yytext()); }
-
 	"=="
 	{ return symbol(EQEQ, yytext()); }
 
@@ -327,6 +326,12 @@ Id = [a-zA-Z]\w*
 		character.setLength(0);
 		yybegin(CHARACTER);
 	}
+
+	{LineWithTab}
+	{ /* Ignore */ }
+
+	{Tab}
+	{ return symbol(TAB, yytext()); }
 
 	{LineTerminator}
 	{ return symbol(EOL, yytext()); }

@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.control.OperationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,33 +31,18 @@ public class For implements Instruction, Ins {
     }
 
     @Override
-    public void sayName() {
-        System.out.println("for");
-    }
-
-    @Override
-    public Object run(SymbolTable table) {
+    public Object run(SymbolTable table, OperationHandler handler) {
         SymbolTable local = new SymbolTable(table);
-        this.init.run(local);
-        while(getValue(condition.run(local))) {
+        this.init.run(local, handler);
+        while(handler.getOperation().getValue(condition.run(local, handler))) {
             SymbolTable local1 = new SymbolTable(local);
             for(Instruction i : instructions) {
-                i.run(local1);
+                i.run(local1, handler);
             }
-            increase.run(local1);
+            increase.run(local1, handler);
         }
         
         return null;
-    }
-
-    public boolean getValue(Variable cond) {
-        if (cond.getType() == Var.BOOLEAN) {
-            String value = cond.getValue().toLowerCase();
-            return value.equals("true") || value.equals("verdadero") || value.equals("1");
-        }
-
-        System.out.println("For condition no BOOLEAN type");
-        return false;
     }
 
     public Assignment getInit() {

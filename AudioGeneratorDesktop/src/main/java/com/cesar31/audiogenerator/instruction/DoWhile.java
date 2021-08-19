@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.control.OperationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,31 +25,16 @@ public class DoWhile implements Instruction, Ins {
     }
 
     @Override
-    public void sayName() {
-        System.out.println("do-while");
-    }
-
-    @Override
-    public Object run(SymbolTable table) {
+    public Object run(SymbolTable table, OperationHandler handler) {
 
         do {
             SymbolTable local = new SymbolTable(table);
             for (Instruction i : this.instructions) {
-                i.run(local);
+                i.run(local, handler);
             }
-        } while (getValue(this.condition.run(table)));
+        } while (handler.getOperation().getValue(this.condition.run(table, handler)));
 
         return null;
-    }
-
-    public boolean getValue(Variable cond) {
-        if (cond.getType() == Var.BOOLEAN) {
-            String value = cond.getValue().toLowerCase();
-            return value.equals("true") || value.equals("verdadero") || value.equals("1");
-        }
-
-        System.out.println("While condition no BOOLEAN type");
-        return false;
     }
 
     @Override

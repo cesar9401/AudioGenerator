@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.main;
 
 import com.cesar31.audiogenerator.control.FileControl;
+import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.Ins;
 import com.cesar31.audiogenerator.instruction.Instruction;
@@ -19,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        String input = FileControl.readData("input_files/input5.txt");
+        String input = FileControl.readData("input_files/input6.txt");
         System.out.println(input);
         System.out.println("");
 
@@ -47,6 +48,7 @@ public class Main {
             ex.printStackTrace(System.out);
         }
         long t1 = System.currentTimeMillis() - t;
+        System.out.println();
         System.out.println(t1);
     }
 
@@ -54,10 +56,20 @@ public class Main {
         if (ast != null) {
             System.out.println("AST -> " + ast.size());
             SymbolTable table = new SymbolTable();
+            OperationHandler handler = new OperationHandler();
+            
             for (Instruction i : ast) {
                 System.out.println("ast -> " + i.getClass().getSimpleName());
-                i.run(table);
+                i.run(table, handler);
             }
+            
+            
+            if(!handler.getErrors().isEmpty()) {
+                for(Err e : handler.getErrors()) {
+                    System.out.println(e.toString());
+                }
+            }
+            
         } else {
             System.out.println("ast null");
         }

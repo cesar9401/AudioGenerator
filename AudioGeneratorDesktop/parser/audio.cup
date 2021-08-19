@@ -229,19 +229,19 @@ assign ::=
 assignment ::=
 			ID:token EQUAL a:operation
 				{: RESULT = new Assignment(token, operation); :}
-			| ID:token PLUS_EQ a:operation
+			| ID:token PLUS_EQ:op a:operation
 				{:
-					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation);
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation, op);
 					RESULT = new Assignment(token, tmp);
 				:}
-			| ID:token PLUS_PLUS
+			| ID:token PLUS_PLUS:op
 				{:
-					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")));
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
 					RESULT = new Assignment(token, tmp);
 				:}
-			| ID:token MINUS_MINUS
+			| ID:token MINUS_MINUS:op
 				{:
-					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")));
+					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
 					RESULT = new Assignment(token, tmp);
 				:}
 			/* asignacion a arreglos */
@@ -335,58 +335,58 @@ value_list ::=
 
 /* Operaciones logicas y aritmeticas */
 a ::=
-			a:l OR b:r {: RESULT = new Operation(OperationType.OR, l, r); :}
-			| a:l NOR b:r {: RESULT = new Operation(OperationType.NOR, l, r); :}
-			| a:l XOR b:r {: RESULT = new Operation(OperationType.XOR, l, r); :}
+			a:l OR:token b:r {: RESULT = new Operation(OperationType.OR, l, r, token); :}
+			| a:l NOR:token b:r {: RESULT = new Operation(OperationType.NOR, l, r, token); :}
+			| a:l XOR:token b:r {: RESULT = new Operation(OperationType.XOR, l, r, token); :}
 			| b:op {: RESULT = op; :}
 			;
 
 b ::=
-			b:l AND c:r {: RESULT = new Operation(OperationType.AND, l, r); :}
-			| b:l NAND c:r {: RESULT = new Operation(OperationType.NAND, l, r); :}
+			b:l AND:token c:r {: RESULT = new Operation(OperationType.AND, l, r, token); :}
+			| b:l NAND:token c:r {: RESULT = new Operation(OperationType.NAND, l, r, token); :}
 			| c:op {: RESULT = op; :}
 			;
 
 c ::=
-			c:l EQEQ d:r {: RESULT = new Operation(OperationType.EQEQ, l, r); :}
-			| c:l NEQ d:r {: RESULT = new Operation(OperationType.NEQ, l, r); :}
-			| c:l GREATER d:r {: RESULT = new Operation(OperationType.GREATER, l, r); :}
-			| c:l SMALLER d:r {: RESULT = new Operation(OperationType.SMALLER, l, r); :}
-			| c:l GRTREQ d:r {: RESULT = new Operation(OperationType.GREATER_OR_EQUAL, l, r); :}
-			| c:l SMLLREQ d:r {: RESULT = new Operation(OperationType.LESS_OR_EQUAL, l, r); :}
+			c:l EQEQ:token d:r {: RESULT = new Operation(OperationType.EQEQ, l, r, token); :}
+			| c:l NEQ:token d:r {: RESULT = new Operation(OperationType.NEQ, l, r, token); :}
+			| c:l GREATER:token d:r {: RESULT = new Operation(OperationType.GREATER, l, r, token); :}
+			| c:l SMALLER:token d:r {: RESULT = new Operation(OperationType.SMALLER, l, r, token); :}
+			| c:l GRTREQ:token d:r {: RESULT = new Operation(OperationType.GREATER_OR_EQUAL, l, r, token); :}
+			| c:l SMLLREQ:token d:r {: RESULT = new Operation(OperationType.LESS_OR_EQUAL, l, r, token); :}
 			| d:op {: RESULT = op; :}
 			;
 
 d ::=
-			d:l PLUS e:r {: RESULT = new Operation(OperationType.SUM, l, r); :}
-			| d:l MINUS e:r {: RESULT = new Operation(OperationType.SUBTRACTION, l, r); :}
+			d:l PLUS:token e:r {: RESULT = new Operation(OperationType.SUM, l, r, token); :}
+			| d:l MINUS:token e:r {: RESULT = new Operation(OperationType.SUBTRACTION, l, r, token); :}
 			| e:op {: RESULT = op; :}
 			;
 
 e ::=
-			e:l TIMES f:r {: RESULT = new Operation(OperationType.MULTIPLICATION, l, r); :}
-			| e:l DIVIDE f:r {: RESULT =new Operation(OperationType.DIVISION, l, r); :}
-			| e:l MOD f:r {: RESULT = new Operation(OperationType.MOD, l, r); :}
+			e:l TIMES:token f:r {: RESULT = new Operation(OperationType.MULTIPLICATION, l, r, token); :}
+			| e:l DIVIDE:token f:r {: RESULT =new Operation(OperationType.DIVISION, l, r, token); :}
+			| e:l MOD:token f:r {: RESULT = new Operation(OperationType.MOD, l, r, token); :}
 			| f:op {: RESULT = op; :}
 			;
 
 f ::=
-			g:l POW f:r {: RESULT = new Operation(OperationType.POW, l, r); :}
+			g:l POW:token f:r {: RESULT = new Operation(OperationType.POW, l, r, token); :}
 			| g:op {: RESULT = op; :}
 			;
 
 g ::=
-			MINUS h:l {: RESULT = new Operation(OperationType.UMINUS, l); :}
+			MINUS:token h:l {: RESULT = new Operation(OperationType.UMINUS, l, token); :}
 			| h:op {: RESULT = op; :}
 			;
 
 h ::=
-			NOT i:l {: RESULT = new Operation(OperationType.NOT, l); :}
+			NOT:token i:l {: RESULT = new Operation(OperationType.NOT, l, token); :}
 			| i:op {: RESULT = op; :}
 			;
 
 i ::=
-			NULL j:l {: RESULT = new Operation(OperationType.NULL, l); :}
+			NULL:token j:l {: RESULT = new Operation(OperationType.NULL, l, token); :}
 			| j:op {: RESULT = op; :}
 			;
 

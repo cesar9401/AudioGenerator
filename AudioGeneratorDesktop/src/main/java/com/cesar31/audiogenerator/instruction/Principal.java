@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.control.OperationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +24,14 @@ public class Principal implements Instruction, Ins {
     }
 
     @Override
-    public Object run(SymbolTable table) {
+    public Object run(SymbolTable table, OperationHandler handler) {
         //Crear SymbolTable local
         System.out.println("run principal -> " + instructions.size());
         System.out.println("");
         SymbolTable local = new SymbolTable(table);
         for (Instruction i : instructions) {
             //System.out.println(i.getClass().getSimpleName());
-            i.run(local);
+            i.run(local, handler);
         }
         return null;
     }
@@ -43,11 +44,6 @@ public class Principal implements Instruction, Ins {
     @Override
     public void setTab(Integer tab) {
         this.tab = tab;
-    }
-
-    @Override
-    public void sayName() {
-        System.out.println("principal");
     }
 
     @Override

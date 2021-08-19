@@ -20,7 +20,7 @@ public class OperationHandler {
         this.array = new ArrayHandler();
         this.cast = new CastHandler();
         this.environment = new EnvironmentHandler();
-        this.operation = new OperationMaker();
+        this.operation = new OperationMaker(this);
         this.errors = new ArrayList<>();
     }
 

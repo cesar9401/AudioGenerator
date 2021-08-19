@@ -1,6 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
-import com.cesar31.audiogenerator.control.EnvironmentHandler;
+import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
 
 /**
@@ -55,27 +55,21 @@ public class Assignment implements Instruction {
     }
 
     @Override
-    public void sayName() {
-        System.out.println("Assignment");
-    }
-
-    @Override
-    public Object run(SymbolTable table) {
+    public Object run(SymbolTable table, OperationHandler handler) {
         // Declaracion
-        EnvironmentHandler handler = new EnvironmentHandler();
         if (this.type != null) {
             // Declaracion y asignacion
             if (value != null) {
-                Variable v = value.run(table);
-                handler.addSymbolTable(type, id, v, table, keep, true);
+                Variable v = value.run(table, handler);
+                handler.getEnvironment().addSymbolTable(type, id, v, table, keep, true);
             } else {
                 // Solo declaracion
-                handler.addSymbolTable(type, id, null, table, keep, false);
+                handler.getEnvironment().addSymbolTable(type, id, null, table, keep, false);
             }
         } else if (id != null && value != null) {
             // Solo asignacion
-            Variable v = value.run(table);
-            handler.makeAssignment(id, v, table);
+            Variable v = value.run(table, handler);
+            handler.getEnvironment().makeAssignment(id, v, table);
         }
         return null;
     }

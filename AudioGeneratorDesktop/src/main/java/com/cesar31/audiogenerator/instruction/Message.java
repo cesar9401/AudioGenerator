@@ -1,5 +1,8 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.error.Err;
+
 /**
  *
  * @author cesar31
@@ -15,8 +18,8 @@ public class Message implements Instruction {
     }
 
     @Override
-    public Object run(SymbolTable table) {
-        Variable v = operation.run(table);
+    public Object run(SymbolTable table, OperationHandler handler) {
+        Variable v = operation.run(table, handler);
         if (v != null) {
             if (v.getValue() != null) {
                 System.out.println(v.getValue());
@@ -39,10 +42,4 @@ public class Message implements Instruction {
     public void setTab(Integer tab) {
         this.tab = tab;
     }
-
-    @Override
-    public void sayName() {
-        System.out.println("Mensaje");
-    }
-
 }

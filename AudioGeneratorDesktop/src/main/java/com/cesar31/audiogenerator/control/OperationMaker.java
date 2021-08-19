@@ -1,9 +1,11 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.OperationType;
 import com.cesar31.audiogenerator.instruction.Var;
 import com.cesar31.audiogenerator.instruction.Variable;
 import static com.cesar31.audiogenerator.instruction.Var.*;
+import com.cesar31.audiogenerator.parser.Token;
 
 /**
  *
@@ -11,11 +13,31 @@ import static com.cesar31.audiogenerator.instruction.Var.*;
  */
 public class OperationMaker {
 
-    public OperationMaker() {
+    private OperationHandler handler;
+
+    public OperationMaker(OperationHandler handler) {
+        this.handler = handler;
     }
 
-    public Variable sum(Variable a, Variable b) {
+    private void errorForOperations(Variable a, Token op) {
+        if (a.getValue() == null) {
+            Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
+            String description = "En la operacion definida por el operador " + op.getValue();
+            description += a.getId() != null ? ", la variable " + a.getId() + " no tiene un valor definido. " : ", uno de los operadores no tiene un valor definido. ";
+            description += "No es posible procesar la operacion.";
+            e.setDescription(description);
+            handler.getErrors().add(e);
+        }
+    }
+
+    public Variable sum(Variable a, Variable b, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -132,9 +154,15 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable subtraction(Variable a, Variable b) {
+    public Variable subtraction(Variable a, Variable b, Token op) {
 
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -238,8 +266,14 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable multiplication(Variable a, Variable b) {
+    public Variable multiplication(Variable a, Variable b, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -343,8 +377,14 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable division(Variable a, Variable b) {
+    public Variable division(Variable a, Variable b, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -449,8 +489,14 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable mod(Variable a, Variable b) {
+    public Variable mod(Variable a, Variable b, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -463,8 +509,14 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable pow(Variable a, Variable b) {
+    public Variable pow(Variable a, Variable b, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -481,8 +533,13 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable uminus(Variable a) {
+    public Variable uminus(Variable a, Token op) {
         if (a == null) {
+            return null;
+        }
+
+        if (a.getValue() == null) {
+            errorForOperations(a, op);
             return null;
         }
 
@@ -501,8 +558,14 @@ public class OperationMaker {
         return null;
     }
 
-    public Variable logical(Variable a, Variable b, OperationType type) {
+    public Variable logical(Variable a, Variable b, OperationType type, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -530,18 +593,39 @@ public class OperationMaker {
             return new Variable(BOOLEAN, value.toString());
         }
 
+        if (checkTypes(a, BOOLEAN, b, INTEGER) && (b.getValue().equals("1") || b.getValue().equals("0"))) {
+            return logical(a, new Variable(BOOLEAN, getBoolean(b).toString()), type, op);
+        }
+
+        if (checkTypes(a, INTEGER, b, BOOLEAN) && (a.getValue().equals("1") || b.getValue().equals("0"))) {
+            return logical(new Variable(BOOLEAN, a.getValue()), b, type, op);
+        }
+
         System.out.println("No es posible " + type);
         return null;
     }
 
-    public Variable not(Variable a) {
+    public Variable not(Variable a, Token op) {
         if (a == null) {
+            return null;
+        }
+
+        if (a.getValue() == null) {
+            errorForOperations(a, op);
             return null;
         }
 
         if (a.getType() == BOOLEAN) {
             Boolean value = !getBoolean(a);
             return new Variable(BOOLEAN, value.toString());
+        }
+
+        if (a.getType() == INTEGER) {
+            if (a.getValue().equals("1")) {
+                return new Variable(BOOLEAN, Boolean.TRUE.toString());
+            } else if (a.getValue().equals("0")) {
+                return new Variable(BOOLEAN, Boolean.FALSE.toString());
+            }
         }
 
         System.out.println("No es posible negacion logica");
@@ -557,8 +641,14 @@ public class OperationMaker {
         return new Variable(BOOLEAN, value.toString());
     }
 
-    public Variable compare(Variable a, Variable b, OperationType type) {
+    public Variable compare(Variable a, Variable b, OperationType type, Token op) {
         if (a == null || b == null) {
+            return null;
+        }
+
+        if (a.getValue() == null || b.getValue() == null) {
+            errorForOperations(a, op);
+            errorForOperations(b, op);
             return null;
         }
 
@@ -621,23 +711,56 @@ public class OperationMaker {
         if (checkTypes(a, CHAR, b, CHAR)) {
             Variable a_ = new Variable(INTEGER, getAsciiCode(a).toString());
             Variable b_ = new Variable(INTEGER, getAsciiCode(b).toString());
-            return compare(a_, b_, type);
+            return compare(a_, b_, type, op);
         }
 
         // char comparing integer/double
         if (checkTypes(a, CHAR, b, INTEGER) || checkTypes(a, CHAR, b, DOUBLE)) {
             Variable a_ = new Variable(INTEGER, getAsciiCode(a).toString());
-            return compare(a_, b, type);
+            return compare(a_, b, type, op);
         }
 
         // comparing integer/double vs char
         if (checkTypes(a, INTEGER, b, CHAR) || checkTypes(a, DOUBLE, b, CHAR)) {
             Variable b_ = new Variable(INTEGER, getAsciiCode(b).toString());
-            return compare(a, b_, type);
+            return compare(a, b_, type, op);
+        }
+
+        // comparar boolean vs boolean
+        if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            String valueA = getBoolean(a).toString();
+            String valueB = getBoolean(b).toString();
+            Boolean value;
+            switch (type) {
+                case EQEQ:
+                    value = valueA.equals(valueB);
+                    return new Variable(BOOLEAN, value.toString());
+                case NEQ:
+                    value = !valueA.equals(valueB);
+                    return new Variable(BOOLEAN, value.toString());
+            }
         }
 
         System.out.println("No es posible comparacion " + type + ", entre: " + a.getType() + " y " + b.getType());
         return null;
+    }
+
+    public boolean getValue(Variable cond) {
+        if (cond.getType() == Var.BOOLEAN) {
+            String value = cond.getValue().toLowerCase();
+            return value.equals("true") || value.equals("verdadero") || value.equals("1");
+        }
+
+        if (cond.getType() == Var.INTEGER) {
+            if (cond.getValue().equals("1")) {
+                return true;
+            } else if (cond.getValue().equals("0")) {
+                return false;
+            }
+        }
+
+        System.out.println("While condition no BOOLEAN type");
+        return false;
     }
 
     private boolean checkTypes(Variable a, Var typeA, Variable b, Var typeB) {

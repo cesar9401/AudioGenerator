@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.control.OperationHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,37 +34,22 @@ public class IfInstruction implements Instruction {
     }
 
     @Override
-    public void sayName() {
-        System.out.println(current.toString());
-    }
-
-    @Override
-    public Object run(SymbolTable table) {
+    public Object run(SymbolTable table, OperationHandler handler) {
         for (If i : if_instructions) {
 
             Operation operation = i.getCondition();
-            Boolean value = operation != null ? getValue(operation.run(table)) : true;
+            Boolean value = operation != null ? handler.getOperation().getValue(operation.run(table, handler)) : true;
             
             if (value) {
                 SymbolTable local = new SymbolTable(table);
                 for (Instruction j : i.getInstructions()) {
-                    j.run(local);
+                    j.run(local, handler);
                 }
                 return null;
             }
         }
 
         return null;
-    }
-
-    public boolean getValue(Variable cond) {
-        if (cond.getType() == Var.BOOLEAN) {
-            String value = cond.getValue().toLowerCase();
-            return value.equals("true") || value.equals("verdadero") || value.equals("1");
-        }
-
-        System.out.println("While condition no BOOLEAN type");
-        return false;
     }
 
     public List<If> getIf_instructions() {
