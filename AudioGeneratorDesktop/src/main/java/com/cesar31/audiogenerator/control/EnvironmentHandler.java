@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.SymbolTable;
 import com.cesar31.audiogenerator.instruction.Var;
 import com.cesar31.audiogenerator.instruction.Variable;
@@ -11,33 +12,49 @@ import com.cesar31.audiogenerator.parser.Token;
  */
 public class EnvironmentHandler {
 
-    private CastHandler cast;
+    private OperationHandler handler;
 
-    public EnvironmentHandler() {
-        this.cast = new CastHandler();
+    public EnvironmentHandler(OperationHandler handler) {
+        this.handler = handler;
     }
 
     public void addSymbolTable(Token type, Token id, Variable value, SymbolTable e, boolean keep, boolean assignment) {
         if (type != null) {
-            Var kind = cast.getType(type);
+            Var kind = this.handler.getCast().getType(type);
             if (value != null) {
-                Variable newType = cast.typeConversion(kind, value);
-                if (newType != null) {
-                    // En este punto el tipo de variable declarado es igual que el tipo de variable a asignar
+                if (value.getValue() != null) {
+                    Variable newType = this.handler.getCast().typeConversion(kind, value);
+                    if (newType != null) {
+                        // En este punto el tipo de variable declarado es igual que el tipo de variable a asignar
 
-                    // Agregar id y keep
-                    newType.setId(id.getValue());
-                    newType.setKeep(keep);
-                    if (!e.containsVariable(newType.getId())) {
-                        /* Agregar variable a table de simbolos */
-                        e.add(newType);
-                        //e.forEach(System.out::println);
+                        // Agregar id y keep
+                        newType.setId(id.getValue());
+                        newType.setKeep(keep);
+                        if (!e.containsVariable(newType.getId())) {
+                            /* Agregar variable a table de simbolos */
+                            e.add(newType);
+                        } else {
+                            // Error la variable ya existe
+                            Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                            String description = "La variable `" + id.getValue() + "` ya esta definida en este ambito, intente con otro identificador.";
+                            err.setDescription(description);
+                            this.handler.getErrors().add(err);
+                        }
                     } else {
-                        System.out.println("Error, ya existe variable " + newType.getId());
+                        // Error, no es posible asignar por los tipos
+                        Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                        String description = "No es posible realizar una asignacion entre la variable `" + id.getValue() + "` de tipo `" + kind.getName() + "`";
+                        description += " y el valor a asignar `" + value.getValue() + "` de tipo `" + value.getType().getName() + "`.";
+                        err.setDescription(description);
+                        this.handler.getErrors().add(err);
                     }
                 } else {
-                    // Error, no es posible asignar
-                    System.out.println("No es posible asignacion: " + kind + " = " + value.getType());
+                    // System.out.println("Error here, value.getValue() is null");
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "Se esta intentando realizar una asignacion a la variable `" + id.getValue() + "` de un valor null. ";
+                    description += value.getId() != null ? "Esto se debe a que la variable `" + value.getId() + "`, no tiene un valor definido." : "Esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                    err.setDescription(description);
+                    this.handler.getErrors().add(err);
                 }
             } else if (!assignment) {
                 // Solo declaracion (no se asigno valor)
@@ -47,12 +64,20 @@ public class EnvironmentHandler {
                     // Agregar a tabla
                     e.add(v);
                 } else {
-                    System.out.println("Error ya existe variable en declaracion");
+                    // Error la variable ya existe
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "La variable `" + id.getValue() + "` ya esta definida en este ambito, intente con otro identificador.";
+                    err.setDescription(description);
+                    this.handler.getErrors().add(err);
                 }
+            } else {
+                // Error, se esta intendo asignar un valor nulo
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "Se esta intentando realizar una asignacion a la variable `" + id.getValue() + "` de un valor null. ";
+                description += "Esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                err.setDescription(description);
+                this.handler.getErrors().add(err);
             }
-
-        } else {
-            System.out.println("No se indico tipo");
         }
     }
 
@@ -61,13 +86,34 @@ public class EnvironmentHandler {
         if (v != null) {
             if (a != null) {
                 if (a.getValue() != null) {
-                    Variable newType = cast.typeConversion(v.getType(), a);
+                    Variable newType = this.handler.getCast().typeConversion(v.getType(), a);
                     if (newType != null) {
                         v.setValue(newType.getValue());
                     } else {
+                        // Error, no es posible asignar por los tipos
+                        Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                        String description = "No es posible realizar una asignacion entre la variable `" + id.getValue() + "` de tipo `" + v.getType().getName() + "`";
+                        description += " y el valor a asignar `" + a.getValue() + "` de tipo `" + a.getType().getName() + "`.";
+                        err.setDescription(description);
+                        this.handler.getErrors().add(err);
+
                         System.out.println("No es posible asignar " + v.getId() + " = " + a.getType());
                     }
+                } else {
+                    // Error, uno de los operadores puede tener un valor no definido
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "Se esta intentando realizar una asignacion a la variable `" + id.getValue() + "` de un valor null. ";
+                    description += a.getId() != null ? "Esto se debe a que la variable `" + a.getId() + "`, no tiene un valor definido." : "Esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                    err.setDescription(description);
+                    this.handler.getErrors().add(err);
                 }
+            } else {
+                // Error, uno de los operadores puede tener un valor no definido
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "Se esta intentando realizar una asignacion a la variable `" + id.getValue() + "` de un valor null. ";
+                description += "Esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                err.setDescription(description);
+                this.handler.getErrors().add(err);
             }
         } else {
             // Error se verifica en getFromSymbolTable
@@ -87,14 +133,22 @@ public class EnvironmentHandler {
 
         if (v != null) {
             if (v.getValue() == null && assignment) {
-                System.out.println("La variable " + id.getValue() + ", no existe. No es posible realizar asignacion");
+                // La variable no tiene valor definido
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "La variable `" + id.getValue() + "` no tiene valor definido, no es posible realizar la asignacion.";
+                err.setDescription(description);
+                this.handler.getErrors().add(err);
                 return null;
             }
 
             return v;
         }
 
-        System.out.println("No existe variable " + id.getValue());
+        // La variable no existe
+        Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+        String description = "No se han encontrado al simbolo `" + id.getValue() + "`, este no ha sido declarado.";
+        err.setDescription(description);
+        this.handler.getErrors().add(err);
         return null;
     }
 }

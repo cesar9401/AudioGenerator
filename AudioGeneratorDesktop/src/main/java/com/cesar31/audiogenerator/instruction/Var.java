@@ -5,20 +5,20 @@ package com.cesar31.audiogenerator.instruction;
  * @author cesar31
  */
 public enum Var {
-    STRING(-1),
-    DOUBLE(0),
-    INTEGER(1),
-    CHAR(2),
-    BOOLEAN(3),
-    VOID(null);
+    STRING("cadena"),
+    DOUBLE("doble"),
+    INTEGER("entero"),
+    CHAR("caracter"),
+    BOOLEAN("boolean"),
+    VOID("void");
 
-    private final Integer level;
-
-    private Var(Integer level) {
-        this.level = level;
+    private final String name;
+    
+    private Var(String name) {
+        this.name = name;
     }
-
-    public Integer getLevel() {
-        return this.level;
+    
+    public String getName() {
+        return this.name;
     }
 }

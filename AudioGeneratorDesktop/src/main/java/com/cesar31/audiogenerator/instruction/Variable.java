@@ -17,9 +17,9 @@ public class Variable {
     private Token token;
 
     // variables para arreglos
-    private int [] dimensions;
+    private int[] dimensions;
     private Object array;
-    
+
     public Variable(Token token) {
         this.token = token;
     }
@@ -34,9 +34,14 @@ public class Variable {
         this.id = id;
         this.value = value;
     }
-    
-    // constructor para arreglos
 
+    public Variable(Token token, Var type, String value) {
+        this.token = token;
+        this.type = type;
+        this.value = value;
+    }
+
+    // constructor para arreglos
     public Variable(Var type, String id, boolean keep, int[] dimensions, Object array) {
         this.type = type;
         this.id = id;

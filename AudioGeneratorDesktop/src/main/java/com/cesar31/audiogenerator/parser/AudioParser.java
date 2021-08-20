@@ -2003,7 +2003,7 @@ class CUP$AudioParser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Token var = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, var.getValue())); 
+		 RESULT = new Operation(OperationType.INTEGER, new Variable(var, Var.INTEGER, var.getValue())); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",25, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -2015,7 +2015,7 @@ class CUP$AudioParser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Token var = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Operation(OperationType.DOUBLE, new Variable(Var.DOUBLE, var.getValue())); 
+		 RESULT = new Operation(OperationType.DOUBLE, new Variable(var, Var.DOUBLE, var.getValue())); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",25, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -2027,7 +2027,7 @@ class CUP$AudioParser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Token var = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Operation(OperationType.STRING, new Variable(Var.STRING, var.getValue())); 
+		 RESULT = new Operation(OperationType.STRING, new Variable(var, Var.STRING, var.getValue())); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",25, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -2039,7 +2039,7 @@ class CUP$AudioParser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Token var = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Operation(OperationType.CHAR, new Variable(Var.CHAR, var.getValue())); 
+		 RESULT = new Operation(OperationType.CHAR, new Variable(var, Var.CHAR, var.getValue())); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("j",25, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -2099,7 +2099,7 @@ class CUP$AudioParser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Token var = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Variable(Var.BOOLEAN, var.getValue()); 
+		 RESULT = new Variable(var, Var.BOOLEAN, var.getValue()); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("boolean_val",15, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -2111,7 +2111,7 @@ class CUP$AudioParser$actions {
 		int varleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int varright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Token var = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Variable(Var.BOOLEAN, var.getValue()); 
+		 RESULT = new Variable(var, Var.BOOLEAN, var.getValue()); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("boolean_val",15, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;

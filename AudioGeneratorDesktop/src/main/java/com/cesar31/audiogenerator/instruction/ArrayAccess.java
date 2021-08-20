@@ -1,6 +1,5 @@
 package com.cesar31.audiogenerator.instruction;
 
-import com.cesar31.audiogenerator.control.ArrayHandler;
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
 import java.util.List;

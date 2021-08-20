@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.parser.Token;
 import java.lang.reflect.Array;
@@ -14,10 +15,10 @@ import java.util.List;
  */
 public class ArrayHandler {
 
-    private CastHandler cast;
+    private OperationHandler handler;
 
-    public ArrayHandler() {
-        this.cast = new CastHandler();
+    public ArrayHandler(OperationHandler handler) {
+        this.handler = handler;
     }
 
     /**
@@ -31,13 +32,16 @@ public class ArrayHandler {
      */
     public void addArrayStatementToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, SymbolTable e) {
         if (type != null) {
-            Var kind = cast.getType(type);
+            Var kind = handler.getCast().getType(type);
             Object array = Array.newInstance(String.class, dimensions);
             Variable variable = new Variable(kind, id.getValue(), keep, dimensions, array);
             if (!e.containsVariable(variable.getId())) {
                 e.add(variable);
             } else {
-                System.out.println("El id ya fue declarado");
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "El id que desea utilizar `" + id.getValue() + "`, ya ha sido usada en este ambito, intente con otro identificador.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
             }
         }
     }
@@ -52,11 +56,10 @@ public class ArrayHandler {
      * @param value objecto con valores del arreglo
      * @param ind dimension de cada arreglo individual
      * @param e tabla de simbolos
-     * @param handler
      */
-    public void addArrayAssignmentToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, Object value, List<Integer> ind, SymbolTable e, OperationHandler handler) {
+    public void addArrayAssignmentToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, Object value, List<Integer> ind, SymbolTable e) {
         if (type != null) {
-            Var kind = cast.getType(type);
+            Var kind = handler.getCast().getType(type);
 
             //Verificar que dimensiones de value sean las mismas que las declaradas y almacenadas en dimensions
             if (checkArrayDimensions(dimensions, ind)) {
@@ -71,26 +74,54 @@ public class ArrayHandler {
                     aux = new int[dimensions.length];
                     arrayTour(dimensions.length - 1, 0, dimensions, aux, new HashMap<>(), indexes);
 
-                    List<String> values = getValuesForArray(indexes, kind, value, e, handler);
-                    Object array = Array.newInstance(String.class, dimensions);
+                    List<String> values = getValuesForArray(id, indexes, kind, value, e, handler);
 
-                    // Agregar elementos al arreglo
-                    for (int i = 0; i < indexes.size(); i++) {
-                        setValueToArray(indexes.get(i), values.get(i), array);
+                    if (values != null) {
+                        Object array = Array.newInstance(String.class, dimensions);
+
+                        // Agregar elementos al arreglo
+                        for (int i = 0; i < indexes.size(); i++) {
+                            setValueToArray(indexes.get(i), values.get(i), array);
+                        }
+
+                        // Crear variable aqui y agregar a tabla de simbolos
+                        Variable matrix = new Variable(kind, id.getValue(), keep, dimensions, array);
+                        if (!e.containsVariable(matrix.getId())) {
+                            e.add(matrix);
+                        } else {
+                            Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                            String description = "La variable `" + id.getValue() + "` ya esta definida en este ambito, intente con otro identificador.";
+                            err.setDescription(description);
+                            this.handler.getErrors().add(err);
+                        }
                     }
 
-                    // Crear variable aqui y agregar a tabla de simbolos
-                    Variable matrix = new Variable(kind, id.getValue(), keep, dimensions, array);
-                    if (!e.containsVariable(matrix.getId())) {
-                        e.add(matrix);
-                    } else {
-                        System.out.println("Error, ya se encuentra arreglo en tabla de simbolos");
-                    }
+                } else {
+                    // dimensiones no son correctas
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "En la declaracion del arreglo `" + id.getValue() + "`, las dimensiones declaradas para el arreglo: `" + Arrays.toString(dimensions) + "`, no coinciden con las dimensiones del arreglo a asignar.";
+                    err.setDescription(description);
+                    handler.getErrors().add(err);
                 }
+            } else {
+                // dimensiones no son correctas
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "En la declaracion del arreglo `" + id.getValue() + "`, las dimensiones declaradas para el arreglo: `" + Arrays.toString(dimensions) + "`, no coinciden con las dimensiones del arreglo a asignar.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
             }
         }
     }
 
+    /**
+     * Obtener un elemento en especifico de un arreglo
+     *
+     * @param id
+     * @param indexes
+     * @param e
+     * @param handler
+     * @return
+     */
     public Variable getItemFromArray(Token id, List<Operation> indexes, SymbolTable e, OperationHandler handler) {
         Variable v = e.getVariable(id.getValue());
         if (v != null) {
@@ -147,17 +178,43 @@ public class ArrayHandler {
         return null;
     }
 
-    private List<String> getValuesForArray(List<int[]> indexes, Var kind, Object value, SymbolTable e, OperationHandler handler) {
+    private List<String> getValuesForArray(Token id, List<int[]> indexes, Var kind, Object value, SymbolTable e, OperationHandler handler) {
         List<String> values = new ArrayList<>();
+        boolean error = false;
 
         for (int[] i : indexes) {
             Object obj = getValueFromArray(i, value);
             if (obj != null) {
                 Operation op = (Operation) obj;
                 Variable v = op.run(e, handler);
-                Variable variable = cast.typeConversion(kind, v);
-                values.add(variable.getValue());
+                if (v != null) {
+                    Variable variable = handler.getCast().typeConversion(kind, v);
+                    if (variable != null) {
+                        values.add(variable.getValue());
+                    } else {
+                        // Error, el elemento en el indice i no se puede agregar al arreglo por ser de un tipo distinto
+                        Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                        String description = "No es posible realizar una asignacion al arreglo `" + id.getValue() + "` de tipo `" + kind.getName() + "`";
+                        description += " y el valor a asignar en el indice`" + Arrays.toString(i) + "` con valor `" + v.getValue() + "`, de tipo `" + v.getType().getName() + "`.";
+                        err.setDescription(description);
+                        this.handler.getErrors().add(err);
+                        error = true;
+                    }
+                } else {
+                    // Error, variable null, probablemente uno de los operadores tiene un valor nulo
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "No es posible realizar una asignacion al arreglo `" + id.getValue() + "` en el indice `" + Arrays.toString(i) + "` de un valor null";
+                    description += ", esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                    err.setDescription(description);
+                    this.handler.getErrors().add(err);
+
+                    error = true;
+                }
             }
+        }
+
+        if (error) {
+            return null;
         }
 
         return values;
@@ -196,7 +253,7 @@ public class ArrayHandler {
         int first = dimensions[dimensions.length - 1];
         for (int i = 0; i < ind.size(); i++) {
             if (first != ind.get(i)) {
-                System.out.println("Error, las dimensiones no coinciden");
+                // System.out.println("Error, las dimensiones no coinciden");
                 return false;
             }
         }
@@ -213,7 +270,7 @@ public class ArrayHandler {
                 size /= dimensions[i];
             } else {
                 // Error
-                System.out.println("Dimensiones no coinciden!");
+                // System.out.println("Dimensiones no coinciden!");
                 return false;
             }
 
@@ -249,6 +306,13 @@ public class ArrayHandler {
         }
     }
 
+    /**
+     * Asignar un elemento al arreglo
+     *
+     * @param dimension lugar donde se guarda o agrega el elemento
+     * @param value valor a guardar en el arreglo
+     * @param array es el arreglo
+     */
     private void setValueToArray(int[] dimension, String value, Object array) {
         int i = 0;
         Object aux = array;
@@ -259,6 +323,14 @@ public class ArrayHandler {
         Array.set(aux, dimension[i], value);
     }
 
+    /**
+     * Metodo para verificar si en la ultima dimension de un arreglo no se
+     * guarda otro arreglo
+     *
+     * @param item al objeto a verificar
+     * @return retorna true si el elemento no es un arreglo, y false en caso
+     * contrario
+     */
     private boolean isNotAnArray(Object item) {
         try {
             Array.getLength(item);
@@ -269,6 +341,15 @@ public class ArrayHandler {
         }
     }
 
+    /**
+     * Metodo para verificar que las dimensiones para obtener cierto elemento
+     * son menores que la longitud de las dimensiones de la declaracion del
+     * arreglo
+     *
+     * @param length
+     * @param indexes
+     * @return
+     */
     private boolean rightDimensions(int[] length, int[] indexes) {
         if (length.length != indexes.length) {
             return false;

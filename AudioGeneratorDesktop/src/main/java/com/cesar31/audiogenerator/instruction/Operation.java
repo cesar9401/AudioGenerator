@@ -60,16 +60,44 @@ public class Operation implements Instruction {
                 if (variable == null) {
                     Token t = value.getToken();
                     Err e = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
-                    String description = "La variable " + t.getValue() + ", no ha sido declarada.";
+                    String description = "No se han encontrado al simbolo `" + t.getValue() + "` este no ha sido declarado.";
                     e.setDescription(description);
                     handler.getErrors().add(e);
+                } else if (variable.getArray() != null) {
+                    // Se maneja error al verificar que v.getValue() is null
+                    // System.out.println("variable de tipo arreglo");
                 }
                 return variable;
             case INTEGER:
             case STRING:
             case BOOLEAN:
+                return value;
             case CHAR: // revisar longitud
+                if (value.getValue().length() != 1) {
+                    if (value.getToken() != null) {
+                        Token tmp = value.getToken();
+                        Err e = new Err(Err.TypeErr.SEMANTICO, tmp.getLine(), tmp.getColumn(), tmp.getValue());
+                        String description = "Las variables de tipo `caracter` deben de tener longitud de 1, el valor = `" + tmp.getValue() + "`, no cumple con la longitud esperada.";
+                        e.setDescription(description);
+                        handler.getErrors().add(e);
+                    }
+                }
+                return value;
+
             case DOUBLE: // revisar numero de cifras decimales
+                String val = value.getValue();
+                int index = val.indexOf(".");
+                int count = val.substring(index + 1).length();
+
+                if (count > 6) {
+                    if (value.getToken() != null) {
+                        Token tmp = value.getToken();
+                        Err e = new Err(Err.TypeErr.SEMANTICO, tmp.getLine(), tmp.getColumn(), tmp.getValue());
+                        String description = "Para las variables de tipo `doble`, el maximo de cifras decimales permitidas es 6. El valor `" + tmp.getValue() + "` no cumple con la longitud maxima permitida.";
+                        e.setDescription(description);
+                        handler.getErrors().add(e);
+                    }
+                }
                 return value;
 
             //operaciones aritmeticas

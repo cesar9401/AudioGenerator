@@ -19,15 +19,37 @@ public class OperationMaker {
         this.handler = handler;
     }
 
-    private void errorForOperations(Variable a, Token op) {
-        if (a.getValue() == null) {
+    private void errorForOperations(Variable a, Token op, String name) {
+        if (a.getValue() == null && a.getArray() == null) {
             Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
-            String description = "En la operacion definida por el operador " + op.getValue();
-            description += a.getId() != null ? ", la variable " + a.getId() + " no tiene un valor definido. " : ", uno de los operadores no tiene un valor definido. ";
+            String description = "En la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
+            description += a.getId() != null ? ", la variable `" + a.getId() + "` no tiene un valor definido. " : ", uno de los operadores no tiene un valor definido. ";
             description += "No es posible procesar la operacion.";
             e.setDescription(description);
-            handler.getErrors().add(e);
+            this.handler.getErrors().add(e);
+        } else if (a.getArray() != null) {
+            Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
+            String description = "En la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
+            description += ", la variable `" + a.getId() + "` es de tipo `arreglo de " + a.getType().getName() + "`, por lo tanto la operacion no puede ser procesada.";
+            e.setDescription(description);
+            this.handler.getErrors().add(e);
         }
+    }
+
+    private void errorOfTypes(Variable a, Variable b, Token op, String name) {
+        Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
+        String description = "No es posible realizar la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
+        description += " entre variables de tipos: `" + a.getType().getName() + "` y `" + b.getType().getName() + "`.";
+        e.setDescription(description);
+        this.handler.getErrors().add(e);
+    }
+
+    private void errorOfTypes(Variable a, Token op, String name) {
+        Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
+        String description = "No es posible realizar la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
+        description += " para la variable de tipo: `" + a.getType().getName() + "`.";
+        e.setDescription(description);
+        this.handler.getErrors().add(e);
     }
 
     public Variable sum(Variable a, Variable b, Token op) {
@@ -36,8 +58,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "suma");
+            errorForOperations(b, op, "suma");
             return null;
         }
 
@@ -149,8 +171,7 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        // cadena + cadena
-        System.out.println("No es posible suma");
+        errorOfTypes(a, b, op, "suma");
         return null;
     }
 
@@ -161,8 +182,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "resta");
+            errorForOperations(b, op, "resta");
             return null;
         }
 
@@ -262,7 +283,7 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        System.out.println("No es posible resta");
+        errorOfTypes(a, b, op, "resta");
         return null;
     }
 
@@ -272,8 +293,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "multiplicacion");
+            errorForOperations(b, op, "multiplicacion");
             return null;
         }
 
@@ -373,7 +394,7 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        System.out.println("No es posible multiplicar");
+        errorOfTypes(a, b, op, "multiplicacion");
         return null;
     }
 
@@ -383,8 +404,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "division");
+            errorForOperations(b, op, "division");
             return null;
         }
 
@@ -484,8 +505,7 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        System.out.println("No es posible dividir");
-
+        errorOfTypes(a, b, op, "division");
         return null;
     }
 
@@ -495,8 +515,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "modulo");
+            errorForOperations(b, op, "modulo");
             return null;
         }
 
@@ -505,7 +525,7 @@ public class OperationMaker {
             return new Variable(INTEGER, value.toString());
         }
 
-        System.out.println("No es posible ejecutar MOD");
+        errorOfTypes(a, b, op, "modulo");
         return null;
     }
 
@@ -515,8 +535,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "potencia");
+            errorForOperations(b, op, "potencia");
             return null;
         }
 
@@ -530,6 +550,7 @@ public class OperationMaker {
             return new Variable(DOUBLE, value.toString());
         }
 
+        errorOfTypes(a, b, op, "potencia");
         return null;
     }
 
@@ -539,7 +560,7 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null) {
-            errorForOperations(a, op);
+            errorForOperations(a, op, "menos unario");
             return null;
         }
 
@@ -554,7 +575,7 @@ public class OperationMaker {
             return new Variable(DOUBLE, value.toString());
         }
 
-        System.out.println("No es posible negacion numerica");
+        errorOfTypes(a, op, "menos unario");
         return null;
     }
 
@@ -564,8 +585,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, type.toString().toLowerCase());
+            errorForOperations(b, op, type.toString().toLowerCase());
             return null;
         }
 
@@ -598,10 +619,10 @@ public class OperationMaker {
         }
 
         if (checkTypes(a, INTEGER, b, BOOLEAN) && (a.getValue().equals("1") || b.getValue().equals("0"))) {
-            return logical(new Variable(BOOLEAN, a.getValue()), b, type, op);
+            return logical(new Variable(BOOLEAN, getBoolean(a).toString()), b, type, op);
         }
 
-        System.out.println("No es posible " + type);
+        errorOfTypes(a, b, op, type.toString().toLowerCase());
         return null;
     }
 
@@ -611,7 +632,7 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null) {
-            errorForOperations(a, op);
+            errorForOperations(a, op, "negacion logica");
             return null;
         }
 
@@ -628,7 +649,7 @@ public class OperationMaker {
             }
         }
 
-        System.out.println("No es posible negacion logica");
+        errorOfTypes(a, op, "negacion logica");
         return null;
     }
 
@@ -637,7 +658,7 @@ public class OperationMaker {
             return null;
         }
 
-        Boolean value = a.getValue() == null;
+        Boolean value = a.getValue() == null && a.getArray() == null;
         return new Variable(BOOLEAN, value.toString());
     }
 
@@ -647,8 +668,8 @@ public class OperationMaker {
         }
 
         if (a.getValue() == null || b.getValue() == null) {
-            errorForOperations(a, op);
-            errorForOperations(b, op);
+            errorForOperations(a, op, "comparacion");
+            errorForOperations(b, op, "comparacion");
             return null;
         }
 
@@ -741,7 +762,7 @@ public class OperationMaker {
             }
         }
 
-        System.out.println("No es posible comparacion " + type + ", entre: " + a.getType() + " y " + b.getType());
+        errorOfTypes(a, b, op, "comparacion");
         return null;
     }
 

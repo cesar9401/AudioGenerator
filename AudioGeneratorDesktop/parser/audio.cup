@@ -391,10 +391,10 @@ i ::=
 			;
 
 j ::=
-			INTEGER:var {: RESULT = new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, var.getValue())); :}
-			| DECIMAL:var {: RESULT = new Operation(OperationType.DOUBLE, new Variable(Var.DOUBLE, var.getValue())); :}
-			| STR:var {: RESULT = new Operation(OperationType.STRING, new Variable(Var.STRING, var.getValue())); :}
-			| CHAR:var {: RESULT = new Operation(OperationType.CHAR, new Variable(Var.CHAR, var.getValue())); :}
+			INTEGER:var {: RESULT = new Operation(OperationType.INTEGER, new Variable(var, Var.INTEGER, var.getValue())); :}
+			| DECIMAL:var {: RESULT = new Operation(OperationType.DOUBLE, new Variable(var, Var.DOUBLE, var.getValue())); :}
+			| STR:var {: RESULT = new Operation(OperationType.STRING, new Variable(var, Var.STRING, var.getValue())); :}
+			| CHAR:var {: RESULT = new Operation(OperationType.CHAR, new Variable(var, Var.CHAR, var.getValue())); :}
 			| boolean_val:var {: RESULT = new Operation(OperationType.BOOLEAN, var); :}
 			| ID:token {: RESULT = new Operation(OperationType.ID, new Variable(token)); :}
 			| l:array_access {: RESULT = new Operation(OperationType.ARRAY_ACCESS, array_access); :} /* arreglo */
@@ -402,8 +402,8 @@ j ::=
 			;
 
 boolean_val ::=
-			TRUE:var {: RESULT = new Variable(Var.BOOLEAN, var.getValue()); :}
-			| FALSE:var {: RESULT = new Variable(Var.BOOLEAN, var.getValue()); :}
+			TRUE:var {: RESULT = new Variable(var, Var.BOOLEAN, var.getValue()); :}
+			| FALSE:var {: RESULT = new Variable(var, Var.BOOLEAN, var.getValue()); :}
 			;
 /* Operaciones logicas y aritmeticas */
 

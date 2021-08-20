@@ -22,8 +22,12 @@ public class FileControl {
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String line = br.readLine();
                 while (line != null) {
-                    string += "\n" + line;
+                    string += line;
                     line = br.readLine();
+                    
+                    if(line != null) {
+                        string += "\n";
+                    }
                 }
             }
 

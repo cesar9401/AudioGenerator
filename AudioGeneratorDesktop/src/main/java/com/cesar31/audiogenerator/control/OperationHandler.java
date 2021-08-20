@@ -17,9 +17,9 @@ public class OperationHandler {
     private List<Err> errors;
 
     public OperationHandler() {
-        this.array = new ArrayHandler();
+        this.array = new ArrayHandler(this);
         this.cast = new CastHandler();
-        this.environment = new EnvironmentHandler();
+        this.environment = new EnvironmentHandler(this);
         this.operation = new OperationMaker(this);
         this.errors = new ArrayList<>();
     }

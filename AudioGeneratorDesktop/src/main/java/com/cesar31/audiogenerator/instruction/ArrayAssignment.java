@@ -1,10 +1,8 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.parser.Token;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,10 +43,26 @@ public class ArrayAssignment implements Instruction {
             Variable v = dimensions.get(i).run(table, handler);
             if (v.getType() == Var.INTEGER) {
                 dimension[i] = Integer.valueOf(v.getValue());
+                if (dimension[i] <= 0) {
+                    // Error, las dimensiones deben ser mayor a cero
+                    error = true;
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                    description += v.getId() != null ? " con id: `" + v.getId() + "`" : "";
+                    description += ", con valor entero(value = `" + v.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
+                    err.setDescription(description);
+                    handler.getErrors().add(err);
+                }
+
             } else {
                 // Agregar error aqui
                 error = true;
-                System.out.println("Se necesita variable de tipo entero para definir dimensiones de arreglos");
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                description += v.getId() != null ? " con id: `" + v.getId() + "`" : "";
+                description += ", no es de tipo entero(value = `" + v.getValue() + "`, tipo = `" + v.getType().getName() + "`). Se necesita una variable de tipo entero para definir la longitud/dimension de un arreglo.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
             }
         }
 
@@ -61,7 +75,7 @@ public class ArrayAssignment implements Instruction {
         } else {
             if (!error) {
                 // Declaracion y asignacionH
-                handler.getArray().addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table, handler);
+                handler.getArray().addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table);
             }
         }
 
