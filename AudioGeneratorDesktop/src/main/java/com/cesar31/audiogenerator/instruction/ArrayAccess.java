@@ -11,16 +11,16 @@ import java.util.List;
 public class ArrayAccess implements Instruction {
 
     private Token id;
-    private List<Operation> indexes;
+    private List<ArrayIndex> indexes;
 
-    public ArrayAccess(Token id, List<Operation> indexes) {
+    public ArrayAccess(Token id, List<ArrayIndex> indexes) {
         this.id = id;
         this.indexes = indexes;
     }
 
     @Override
     public Variable run(SymbolTable table, OperationHandler handler) {
-        return handler.getArray().getItemFromArray(id, indexes, table, handler);
+        return handler.getArray().getItemFromArray(id, indexes, table);
     }
 
     @Override

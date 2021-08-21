@@ -1325,10 +1325,10 @@ class CUP$AudioParser$actions {
 		int token_idleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int token_idright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		Token token_id = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-		int list_operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
-		int list_operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
-		List<Operation> list_operation = (List<Operation>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new ArrayAccess(token_id, list_operation); 
+		int list_array_indexleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int list_array_indexright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		List<ArrayIndex> list_array_index = (List<ArrayIndex>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = new ArrayAccess(token_id, list_array_index); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("l",39, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1349,9 +1349,9 @@ class CUP$AudioParser$actions {
 		int list_tokenleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).left;
 		int list_tokenright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).right;
 		List<Token> list_token = (List<Token>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).value;
-		int dimensionsleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
-		int dimensionsright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
-		List<Operation> dimensions = (List<Operation>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
+		int list_array_indexleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
+		int list_array_indexright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
+		List<ArrayIndex> list_array_index = (List<ArrayIndex>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
 		int array_listleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int array_listright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Object array_list = (Object)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
@@ -1367,7 +1367,7 @@ class CUP$AudioParser$actions {
 
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list, ind));
+						RESULT.add(new ArrayAssignment(t, keep, type, id, list_array_index, array_list, ind));
 					}
 					ind = new ArrayList<>();
 				
@@ -1378,14 +1378,14 @@ class CUP$AudioParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 46: // dimensions ::= dimensions dimension 
             {
-              List<Operation> RESULT =null;
+              List<ArrayIndex> RESULT =null;
 		int list_opleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int list_opright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
-		List<Operation> list_op = (List<Operation>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-		int operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
-		int operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
-		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = list_op; RESULT.add(operation); 
+		List<ArrayIndex> list_op = (List<ArrayIndex>)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
+		int array_indexleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int array_indexright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		ArrayIndex array_index = (ArrayIndex)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = list_op; RESULT.add(array_index); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1393,11 +1393,11 @@ class CUP$AudioParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 47: // dimensions ::= dimension 
             {
-              List<Operation> RESULT =null;
-		int operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
-		int operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
-		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new ArrayList<>(); RESULT.add(operation); 
+              List<ArrayIndex> RESULT =null;
+		int array_indexleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int array_indexright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		ArrayIndex array_index = (ArrayIndex)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = new ArrayList<>(); RESULT.add(array_index); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimensions",27, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1405,11 +1405,17 @@ class CUP$AudioParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 48: // dimension ::= LBRACKET a RBRACKET 
             {
-              Operation RESULT =null;
+              ArrayIndex RESULT =null;
+		int leftleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).left;
+		int leftright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).right;
+		Token left = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).value;
 		int operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-		 RESULT = operation; 
+		int rightleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int rightright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		Token right = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		 RESULT = new ArrayIndex(left, operation, right); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("dimension",26, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;

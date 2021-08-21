@@ -73,8 +73,10 @@ non terminal Assignment assignment, assign, for_assign;
 non terminal List<Instruction> body, bod, inicio1;
 non terminal If if_, else_, else_if;
 non terminal Variable boolean_val;
-non terminal Operation a, b, c, d, e, f, g, h, i, j, dimension;
-non terminal List<Operation> dimensions, value_list;
+non terminal Operation a, b, c, d, e, f, g, h, i, j;
+non terminal ArrayIndex dimension;
+non terminal List<ArrayIndex> dimensions;
+non terminal List<Operation> value_list;
 non terminal While while_;
 non terminal Instruction function;
 non terminal Principal principal;
@@ -252,13 +254,13 @@ assignment ::=
 			;
 
 l ::=
-			ID:token_id dimensions:list_operation
-				{: RESULT = new ArrayAccess(token_id, list_operation); :}
+			ID:token_id dimensions:list_array_index
+				{: RESULT = new ArrayAccess(token_id, list_array_index); :}
 			;
 
 /* declaracion de arreglos */
 array_statement ::=
-			eol_ tab:t keep:keep VAR type:type ARRAY id_list:list_token dimensions:dimensions array_value:array_list
+			eol_ tab:t keep:keep VAR type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
 				{:
 					if(min <= t && t <= max) {
 						max = t;
@@ -271,22 +273,22 @@ array_statement ::=
 
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayAssignment(t, keep, type, id, dimensions, array_list, ind));
+						RESULT.add(new ArrayAssignment(t, keep, type, id, list_array_index, array_list, ind));
 					}
 					ind = new ArrayList<>();
 				:}
 			;
 
 dimensions ::=
-			dimensions:list_op dimension:operation
-				{: RESULT = list_op; RESULT.add(operation); :}
-			| dimension:operation
-				{: RESULT = new ArrayList<>(); RESULT.add(operation); :}
+			dimensions:list_op dimension:array_index
+				{: RESULT = list_op; RESULT.add(array_index); :}
+			| dimension:array_index
+				{: RESULT = new ArrayList<>(); RESULT.add(array_index); :}
 			;
 
 dimension ::=
-			LBRACKET a:operation RBRACKET
-				{: RESULT = operation; :}
+			LBRACKET:left a:operation RBRACKET:right
+				{: RESULT = new ArrayIndex(left, operation, right); :}
 			;
 
 array_value ::=

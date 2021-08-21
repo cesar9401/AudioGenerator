@@ -15,14 +15,14 @@ public class ArrayAssignment implements Instruction {
     private boolean keep;
     private Token type;
     private Token id;
-    private List<Operation> dimensions;
+    private List<ArrayIndex> dimensions;
     private Object value;
 
     // para evaluar dimensiones del arreglo
     List<Integer> ind;
 
     // solo declaracion
-    public ArrayAssignment(Integer tab, boolean keep, Token type, Token id, List<Operation> dimensions, Object value, List<Integer> ind) {
+    public ArrayAssignment(Integer tab, boolean keep, Token type, Token id, List<ArrayIndex> dimensions, Object value, List<Integer> ind) {
         this.tab = tab;
         this.keep = keep;
         this.type = type;
@@ -40,29 +40,52 @@ public class ArrayAssignment implements Instruction {
         boolean error = false;
 
         for (int i = 0; i < dimensions.size(); i++) {
-            Variable v = dimensions.get(i).run(table, handler);
-            if (v.getType() == Var.INTEGER) {
-                dimension[i] = Integer.valueOf(v.getValue());
-                if (dimension[i] <= 0) {
-                    // Error, las dimensiones deben ser mayor a cero
+            Variable v = dimensions.get(i).getOperation().run(table, handler);
+            if (v != null) {
+                if (v.getType() == Var.INTEGER) {
+                    dimension[i] = Integer.valueOf(v.getValue());
+                    if (dimension[i] <= 0) {
+                        // Error, las dimensiones deben ser mayor a cero
+                        error = true;
+                        Token left = dimensions.get(i).getLbracket();
+
+                        Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
+                        String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                        if (v.getId() != null) {
+                            description += " con id: `" + v.getId() + "`";
+                            err.setLexema(v.getId());
+                            if (v.getToken() != null) {
+                                err.setLine(v.getToken().getLine());
+                                err.setColumn(v.getToken().getColumn());
+                            }
+                        }
+                        description += ", con valor entero(value = `" + v.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
+                        err.setDescription(description);
+                        handler.getErrors().add(err);
+                    }
+
+                } else {
+                    // Agregar error aqui
                     error = true;
-                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    Token left = dimensions.get(i).getLbracket();
+
+                    Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
                     String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
-                    description += v.getId() != null ? " con id: `" + v.getId() + "`" : "";
-                    description += ", con valor entero(value = `" + v.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
+                    if (v.getId() != null) {
+                        description += " con id: `" + v.getId() + "`";
+                        err.setLexema(v.getId());
+                        if (v.getToken() != null) {
+                            err.setLine(v.getToken().getLine());
+                            err.setColumn(v.getToken().getLine());
+                        }
+                    }
+                    description += ", no es de tipo entero(value = `" + v.getValue() + "`, tipo = `" + v.getType().getName() + "`). Se necesita una variable de tipo entero para definir la longitud/dimension de un arreglo.";
                     err.setDescription(description);
                     handler.getErrors().add(err);
                 }
-
             } else {
-                // Agregar error aqui
+                // Error variable no existe, error se determina en la clase operacion
                 error = true;
-                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
-                String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
-                description += v.getId() != null ? " con id: `" + v.getId() + "`" : "";
-                description += ", no es de tipo entero(value = `" + v.getValue() + "`, tipo = `" + v.getType().getName() + "`). Se necesita una variable de tipo entero para definir la longitud/dimension de un arreglo.";
-                err.setDescription(description);
-                handler.getErrors().add(err);
             }
         }
 
@@ -116,11 +139,11 @@ public class ArrayAssignment implements Instruction {
         this.id = id;
     }
 
-    public List<Operation> getDimensions() {
+    public List<ArrayIndex> getDimensions() {
         return dimensions;
     }
 
-    public void setDimensions(List<Operation> dimensions) {
+    public void setDimensions(List<ArrayIndex> dimensions) {
         this.dimensions = dimensions;
     }
 }

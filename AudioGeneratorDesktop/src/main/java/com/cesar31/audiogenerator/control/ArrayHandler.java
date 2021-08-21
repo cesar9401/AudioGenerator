@@ -114,15 +114,16 @@ public class ArrayHandler {
     }
 
     /**
-     * Obtener un elemento en especifico de un arreglo
+     * Obtener un elemento en especifico de un arreglo, metodo principal para el
+     * acceso de un arreglo
      *
-     * @param id
-     * @param indexes
-     * @param e
-     * @param handler
+     * @param id Token con el nombre del id
+     * @param indexes Listado de instrucciones con los indices para el acceso al
+     * arreglo
+     * @param e tabla de simbolos
      * @return
      */
-    public Variable getItemFromArray(Token id, List<Operation> indexes, SymbolTable e, OperationHandler handler) {
+    public Variable getItemFromArray(Token id, List<ArrayIndex> indexes, SymbolTable e) {
         Variable v = e.getVariable(id.getValue());
         if (v != null) {
             if (v.getArray() != null) {
@@ -130,7 +131,7 @@ public class ArrayHandler {
                 boolean error = false;
 
                 for (int i = 0; i < indexes.size(); i++) {
-                    Variable tmp = indexes.get(i).run(e, handler);
+                    Variable tmp = indexes.get(i).getOperation().run(e, handler);
 
                     if (tmp != null) {
                         if (tmp.getType() == Var.INTEGER) {
@@ -138,46 +139,108 @@ public class ArrayHandler {
                             if (index[i] < 0) {
                                 // Error, indice menor que cero
                                 error = true;
+                                Token left = indexes.get(i).getLbracket();
+
+                                Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
+                                String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                                if (tmp.getId() != null) {
+                                    description += " con id: `" + tmp.getId() + "`";
+                                    err.setLexema(tmp.getId());
+                                    if (tmp.getToken() != null) {
+                                        err.setLine(tmp.getToken().getLine());
+                                        err.setColumn(tmp.getToken().getColumn());
+                                    }
+                                }
+                                description += ", con valor entero(value = `" + tmp.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
+                                err.setDescription(description);
+                                handler.getErrors().add(err);
                             }
                         } else {
-                            error = true;
                             // Error, variable para acceder a indice i no es de tipo entero
+                            error = true;
+                            Token left = indexes.get(i).getLbracket();
+
+                            Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
+                            String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                            if (tmp.getId() != null) {
+                                description += " con id: `" + tmp.getId() + "`";
+                                err.setLexema(tmp.getId());
+                                if (tmp.getToken() != null) {
+                                    err.setLine(tmp.getToken().getLine());
+                                    err.setColumn(tmp.getToken().getLine());
+                                }
+                            }
+                            description += ", no es de tipo entero(value = `" + tmp.getValue() + "`, tipo = `" + tmp.getType().getName() + "`). Se necesita una variable de tipo entero para definir la longitud/dimension de un arreglo.";
+                            err.setDescription(description);
+                            handler.getErrors().add(err);
+
                         }
                     } else {
                         error = true;
-                        // Error, variable con que intenta accesar a indice i no existe
+                        // Error, variable con que intenta accesar a indice i no existe, se verifica cuando se hace la operacion y el posible id no existe
                     }
                 }
 
                 if (!error) {
                     // verificar que los indices no sobrepasen a la longitud del array
-                    if (rightDimensions(v.getDimensions(), index)) {
-                        Object value = this.getValueFromArray(index, v.getArray());
-                        if (value != null) {
-                            return new Variable(v.getType(), value.toString());
-                        } else {
-                            // Error, no tiene valor definido en indices index
-                            System.out.println("error, no tiene valor def");
-                        }
+                    if (v.getDimensions().length == index.length) {
+                        if (rightDimensions(v.getDimensions(), index)) {
+                            Object value = this.getValueFromArray(index, v.getArray());
+                            if (value != null) {
+                                return new Variable(v.getType(), value.toString());
+                            } else {
+                                // Error, no tiene valor definido en indices index
+                                System.out.println("Revisar aqui :v");
+                                return new Variable(v.getType(), null);
+                            }
 
+                        } else {
+                            // out of indexs
+                            Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), "");
+                            String description = "En la llamada al arreglo `" + id.getValue() + "`, los indices indicados: `" + Arrays.toString(index) + "`, estan fuera de rango.";
+                            err.setDescription(description);
+                            handler.getErrors().add(err);
+                        }
                     } else {
-                        // out of indexs
-                        System.out.println("Ouf of indexs");
+                        // error, dimensiones con concuerdan
+                        Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), "");
+                        String description = "En la llamada el arreglo `" + id.getValue() + "`, los indices indicados no concuerdan con las dimensiones del arreglo.";
+                        description += " El arreglo es de " + v.getDimensions().length + " dimensiones, y en la llamada se han indicado: " + index.length + ".";
+                        err.setDescription(description);
+                        handler.getErrors().add(err);
                     }
                 }
 
             } else {
                 // Error, variable no es de tipo arreglo
-                System.out.println("variable no es de tipo arreglo");
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "La variable con identificador `" + id.getValue() + "`, no corresponde a una variable de tipo arreglo.";
+                err.setDescription(description);
+                this.handler.getErrors().add(err);
             }
         } else {
             // Error, variable no existe
-            System.out.println("Variable arreglo no existe");
+            Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+            String description = "El arreglo con identificador `" + id.getValue() + "` no ha sido declarado.";
+            err.setDescription(description);
+            this.handler.getErrors().add(err);
         }
 
         return null;
     }
 
+    /**
+     * Obtener elementos del arreglo que se obtuvieron en la declaracion del
+     * mismo
+     *
+     * @param id
+     * @param indexes
+     * @param kind
+     * @param value
+     * @param e
+     * @param handler
+     * @return
+     */
     private List<String> getValuesForArray(Token id, List<int[]> indexes, Var kind, Object value, SymbolTable e, OperationHandler handler) {
         List<String> values = new ArrayList<>();
         boolean error = false;
