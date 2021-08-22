@@ -10,27 +10,37 @@ import java.util.List;
  */
 public class IfInstruction implements Instruction {
 
-    private Integer tab;
     private List<If> if_instructions;
-    private If.Type current;
 
     public IfInstruction() {
-        this.tab = 0;
         this.if_instructions = new ArrayList<>();
     }
 
-    public IfInstruction(Integer tab, If.Type current) {
+    public IfInstruction(If if_) {
         this();
-        this.tab = tab;
-        this.current = current;
+        this.if_instructions.add(if_);
+    }
+
+    public IfInstruction(If if_, If else_) {
+        this(if_);
+        this.if_instructions.add(else_);
+    }
+
+    public IfInstruction(If if_, List<If> if_else) {
+        this(if_);
+        this.if_instructions.addAll(if_else);
+    }
+
+    public IfInstruction(If if_, List<If> if_else, If else_) {
+        this(if_, if_else);
+        this.if_instructions.add(else_);
     }
 
     public If.Type getCurrent() {
-        return current;
+        return If.Type.IF;
     }
 
     public void setCurrent(If.Type current) {
-        this.current = current;
     }
 
     @Override
@@ -38,14 +48,30 @@ public class IfInstruction implements Instruction {
         for (If i : if_instructions) {
 
             Operation operation = i.getCondition();
-            Boolean value = operation != null ? handler.getOperation().getValue(operation.run(table, handler)) : true;
+            Boolean value = true;
+            boolean error = false;
             
-            if (value) {
-                SymbolTable local = new SymbolTable(table);
-                for (Instruction j : i.getInstructions()) {
-                    j.run(local, handler);
+            if(operation == null) {
+                value = true;
+            } else {
+                Variable v = operation.run(table, handler);
+                if(v != null) {
+                    value = handler.getOperation().getValue(v);
+                } else {
+                    error = true;
+                    System.out.println("value no es de tipo boolean");
                 }
-                return null;
+            }
+            
+            // Boolean value = operation != null ? handler.getOperation().getValue(v) : true;
+            if(!error) {
+                if (value) {
+                    SymbolTable local = new SymbolTable(table);
+                    for (Instruction j : i.getInstructions()) {
+                        j.run(local, handler);
+                    }
+                    return null;
+                }
             }
         }
 
@@ -62,11 +88,10 @@ public class IfInstruction implements Instruction {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 }

@@ -1,7 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,23 +9,10 @@ import java.util.List;
  */
 public class While implements Instruction, Ins {
 
-    private Integer tab;
     private Operation condition;
     private List<Instruction> instructions;
 
-    public While() {
-        this.tab = 0;
-        this.instructions = new ArrayList<>();
-    }
-
-    public While(Integer tab, Operation condition) {
-        this();
-        this.tab = tab;
-        this.condition = condition;
-    }
-
     public While(Operation condition, List<Instruction> instructions) {
-        this();
         this.condition = condition;
         this.instructions = instructions;
     }
@@ -64,12 +50,11 @@ public class While implements Instruction, Ins {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 
     @Override

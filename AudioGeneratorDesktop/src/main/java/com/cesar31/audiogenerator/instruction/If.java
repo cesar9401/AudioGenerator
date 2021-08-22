@@ -1,6 +1,5 @@
 package com.cesar31.audiogenerator.instruction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,25 +12,11 @@ public class If implements Ins {
         IF, ELSE_IF, ELSE
     }
 
-    private Integer tab;
     private Type type;
     private Operation condition;
     private List<Instruction> instructions;
 
-    public If() {
-        this.tab = 0;
-        this.instructions = new ArrayList<>();
-    }
-
-    public If(Integer tab, Type type, Operation condition) {
-        this();
-        this.tab = tab;
-        this.type = type;
-        this.condition = condition;
-    }
-
     public If(Type type, Operation condition, List<Instruction> instructions) {
-        this();
         this.type = type;
         this.condition = condition;
         this.instructions = instructions;
@@ -65,12 +50,11 @@ public class If implements Ins {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 
     @Override

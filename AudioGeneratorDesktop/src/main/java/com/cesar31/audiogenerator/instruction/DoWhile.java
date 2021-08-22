@@ -1,7 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,18 +9,12 @@ import java.util.List;
  */
 public class DoWhile implements Instruction, Ins {
 
-    private Integer tab;
     private List<Instruction> instructions;
     private Operation condition;
 
-    public DoWhile() {
-        this.tab = 0;
-        this.instructions = new ArrayList<>();
-    }
-
-    public DoWhile(Integer tab) {
-        this();
-        this.tab = tab;
+    public DoWhile(List<Instruction> instructions, Operation condition) {
+        this.instructions = instructions;
+        this.condition = condition;
     }
 
     @Override
@@ -57,12 +50,11 @@ public class DoWhile implements Instruction, Ins {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 
     @Override

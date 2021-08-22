@@ -1,7 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,38 +9,30 @@ import java.util.List;
  */
 public class For implements Instruction, Ins {
 
-    private Integer tab;
-
     private Assignment init;
     private Operation condition;
     private Assignment increase;
     private List<Instruction> instructions;
 
-    public For() {
-        this.tab = 0;
-        this.instructions = new ArrayList<>();
-    }
-
-    public For(Integer tab, Assignment init, Operation condition, Assignment increase) {
-        this();
-        this.tab = tab;
+    public For(Assignment init, Operation condition, Assignment increase, List<Instruction> instructions) {
         this.init = init;
         this.condition = condition;
         this.increase = increase;
+        this.instructions = instructions;
     }
 
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
         SymbolTable local = new SymbolTable(table);
         this.init.run(local, handler);
-        while(handler.getOperation().getValue(condition.run(local, handler))) {
+        while (handler.getOperation().getValue(condition.run(local, handler))) {
             SymbolTable local1 = new SymbolTable(local);
-            for(Instruction i : instructions) {
+            for (Instruction i : instructions) {
                 i.run(local1, handler);
             }
             increase.run(local1, handler);
         }
-        
+
         return null;
     }
 
@@ -81,12 +72,11 @@ public class For implements Instruction, Ins {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 
     @Override

@@ -8,11 +8,9 @@ import com.cesar31.audiogenerator.control.OperationHandler;
  */
 public class Message implements Instruction {
 
-    private Integer tab;
     private Operation operation;
 
-    public Message(Integer tab, Operation operation) {
-        this.tab = tab;
+    public Message(Operation operation) {
         this.operation = operation;
     }
 
@@ -34,11 +32,10 @@ public class Message implements Instruction {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 }

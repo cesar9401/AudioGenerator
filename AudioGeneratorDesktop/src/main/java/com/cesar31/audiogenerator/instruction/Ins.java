@@ -15,6 +15,6 @@ public interface Ins {
     public Integer getTab();
 
     public void setTab(Integer tab);
-
-    public boolean isInAst();
+    
+     public boolean isInAst();
 }

@@ -1,8 +1,8 @@
-
 package com.cesar31.audiogenerator.parser;
 
-import java_cup.runtime.Symbol;
 import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
+import java_cup.runtime.Symbol;
+import java.util.Stack;
 
 %%
 
@@ -17,6 +17,9 @@ import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
 // %cupdebug
 
 %{
+	private Stack<Integer> stack = new Stack<>();
+	private boolean end = false;
+
 	StringBuffer string = new StringBuffer();
 	StringBuffer character = new StringBuffer();
 
@@ -32,19 +35,18 @@ import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
 %}
 
 %eofval{
+	// System.out.println("Stack -> " + stack.size());
 	return symbol(EOF);
 %eofval}
 %eofclose
 
 LineTerminator = \r|\n|\r\n
-Tab = \t|"    "
-WhiteSpace = [ ]
-
-LineWithTab = \t+\n
+WhiteSpace = [ \t]+
+Tab = \t
 
 /* Coments */
 InputCharacter = [^\r\n]
-LineComment = [ \t]* ">>" {InputCharacter}* {LineTerminator}?
+LineComment = [ \t]* ">>" {InputCharacter}*
 CommentContent = ([^-]|\-+[^"->"]|\-*[\w<,:;\'\"])*
 BlockComment = [ \t]* "<-" {CommentContent} "-"* "->"
 
@@ -60,8 +62,32 @@ Id = [a-zA-Z]\w*
 /* Estados */
 %state STRING
 %state CHARACTER
+%state LINE
 
 %%
+
+<YYINITIAL, LINE> {
+	<<EOF>>
+	{
+		if(!stack.isEmpty() && !end) {
+			end = true;
+			return symbol(EOL);
+		} else {
+			while(!stack.isEmpty()) {
+				stack.pop();
+				return symbol(DEDENT);
+			}
+		}
+
+		return symbol(EOF);
+	}
+
+	{Comment}
+	{ /* Ignore */ }
+
+	// [\s]+\n?$
+	// { /* Ignore */ }
+}
 
 <YYINITIAL> {
 
@@ -327,20 +353,76 @@ Id = [a-zA-Z]\w*
 		yybegin(CHARACTER);
 	}
 
-	{LineWithTab}
-	{ /* Ignore */ }
-
-	{Tab}
-	{ return symbol(TAB, yytext()); }
-
 	{LineTerminator}
-	{ return symbol(EOL, yytext()); }
+	{
+		yybegin(LINE);
+		return symbol(EOL);
+	}
 
 	{WhiteSpace}
 	{ /* Ignore */ }
+}
 
-	{Comment}
-	{ /* Ignore */ }
+/* Estado para aceptar tabulaciones despues de un salta de linea */
+<LINE> {
+	\n
+	{ return symbol(EOL); }
+
+	({Tab}|" ")*\n
+	{ return symbol(EOL); }
+
+	({Tab}|"    ")+
+	{
+		int amount = yytext().replace("    ", "\t").length();
+		// System.out.println("tab -> " + amount);
+
+		if(stack.isEmpty()) {
+			if(amount > 1) {
+				// error identacion
+				System.out.println("error indent " + amount + " -> " + (yyline + 1) + ", " + (yycolumn + 1));
+				yybegin(YYINITIAL);
+			} else {
+				// generar token INDENT
+				stack.push(amount);
+				yybegin(YYINITIAL);
+				return symbol(INDENT);
+			}
+		} else if(amount == stack.peek()) {
+			// do nothing
+			yybegin(YYINITIAL);
+		} else if(amount == stack.peek() + 1) {
+			// generar token INDENT
+			stack.push(amount);
+			yybegin(YYINITIAL);
+			return symbol(INDENT);
+		} else if(amount > stack.peek() + 1) {
+			// error identacion
+			System.out.println("error indent " + amount + " -> " + (yyline + 1) + ", " + (yycolumn + 1));
+			yybegin(YYINITIAL);
+		}else if(amount < stack.peek()) {
+			while(amount != stack.peek()) {
+				stack.pop();
+				//push back
+				yypushback(yytext().length());
+
+				//emitir token DEDENT
+				return symbol(DEDENT);
+			}
+			yybegin(YYINITIAL);
+		}
+	}
+
+	[^ \r\n\t]+
+	{
+		if(!stack.isEmpty()) {
+			System.out.println("Error ident -> nivel de indentacion actual: " + stack.peek() + " -> " + (yyline + 1) + ", " + (yycolumn + 1));
+		}
+		yypushback(yytext().length());
+		yybegin(YYINITIAL);
+	}
+
+	{WhiteSpace}
+	{/* Ignore */}
 }
 
 /* Estado para construir strings entre comilla doble */

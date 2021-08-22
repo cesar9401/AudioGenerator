@@ -14,23 +14,14 @@ import com.cesar31.audiogenerator.error.*;
 class AudioParser;
 
 parser code {:
-	private Integer min, max;
-	private StackHandler stackHandler;
 	private ErrorHandler errorHandler;
 
 	private List<Integer> ind;
 
 	public AudioParser(AudioLex lex) {
 		super(lex);
-		this.min = 0;
-		this.max = 0;
-		this.stackHandler = new StackHandler();
 		this.errorHandler = new ErrorHandler();
 		this.ind = new ArrayList<>();
-	}
-
-	public Stack<Ins> getStack() {
-		return this.stackHandler.getStack();
 	}
 
 	public List<Err> getErrors() {
@@ -61,6 +52,7 @@ terminal Token WAIT, ORDER, ASC, DESC, EVEN, ODD, PRIME, SUM, LENGTH, MSG, MAIN;
 terminal Token ID, INTEGER, DECIMAL, TAB, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
 terminal Token NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
 terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, STR, CHAR;
+terminal Token INDENT, DEDENT;
 terminal Token ERROR;
 
 non terminal Integer tab;
@@ -70,8 +62,9 @@ non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement;
 non terminal Assignment assignment, assign, for_assign;
-non terminal List<Instruction> body, bod, inicio1;
+non terminal List<Instruction> body, bod, inicio1, f_body, function_body;
 non terminal If if_, else_, else_if;
+non terminal List<If> list_else_if;
 non terminal Variable boolean_val;
 non terminal Operation a, b, c, d, e, f, g, h, i, j;
 non terminal ArrayIndex dimension;
@@ -87,6 +80,9 @@ non terminal List<ArrayAssignment> array_statement;
 non terminal Object list, fn;
 non terminal List<Object> list_fn;
 non terminal ArrayAccess l;
+non terminal IfInstruction list_if;
+non terminal Instruction control;
+non terminal List<Instruction> m_body, main_body;
 
 non terminal eol, eol_;
 non terminal array_value;
@@ -97,16 +93,9 @@ non terminal params_f, params, param;
 start with inicio1;
 
 inicio1 ::=
-			eol TRACK ID extends_ bod:list_i
+			eol_ TRACK ID extends_ eol bod:list_i
 				{:
 					RESULT = list_i;
-					if(!getStack().isEmpty()) {
-						for(Ins i : getStack()) {
-							if(i.isInAst()) {
-								RESULT.add((Instruction) i);
-							}
-						}
-					}
 				:}
 			;
 
@@ -115,75 +104,70 @@ extends_ ::=
 			|
 			;
 
+/* main_body */
 bod ::=
-			body:list_i
-				{: RESULT = list_i; :}
-			| body:list_i eol_
-				{: RESULT = list_i; :}
+			INDENT m_body:list DEDENT
+				{: RESULT = list; :}
+			|
+				{: RESULT = new ArrayList<>(); :}
+			;
+
+m_body ::=
+			m_body:list main_body:instruction
+				{: RESULT = list; RESULT.addAll(instruction); :}
+			| main_body:instruction
+				{: RESULT = new ArrayList<>(); RESULT.addAll(instruction); :}
+			;
+
+main_body ::=
+			principal:principal
+				{: RESULT = new ArrayList<>(); RESULT.add(principal); :}
+			| function
+			| statement:statement eol
+				{: RESULT = new ArrayList<>(); RESULT.addAll(statement); :}
+			| assignment:assignment eol
+				{: RESULT = new ArrayList<>(); RESULT.add(assignment); :}
+			| array_statement:array_statement eol
+				{: RESULT = new ArrayList<>(); RESULT.addAll(array_statement); :}
+			;
+/* main_body */
+
+/* cuerpo para funciones */
+function_body ::=
+			INDENT f_body:list DEDENT
+				{: RESULT = list; :}
+			|
+				{: RESULT = new ArrayList<>(); :}
+			;
+
+f_body ::=
+			f_body:list_ins body:list
+				{: RESULT = list_ins; RESULT.addAll(list); :}
+			| body:list
+				{: RESULT = list; :}
 			;
 
 body ::=
-			body:list_i statement:list // statement -> ArrayList<Assignment>
-				{:
-					RESULT = list_i;
-					for(Assignment a : list) {
-						stackHandler.checkStackForInstructionsNonFather(RESULT , a);
-					}
-				:}
-			| body:list_i assign:assign
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsNonFather(RESULT, assign); :}
-			| body:list_i array_statement:array_assign // array_statement -> ArrayList<ArrayAssignment>
-				{:
-					RESULT = list_i;
-					for(ArrayAssignment a : array_assign) {
-						stackHandler.checkStackForInstructionsNonFather(RESULT, a);
-					}
-				:}
-			| body:list_i for_:for_
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, for_); :}
-			| body:list_i if_:if_
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, if_); :}
-			| body:list_i else_:else_
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, else_); :}
-			| body:list_i else_if:else_if
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsIf(RESULT, else_if); :}
-			| body:list_i while_:wh
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, wh); :}
-			| body:list_i do_while:do_while
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, do_while); :}
-			| body:list_i switch_
-			| body:list_i case_
-			| body:list_i default_
-			| body:list_i exit_
-			| body:list_i continue_
-			| body:list_i return_
-			| body:list_i function
-				{: RESULT = list_i; :}
-			| body:list_i principal:principal
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsFather(RESULT, principal); :}
-			| body:list_i message:message
-				{: RESULT = list_i; stackHandler.checkStackForInstructionsNonFather(RESULT, message); :}
-			|
-				{: RESULT = new ArrayList<Instruction>(); :}
+			statement:list eol /* ArrayList<>(); */
+				{: RESULT = new ArrayList<>(); RESULT.addAll(list); :}
+			| assignment:assign eol /* Assignment */
+				{: RESULT = new ArrayList<>(); RESULT.add(assign); :}
+			| array_statement:list eol /* List<ArrayAssignment> */
+				{:  RESULT = new ArrayList<>(); RESULT.addAll(list); :}
+			| message:message eol /* Message */
+				{: RESULT = new ArrayList<>(); RESULT.add(message); :}
+			| control:instruction
+				{: RESULT = new ArrayList<>(); RESULT.add(instruction); :}
 			;
-
+/* cuerpo para funciones */
 
 /* declaracion de variables */
 statement ::=
-			eol_ tab:t keep:keep VAR type:token id_list:list value:operation
+			keep:keep VAR type:token id_list:list value:operation
 				{:
-					if(min <= t && t <= max) {
-						max = t;
-					} else if(t == 0) {
-						min = 0;
-						max = 0;
-					} else {
-						System.out.println("statement mal identado");
-					}
-
 					RESULT = new ArrayList<Assignment>();
 					for(Token id : list) {
-						RESULT.add(new Assignment(t, keep, token, id, operation));
+						RESULT.add(new Assignment(keep, token, id, operation));
 					}
 				:}
 			;
@@ -215,19 +199,6 @@ type ::=
 			;
 
 /* asignacion de variables */
-assign ::=
-			eol_ tab:t assignment:assign
-				{:
-					assign.setTab(t);
-					RESULT = assign;
-					if(t >= 1 && min <= t && t <= max) {
-						max = t;
-					} else {
-						System.out.println("Assignment mal identado!");
-					}
-				:}
-			;
-
 assignment ::=
 			ID:token EQUAL a:operation
 				{: RESULT = new Assignment(token, operation); :}
@@ -260,20 +231,11 @@ l ::=
 
 /* declaracion de arreglos */
 array_statement ::=
-			eol_ tab:t keep:keep VAR type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+			keep:keep VAR type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
 				{:
-					if(min <= t && t <= max) {
-						max = t;
-					} else if(t == 0) {
-						min = 0;
-						max = 0;
-					} else {
-						System.out.println("Array-Assignment mal identado");
-					}
-
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayAssignment(t, keep, type, id, list_array_index, array_list, ind));
+						RESULT.add(new ArrayAssignment(keep, type, id, list_array_index, array_list, ind));
 					}
 					ind = new ArrayList<>();
 				:}
@@ -419,63 +381,75 @@ tab ::=
 			| TAB {: RESULT = 0; :}
 			;
 
-eol_ ::=
-			eol_ EOL
+eol ::=
+			eol EOL
 			| EOL
 			;
 
-eol ::=
-			eol EOL
+eol_ ::=
+			eol_ EOL
 			|
 			;
 
+/* ciclos y sentencias de control */
+control ::=
+			list_if:ifIns /* IfInstruction */
+				{: RESULT = ifIns; :}
+			| for_:for_
+				{: RESULT = for_; :}
+			| while_:while_
+				{: RESULT = while_; :}
+			| do_while:do_while
+				{: RESULT = do_while; :}
+			;
+/* ciclos y sentencias de control */
+
+/* if - si */
+list_if ::=
+			if_:if_
+				{: RESULT = new IfInstruction(if_); :}
+			| if_:if_ else_:else_
+				{: RESULT = new IfInstruction(if_, else_); :}
+			| if_:if_ list_else_if:list_if
+				{: RESULT = new IfInstruction(if_, list_if); :}
+			| if_:if_ list_else_if:list_if else_:else_
+				{: RESULT = new IfInstruction(if_, list_if, else_); :}
+			;
+
 if_ ::=
-			eol_ tab:t IF LPAREN a:condition RPAREN
+			IF LPAREN a:condition RPAREN eol function_body:list_ins
 				{:
-					RESULT = new If(t, If.Type.IF, condition);
-					if(t >= 1 && min <= t && t <= max) {
-						max = t + 1;
-					} else {
-						System.out.println("If mal identado");
-					}
+					RESULT = new If(If.Type.IF, condition, list_ins);
 				:}
 			;
 
 else_ ::=
-			eol_ tab:t ELSE
+			ELSE eol function_body:list_ins
 				{:
-					RESULT = new If(t, If.Type.ELSE, null);
-					if(t >=1 && min <= t && t <= max) {
-						max = t + 1;
-					} else {
-						System.out.println("Else mal identado");
-					}
+					RESULT = new If(If.Type.ELSE, null, list_ins);
 				:}
 			;
 
+list_else_if ::=
+			list_else_if:list else_if:else_if
+				{: RESULT = list; RESULT.add(else_if); :}
+			| else_if:else_if
+				{: RESULT = new ArrayList<>(); RESULT.add(else_if); :}
+			;
+
 else_if ::=
-			eol_ tab:t ELSE IF LPAREN a:condition RPAREN
+			ELSE IF LPAREN a:condition RPAREN eol function_body:list_ins
 				{:
-					RESULT = new If(t, If.Type.ELSE_IF, condition);
-					if(t >=1 && min <=t && t <= max) {
-						max = t + 1;
-					} else {
-						System.out.println("Else_if mal identado");
-					}
+					RESULT = new If(If.Type.ELSE_IF, condition, list_ins);
 				:}
 			;
 /* if - si */
 
 /* for - para */
 for_ ::=
-			eol_ tab:t FOR LPAREN for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN
+			FOR LPAREN for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN eol function_body:list_ins
 				{:
-					RESULT = new For(t, assign, condition, increase);
-					if(t >=1 && min <= t && t <= max) {
-						max = t + 1;
-					} else {
-						System.out.println("For mal identado");
-					}
+					RESULT = new For(assign, condition, increase, list_ins);
 				:}
 			;
 
@@ -489,92 +463,70 @@ for_assign ::=
 
 /* while - mientras */
 while_ ::=
-			eol_ tab:t WHILE LPAREN a:condition RPAREN
+			WHILE LPAREN a:condition RPAREN eol function_body:list_ins
 				{:
-					RESULT = new While(t, condition);
-					if(t >=1 && min <= t && t <= max) {
-						max = t + 1;
-					} else {
-						System.out.println("While mal identado");
-					}
+					RESULT = new While(condition, list_ins);
 				:}
 			;
 
 /* do-while - hacer-mientras */
 do_while ::=
-			eol_ tab:t DO_WHILE
+			DO_WHILE eol function_body:list_ins WHILE LPAREN a:condition RPAREN eol
 				{:
-					RESULT = new DoWhile(t);
-					if(t >= 1 && min <=t && t <= max) {
-						max = t + 1;
-					} else {
-						System.out.println("Do_while mal identado");
-					}
+					RESULT = new DoWhile(list_ins, condition);
 				:}
 			;
 /* do-while - hacer-mientras */
 
 /* switch  */
 switch_ ::=
-			eol_ tab SWITCH LPAREN a RPAREN
+			SWITCH LPAREN a RPAREN
 			;
 
 case_ ::=
-			eol_ tab CASE a
+			CASE a
 			;
 
 default_ ::=
-			eol_ tab DEFAULT
+			DEFAULT
 			;
 /* switch  */
 
 /* continue - exit - return */
 exit_ ::=
-			eol_ tab EXIT
+			EXIT
 			;
 
 continue_ ::=
-			eol_ tab CONTINUE
+			CONTINUE
 			;
 
 return_ ::=
-			eol_ tab RETURN a
+			RETURN a
 			;
 /* continue - exit return */
 
 /*  functions */
 function ::=
-			eol_ tab ID LPAREN params_f RPAREN // no keep - void
-			| eol_ tab KEEP type ID LPAREN params_f RPAREN // keep - type
-			| eol_ tab KEEP ID LPAREN params_f RPAREN // keep - void
-			| eol_ tab type ID LPAREN params_f RPAREN // no keep - type
-			// | eol_ tab:t MAIN LPAREN RPAREN
+			ID LPAREN params_f RPAREN eol function_body // no keep - void
+			| KEEP type ID LPAREN params_f RPAREN eol function_body // keep - type
+			| KEEP ID LPAREN params_f RPAREN eol function_body // keep - void
+			| type ID LPAREN params_f RPAREN eol function_body // no keep - type
 			;
 
 /* principal */
 principal ::=
-			eol_ tab:t MAIN LPAREN RPAREN
+			MAIN LPAREN RPAREN eol function_body:list_ins
 				{:
-					RESULT = new Principal(t);
-					if(t != 0) {
-						System.out.println("Error, metodo main mal identado");
-					} else {
-						min = t + 1;
-						max = t + 1;
-					}
+					RESULT = new Principal(list_ins);
 				:}
 			;
 
 /* principal */
 message ::=
-			eol_ tab:t MSG LPAREN a:operation RPAREN
+			MSG LPAREN a:operation RPAREN
 				{:
-					RESULT = new Message(t, operation);
-					if(t >= 1 && min <= t && t <= max) {
-						max = t;
-					} else {
-						System.out.println("Message mal identado!");
-					}
+					RESULT = new Message(operation);
 				:}
 			;
 

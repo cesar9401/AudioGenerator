@@ -1,7 +1,6 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,17 +9,10 @@ import java.util.List;
  */
 public class Principal implements Instruction, Ins {
 
-    private Integer tab;
     private List<Instruction> instructions;
 
-    public Principal() {
-        this.tab = 0;
-        this.instructions = new ArrayList<>();
-    }
-
-    public Principal(Integer tab) {
-        this();
-        this.tab = tab;
+    public Principal(List<Instruction> instructions) {
+        this.instructions = instructions;
     }
 
     @Override
@@ -30,7 +22,7 @@ public class Principal implements Instruction, Ins {
         System.out.println("");
         SymbolTable local = new SymbolTable(table);
         for (Instruction i : instructions) {
-            //System.out.println(i.getClass().getSimpleName());
+            // System.out.println(i.getClass().getSimpleName());
             i.run(local, handler);
         }
         return null;
@@ -38,12 +30,11 @@ public class Principal implements Instruction, Ins {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 
     @Override

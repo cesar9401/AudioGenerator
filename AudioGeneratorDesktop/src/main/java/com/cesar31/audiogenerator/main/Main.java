@@ -10,7 +10,6 @@ import com.cesar31.audiogenerator.parser.AudioLex;
 import com.cesar31.audiogenerator.parser.AudioParser;
 import java.io.StringReader;
 import java.util.List;
-import java.util.Stack;
 
 /**
  *
@@ -20,7 +19,7 @@ public class Main {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        String input = FileControl.readData("input_files/input6.txt");
+        String input = FileControl.readData("input_files/input1.txt");
         System.out.println(input);
         System.out.println("");
 
@@ -37,11 +36,6 @@ public class Main {
                 }
             } else {
                 run(ast);
-
-                // Stack<Ins> ins = parser.getStack();
-                // System.out.println("stack size -> " + ins.size());
-                // System.out.println("");
-                //checkStack(ins);
             }
 
         } catch (Exception ex) {
@@ -72,14 +66,6 @@ public class Main {
             
         } else {
             System.out.println("ast null");
-        }
-    }
-
-    private static void checkStack(Stack<Ins> ins) {
-        // System.out.println("stack size -> " + ins.size());
-
-        for (Ins i : ins) {
-            System.out.println(i.getClass().getSimpleName());
         }
     }
 }

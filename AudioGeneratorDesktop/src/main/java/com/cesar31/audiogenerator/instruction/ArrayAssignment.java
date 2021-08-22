@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class ArrayAssignment implements Instruction {
 
-    private Integer tab;
     private boolean keep;
     private Token type;
     private Token id;
@@ -22,8 +21,7 @@ public class ArrayAssignment implements Instruction {
     List<Integer> ind;
 
     // solo declaracion
-    public ArrayAssignment(Integer tab, boolean keep, Token type, Token id, List<ArrayIndex> dimensions, Object value, List<Integer> ind) {
-        this.tab = tab;
+    public ArrayAssignment(boolean keep, Token type, Token id, List<ArrayIndex> dimensions, Object value, List<Integer> ind) {
         this.keep = keep;
         this.type = type;
         this.id = id;
@@ -107,12 +105,11 @@ public class ArrayAssignment implements Instruction {
 
     @Override
     public Integer getTab() {
-        return this.tab;
+        return 0;
     }
 
     @Override
     public void setTab(Integer tab) {
-        this.tab = tab;
     }
 
     public boolean isKeep() {
