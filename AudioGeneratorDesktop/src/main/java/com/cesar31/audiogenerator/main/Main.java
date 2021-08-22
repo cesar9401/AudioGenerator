@@ -3,7 +3,6 @@ package com.cesar31.audiogenerator.main;
 import com.cesar31.audiogenerator.control.FileControl;
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
-import com.cesar31.audiogenerator.instruction.Ins;
 import com.cesar31.audiogenerator.instruction.Instruction;
 import com.cesar31.audiogenerator.instruction.SymbolTable;
 import com.cesar31.audiogenerator.parser.AudioLex;

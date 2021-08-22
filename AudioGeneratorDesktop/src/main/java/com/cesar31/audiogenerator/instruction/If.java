@@ -1,22 +1,36 @@
 package com.cesar31.audiogenerator.instruction;
 
+import com.cesar31.audiogenerator.parser.Token;
 import java.util.List;
 
 /**
  *
  * @author cesar31
  */
-public class If implements Ins {
+public class If {
 
     public enum Type {
-        IF, ELSE_IF, ELSE
+        IF("si"), ELSE_IF("sino si"), ELSE("sino");
+
+        private final String name;
+
+        private Type(String name) {
+            this.name = name;
+        }
+        
+        public String getName() {
+            return this.name;
+        }
     }
+
+    private Token token;
 
     private Type type;
     private Operation condition;
     private List<Instruction> instructions;
 
-    public If(Type type, Operation condition, List<Instruction> instructions) {
+    public If(Token token, Type type, Operation condition, List<Instruction> instructions) {
+        this.token = token;
         this.type = type;
         this.condition = condition;
         this.instructions = instructions;
@@ -38,27 +52,19 @@ public class If implements Ins {
         this.type = type;
     }
 
-    @Override
     public List<Instruction> getInstructions() {
         return instructions;
     }
 
-    @Override
     public void setInstructions(List<Instruction> instructions) {
         this.instructions = instructions;
     }
 
-    @Override
-    public Integer getTab() {
-        return 0;
+    public Token getToken() {
+        return token;
     }
 
-    @Override
-    public void setTab(Integer tab) {
-    }
-
-    @Override
-    public boolean isInAst() {
-        return false;
+    public void setToken(Token token) {
+        this.token = token;
     }
 }

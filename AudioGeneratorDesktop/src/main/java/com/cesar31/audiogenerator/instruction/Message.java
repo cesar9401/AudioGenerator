@@ -29,13 +29,4 @@ public class Message implements Instruction {
 
         return null;
     }
-
-    @Override
-    public Integer getTab() {
-        return 0;
-    }
-
-    @Override
-    public void setTab(Integer tab) {
-    }
 }

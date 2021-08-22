@@ -76,7 +76,7 @@ non terminal Principal principal;
 non terminal Message message;
 non terminal For for_;
 non terminal DoWhile do_while;
-non terminal List<ArrayAssignment> array_statement;
+non terminal List<ArrayStatement> array_statement;
 non terminal Object list, fn;
 non terminal List<Object> list_fn;
 non terminal ArrayAccess l;
@@ -218,7 +218,8 @@ assignment ::=
 					RESULT = new Assignment(token, tmp);
 				:}
 			/* asignacion a arreglos */
-			| l:array_access EQUAL a
+			| l:array_access EQUAL a:operation
+				{: RESULT = new ArrayAssignment(array_access, operation); :}
 			| l:array_access PLUS_EQ a
 			| l:array_access PLUS_PLUS
 			| l:array_access MINUS_MINUS
@@ -235,7 +236,7 @@ array_statement ::=
 				{:
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayAssignment(keep, type, id, list_array_index, array_list, ind));
+						RESULT.add(new ArrayStatement(keep, type, id, list_array_index, array_list, ind));
 					}
 					ind = new ArrayList<>();
 				:}
@@ -417,16 +418,16 @@ list_if ::=
 			;
 
 if_ ::=
-			IF LPAREN a:condition RPAREN eol function_body:list_ins
+			IF:token LPAREN a:condition RPAREN eol function_body:list_ins
 				{:
-					RESULT = new If(If.Type.IF, condition, list_ins);
+					RESULT = new If(token, If.Type.IF, condition, list_ins);
 				:}
 			;
 
 else_ ::=
-			ELSE eol function_body:list_ins
+			ELSE:token eol function_body:list_ins
 				{:
-					RESULT = new If(If.Type.ELSE, null, list_ins);
+					RESULT = new If(token, If.Type.ELSE, null, list_ins);
 				:}
 			;
 
@@ -438,18 +439,18 @@ list_else_if ::=
 			;
 
 else_if ::=
-			ELSE IF LPAREN a:condition RPAREN eol function_body:list_ins
+			ELSE:token IF LPAREN a:condition RPAREN eol function_body:list_ins
 				{:
-					RESULT = new If(If.Type.ELSE_IF, condition, list_ins);
+					RESULT = new If(token, If.Type.ELSE_IF, condition, list_ins);
 				:}
 			;
 /* if - si */
 
 /* for - para */
 for_ ::=
-			FOR LPAREN for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN eol function_body:list_ins
+			FOR:token LPAREN for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN eol function_body:list_ins
 				{:
-					RESULT = new For(assign, condition, increase, list_ins);
+					RESULT = new For(token, assign, condition, increase, list_ins);
 				:}
 			;
 
@@ -463,17 +464,17 @@ for_assign ::=
 
 /* while - mientras */
 while_ ::=
-			WHILE LPAREN a:condition RPAREN eol function_body:list_ins
+			WHILE:token LPAREN a:condition RPAREN eol function_body:list_ins
 				{:
-					RESULT = new While(condition, list_ins);
+					RESULT = new While(token, condition, list_ins);
 				:}
 			;
 
 /* do-while - hacer-mientras */
 do_while ::=
-			DO_WHILE eol function_body:list_ins WHILE LPAREN a:condition RPAREN eol
+			DO_WHILE eol function_body:list_ins WHILE:token LPAREN a:condition RPAREN eol
 				{:
-					RESULT = new DoWhile(list_ins, condition);
+					RESULT = new DoWhile(token, list_ins, condition);
 				:}
 			;
 /* do-while - hacer-mientras */

@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author cesar31
  */
-public class Principal implements Instruction, Ins {
+public class Principal implements Instruction {
 
     private List<Instruction> instructions;
 
@@ -26,29 +26,5 @@ public class Principal implements Instruction, Ins {
             i.run(local, handler);
         }
         return null;
-    }
-
-    @Override
-    public Integer getTab() {
-        return 0;
-    }
-
-    @Override
-    public void setTab(Integer tab) {
-    }
-
-    @Override
-    public void setInstructions(List<Instruction> instructions) {
-        this.instructions = instructions;
-    }
-
-    @Override
-    public List<Instruction> getInstructions() {
-        return this.instructions;
-    }
-
-    @Override
-    public boolean isInAst() {
-        return true;
     }
 }

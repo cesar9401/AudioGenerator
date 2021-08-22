@@ -14,6 +14,9 @@ public class Assignment implements Instruction {
     private Token id;
     private Operation value;
 
+    public Assignment() {
+    }
+    
     // Declaracion y asignacion
     public Assignment(boolean keep, Token type, Token id, Operation value) {
         this.keep = keep;
@@ -27,21 +30,12 @@ public class Assignment implements Instruction {
         this.id = id;
         this.value = value;
     }
-
+    
     // para declaracion y asignacion ciclo for
     public Assignment(Token type, Token id, Operation value) {
         this.type = type;
         this.id = id;
         this.value = value;
-    }
-
-    @Override
-    public void setTab(Integer tab) {
-    }
-
-    @Override
-    public Integer getTab() {
-        return 0;
     }
 
     @Override

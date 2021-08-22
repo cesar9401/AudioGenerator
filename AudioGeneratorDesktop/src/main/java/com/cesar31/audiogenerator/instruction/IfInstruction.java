@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.error.Err;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,49 +50,32 @@ public class IfInstruction implements Instruction {
 
             Operation operation = i.getCondition();
             Boolean value = true;
-            boolean error = false;
-            
-            if(operation == null) {
+
+            if (operation == null) {
                 value = true;
             } else {
                 Variable v = operation.run(table, handler);
-                if(v != null) {
-                    value = handler.getOperation().getValue(v);
+                if (v != null) {
+                    // Error no es de tipo boolean se verifica al obtener valor
+                    value = handler.getOperation().getValue(v, i.getType().getName(), i.getToken());
                 } else {
-                    error = true;
-                    System.out.println("value no es de tipo boolean");
+                    Err e = new Err(Err.TypeErr.SINTACTICO, i.getToken().getLine(), i.getToken().getColumn(), i.getType().getName());
+                    String description = "No es posible evaluar condicion para la sentencia `" + i.getType().getName() + "` esto a que probablemente la expresion de condicion no tiene un valor definido o uno de los operadores no tiene valor definido.";
+                    e.setDescription(description);
+                    handler.getErrors().add(e);
+                    value = false;
                 }
             }
-            
-            // Boolean value = operation != null ? handler.getOperation().getValue(v) : true;
-            if(!error) {
-                if (value) {
-                    SymbolTable local = new SymbolTable(table);
-                    for (Instruction j : i.getInstructions()) {
-                        j.run(local, handler);
-                    }
-                    return null;
+
+            if (value) {
+                SymbolTable local = new SymbolTable(table);
+                for (Instruction j : i.getInstructions()) {
+                    j.run(local, handler);
                 }
+                return null;
             }
         }
 
         return null;
-    }
-
-    public List<If> getIf_instructions() {
-        return if_instructions;
-    }
-
-    public void setIf_instructions(List<If> if_instructions) {
-        this.if_instructions = if_instructions;
-    }
-
-    @Override
-    public Integer getTab() {
-        return 0;
-    }
-
-    @Override
-    public void setTab(Integer tab) {
     }
 }

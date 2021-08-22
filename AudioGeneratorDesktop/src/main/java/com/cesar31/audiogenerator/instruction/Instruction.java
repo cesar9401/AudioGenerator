@@ -9,8 +9,4 @@ import com.cesar31.audiogenerator.control.OperationHandler;
 public interface Instruction {
 
     public Object run(SymbolTable table, OperationHandler handler);
-
-    public Integer getTab();
-
-    public void setTab(Integer tab);
 }

@@ -21,6 +21,7 @@ public class OperationMaker {
 
     private void errorForOperations(Variable a, Token op, String name) {
         if (a.getValue() == null && a.getArray() == null) {
+            // Variable no tiene valor definido
             Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
             String description = "En la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
             description += a.getId() != null ? ", la variable `" + a.getId() + "` no tiene un valor definido. " : ", uno de los operadores no tiene un valor definido. ";
@@ -28,6 +29,7 @@ public class OperationMaker {
             e.setDescription(description);
             this.handler.getErrors().add(e);
         } else if (a.getArray() != null) {
+            // Variable de tipo arreglo
             Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
             String description = "En la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
             description += ", la variable `" + a.getId() + "` es de tipo `arreglo de " + a.getType().getName() + "`, por lo tanto la operacion no puede ser procesada.";
@@ -766,7 +768,26 @@ public class OperationMaker {
         return null;
     }
 
-    public boolean getValue(Variable cond) {
+    public boolean getValue(Variable cond, String sentence, Token token) {
+        if (cond.getValue() == null && cond.getArray() == null) {
+            // Variable no tiene valor
+            Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), "null");
+            String description = "La sentencia `" + sentence + "`, no puede ser procesada ya que ";
+            description += cond.getId() != null ? "La variable `" + cond.getId() + "` no tiene un valor defino" : " probablemente uno de los operadores no tenga un valor definido.";
+            e.setDescription(description);
+            this.handler.getErrors().add(e);
+
+            return false;
+        } else if (cond.getArray() != null) {
+            // Variable es de tipo arreglo
+            Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), cond.getId());
+            String description = "En la condicion definida para la sentencia `" + sentence + "`, la expresion indicada para condicion, no es de tipo booleano. ";
+            description += "La variable `" + cond.getId() + "` es de tipo `arreglo de " + cond.getType().getName() + "`";
+            e.setDescription(description);
+            this.handler.getErrors().add(e);
+            return false;
+        }
+
         if (cond.getType() == Var.BOOLEAN) {
             String value = cond.getValue().toLowerCase();
             return value.equals("true") || value.equals("verdadero") || value.equals("1");
@@ -780,7 +801,24 @@ public class OperationMaker {
             }
         }
 
-        System.out.println("While condition no BOOLEAN type");
+        // Variable no es de tipo boolean
+        Err err = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), cond.getValue());
+        String description = "En la expresion `" + sentence + "`, en la linea `" + token.getLine() + "`, la expresion necesaria para la condicion no es de tipo boolean.";
+
+        if (cond.getId() != null) {
+            err.setLexema(cond.getId());
+            description += "La variable `" + cond.getId() + "` ";
+            if (cond.getToken() != null) {
+                Token tmp = cond.getToken();
+                err.setLine(tmp.getLine());
+                err.setColumn(tmp.getColumn());
+            }
+        } else {
+            description += "La expresion indicada ";
+        }
+        description += "es de tipo `" + cond.getType() + "`, con valor `" + cond.getValue() + "`.";
+        err.setDescription(description);
+        this.handler.getErrors().add(err);
         return false;
     }
 

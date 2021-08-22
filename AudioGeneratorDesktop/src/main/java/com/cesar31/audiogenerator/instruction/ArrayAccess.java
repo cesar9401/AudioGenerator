@@ -22,14 +22,4 @@ public class ArrayAccess implements Instruction {
     public Variable run(SymbolTable table, OperationHandler handler) {
         return handler.getArray().getItemFromArray(id, indexes, table);
     }
-
-    @Override
-    public Integer getTab() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setTab(Integer tab) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
