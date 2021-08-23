@@ -65,7 +65,7 @@ public class Operation implements Instruction {
                     handler.getErrors().add(e);
                 } else if (variable.getArray() != null) {
                     // Se maneja error al verificar que v.getValue() is null
-                    // System.out.println("variable de tipo arreglo");
+                    // System.out.println("Variable de tipo arreglo!!!");
                 }
                 return variable;
             case INTEGER:
@@ -143,5 +143,9 @@ public class Operation implements Instruction {
         }
 
         return null;
+    }
+
+    public Token getOp() {
+        return op;
     }
 }

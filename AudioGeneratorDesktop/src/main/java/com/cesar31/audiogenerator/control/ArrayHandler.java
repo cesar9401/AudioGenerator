@@ -21,6 +21,132 @@ public class ArrayHandler {
         this.handler = handler;
     }
 
+    private void errorArrayAssignment(ArrayAccess arrayItem, Operation operation, Var var) {
+        Token op = operation.getOp();
+        Err err = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
+        String description = "La asignacion definida por el operador `" + op.getValue() + "` no es aplicable a variables de tipo `" + var.getName() + "`, como lo es la variable `" + arrayItem.getId().getValue() + "`.";
+        err.setDescription(description);
+        this.handler.getErrors().add(err);
+    }
+
+    private void errorArrayAssignmentWithNoValue(ArrayAccess arrayItem, Operation operation, int[] index) {
+        Token t = arrayItem.getId();
+        Err err = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
+        String description = "En la asignacion definida por el operador `" + operation.getOp().getValue() + "` el arreglo en la direccion `" + Arrays.toString(index) + "` tiene valor nulo, por tanto no es posible realizar tal operacion.";
+        err.setDescription(description);
+        this.handler.getErrors().add(err);
+    }
+
+    public void assignElementToArray(ArrayAccess arrayItem, Operation operation, Assignment.TypeA type, SymbolTable table) {
+        Variable tmp = arrayItem.run(table, handler);
+
+        if (tmp != null) {
+            // Obtener indices aqui
+            int[] indexes = new int[arrayItem.getIndexes().size()];
+            for (int i = 0; i < indexes.length; i++) {
+                // En este punto, los tipos ya fueron comprobados
+                Variable aux = arrayItem.getIndexes().get(i).getOperation().run(table, handler);
+                indexes[i] = Integer.valueOf(aux.getValue());
+            }
+
+            switch (type) {
+                case EQUAL:
+                    // do nothing
+                    break;
+                case MINUS_MINUS:
+                    if (tmp.getType() == Var.BOOLEAN || tmp.getType() == Var.STRING) {
+                        errorArrayAssignment(arrayItem, operation, tmp.getType());
+                        return;
+                    }
+
+                    if (tmp.getValue() == null) {
+                        errorArrayAssignmentWithNoValue(arrayItem, operation, indexes);
+                        return;
+                    }
+
+                    break;
+                case PLUS_PLUS:
+                    if (tmp.getType() == Var.BOOLEAN) {
+                        errorArrayAssignment(arrayItem, operation, tmp.getType());
+                        return;
+                    }
+
+                    if (tmp.getValue() == null) {
+                        errorArrayAssignmentWithNoValue(arrayItem, operation, indexes);
+                        return;
+                    }
+
+                    break;
+                case PLUS_EQ:
+                    if (tmp.getType() == Var.BOOLEAN) {
+                        errorArrayAssignment(arrayItem, operation, tmp.getType());
+                        return;
+                    }
+
+                    if (tmp.getValue() == null) {
+                        errorArrayAssignmentWithNoValue(arrayItem, operation, indexes);
+                        return;
+                    }
+                    break;
+            }
+
+            // Valor a asignar
+            Variable value = operation.run(table, handler);
+
+            // Arreglo
+            Variable array = table.getVariable(arrayItem.getId().getValue());
+
+            if (value != null) {
+                if (value.getValue() != null) {
+                    Variable newType = handler.getCast().typeConversion(tmp.getType(), value);
+                    if (newType != null) {
+
+                        // Asignacion
+                        setValueToArray(indexes, newType.getValue(), array.getArray());
+
+                    } else {
+                        // Error, no es posible asignar de del tipo de value al tipo de tmp
+                        Token t = arrayItem.getId();
+
+                        Err err = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
+                        String description = "No es posible realizar una asignacion al arreglo `" + array.getId() + "` de tipo `" + array.getType().getName() + "`";
+                        description += " y el valor a asignar en la dimension `" + Arrays.toString(indexes) + "` con valor `" + value.getValue() + "` de tipo `" + value.getType().getName() + "`.";
+                        err.setDescription(description);
+                        this.handler.getErrors().add(err);
+                    }
+                } else {
+                    // Error, variable no tiene valor definido
+                    Token t = arrayItem.getId();
+                    Err err = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
+                    String description = "Se esta intetando asignar un valor nulo al arreglo en la direccion `" + Arrays.toString(indexes) + "`, ";
+                    if (value.getId() != null) {
+                        description += "Esto se debe a que la variable `" + value.getId() + "`, no tiene un valor definido.";
+                        err.setLexema(value.getId());
+                        if (value.getToken() != null) {
+                            err.setLine(value.getToken().getLine());
+                            err.setColumn(value.getToken().getColumn());
+                        }
+                    } else {
+                        description += "Esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                    }
+                    err.setDescription(description);
+                    handler.getErrors().add(err);
+                }
+            } else {
+                // Errores se verifican cuando value = operation.run(table, handler)
+                Token t = arrayItem.getId();
+                Err err = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
+                String description = "Se esta intetando asignar un valor nulo al arreglo en la direccion `" + Arrays.toString(indexes) + "`, ";
+                description += "Esto se debe a que probablemente uno de los operadores a asignar no tiene un valor definido.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
+            }
+        } else {
+            // Errores se verifican cuando -> arrayItem.run(table, handler)
+            System.out.println("Errores del areglo");
+        }
+    }
+
     /**
      * Agregar declaracion de array a tabla de simbolos
      *
@@ -142,7 +268,7 @@ public class ArrayHandler {
                                 Token left = indexes.get(i).getLbracket();
 
                                 Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
-                                String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                                String description = "En la llamada al arreglo " + id.getValue() + ", el indice numero " + (i + 1);
                                 if (tmp.getId() != null) {
                                     description += " con id: `" + tmp.getId() + "`";
                                     err.setLexema(tmp.getId());
@@ -161,7 +287,7 @@ public class ArrayHandler {
                             Token left = indexes.get(i).getLbracket();
 
                             Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
-                            String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                            String description = "En la llamada al arreglo " + id.getValue() + ", el indice numero " + (i + 1);
                             if (tmp.getId() != null) {
                                 description += " con id: `" + tmp.getId() + "`";
                                 err.setLexema(tmp.getId());
@@ -190,7 +316,7 @@ public class ArrayHandler {
                                 return new Variable(v.getType(), value.toString());
                             } else {
                                 // Error, no tiene valor definido en indices index
-                                System.out.println("Revisar aqui :v");
+                                // System.out.println("Revisar aqui :v");
                                 return new Variable(v.getType(), null);
                             }
 

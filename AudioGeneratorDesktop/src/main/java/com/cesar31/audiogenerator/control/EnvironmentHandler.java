@@ -1,6 +1,8 @@
 package com.cesar31.audiogenerator.control;
 
 import com.cesar31.audiogenerator.error.Err;
+import com.cesar31.audiogenerator.instruction.Assignment;
+import com.cesar31.audiogenerator.instruction.Operation;
 import com.cesar31.audiogenerator.instruction.SymbolTable;
 import com.cesar31.audiogenerator.instruction.Var;
 import com.cesar31.audiogenerator.instruction.Variable;
@@ -81,9 +83,57 @@ public class EnvironmentHandler {
         }
     }
 
-    public void makeAssignment(Token id, Variable a, SymbolTable e) {
+    public void makeAssignment(Assignment.TypeA kindA, Token id, Operation value, SymbolTable e) {
         Variable v = this.getFromSymbolTable(id, e, false);
         if (v != null) {
+            if (v.getArray() != null) {
+                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                String description = "La variable `" + id.getValue() + "` corresponde a una variable de tipo `arreglo de " + v.getType().getName() + "`, para acceder a los elementos de un arreglo, debe de indicar los indices del mismo.";
+                err.setDescription(description);
+                this.handler.getErrors().add(err);
+                return;
+            }
+
+            switch (kindA) {
+                case EQUAL:
+                    // do nothing
+                    break;
+                case MINUS_MINUS:
+                    if (v.getType() == Var.BOOLEAN || v.getType() == Var.STRING) {
+                        errorAssignment(id, value, v.getType());
+                        return;
+                    }
+
+                    if (v.getValue() == null) {
+                        errorAssignmentWithNoValue(id, value);
+                        return;
+                    }
+                    break;
+                case PLUS_PLUS:
+                    if (v.getType() == Var.BOOLEAN) {
+                        errorAssignment(id, value, v.getType());
+                        return;
+                    }
+
+                    if (v.getValue() == null) {
+                        errorAssignmentWithNoValue(id, value);
+                        return;
+                    }
+                    break;
+                case PLUS_EQ:
+                    if (v.getType() == Var.BOOLEAN) {
+                        errorAssignment(id, value, v.getType());
+                        return;
+                    }
+
+                    if (v.getValue() == null) {
+                        errorAssignmentWithNoValue(id, value);
+                        return;
+                    }
+                    break;
+            }
+
+            Variable a = value.run(e, handler);
             if (a != null) {
                 if (a.getValue() != null) {
                     Variable newType = this.handler.getCast().typeConversion(v.getType(), a);
@@ -96,8 +146,6 @@ public class EnvironmentHandler {
                         description += " y el valor a asignar `" + a.getValue() + "` de tipo `" + a.getType().getName() + "`.";
                         err.setDescription(description);
                         this.handler.getErrors().add(err);
-
-                        System.out.println("No es posible asignar " + v.getId() + " = " + a.getType());
                     }
                 } else {
                     // Error, uno de los operadores puede tener un valor no definido
@@ -118,6 +166,21 @@ public class EnvironmentHandler {
         } else {
             // Error se verifica en getFromSymbolTable
         }
+    }
+
+    private void errorAssignment(Token id, Operation value, Var type) {
+        Token t = value.getOp();
+        Err err = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
+        String description = "La asignacion definida por el operador `" + t.getValue() + "` no es aplicable a variables de tipo `" + type.getName() + "` como lo es la variable `" + id.getValue() + "`.";
+        err.setDescription(description);
+        this.handler.getErrors().add(err);
+    }
+
+    private void errorAssignmentWithNoValue(Token id, Operation value) {
+        Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+        String description = "En la asignacion definida por el operador `" + value.getOp().getValue() + "`, la variable `" + id.getValue() + "` no tiene valor definido, por lo tanto no es posible proceder con la asignacion.";
+        err.setDescription(description);
+        this.handler.getErrors().add(err);
     }
 
     /**

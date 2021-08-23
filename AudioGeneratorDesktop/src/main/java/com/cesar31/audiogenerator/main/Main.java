@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        String input = FileControl.readData("input_files/input1.txt");
+        String input = FileControl.readData("input_files/input6.txt");
         System.out.println(input);
         System.out.println("");
 

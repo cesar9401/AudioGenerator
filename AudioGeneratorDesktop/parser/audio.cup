@@ -201,28 +201,40 @@ type ::=
 /* asignacion de variables */
 assignment ::=
 			ID:token EQUAL a:operation
-				{: RESULT = new Assignment(token, operation); :}
+				{: RESULT = new Assignment(Assignment.TypeA.EQUAL, token, operation); :}
 			| ID:token PLUS_EQ:op a:operation
 				{:
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation, op);
-					RESULT = new Assignment(token, tmp);
+					RESULT = new Assignment(Assignment.TypeA.PLUS_EQ, token, tmp);
 				:}
 			| ID:token PLUS_PLUS:op
 				{:
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
-					RESULT = new Assignment(token, tmp);
+					RESULT = new Assignment(Assignment.TypeA.PLUS_PLUS, token, tmp);
 				:}
 			| ID:token MINUS_MINUS:op
 				{:
 					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
-					RESULT = new Assignment(token, tmp);
+					RESULT = new Assignment(Assignment.TypeA.MINUS_MINUS, token, tmp);
 				:}
 			/* asignacion a arreglos */
 			| l:array_access EQUAL a:operation
-				{: RESULT = new ArrayAssignment(array_access, operation); :}
-			| l:array_access PLUS_EQ a
-			| l:array_access PLUS_PLUS
-			| l:array_access MINUS_MINUS
+				{: RESULT = new ArrayAssignment(array_access, operation, Assignment.TypeA.EQUAL); :}
+			| l:array_access PLUS_EQ:op a:operation
+				{:
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ARRAY_ACCESS, array_access), operation, op);
+					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.PLUS_EQ);
+				:}
+			| l:array_access PLUS_PLUS:op
+				{:
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ARRAY_ACCESS, array_access), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
+					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.PLUS_PLUS);
+				:}
+			| l:array_access MINUS_MINUS:op
+				{:
+					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ARRAY_ACCESS, array_access), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
+					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.MINUS_MINUS);
+				:}
 			;
 
 l ::=

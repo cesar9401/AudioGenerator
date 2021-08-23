@@ -70,6 +70,16 @@ public class CastHandler {
             }
         }
 
+        if (type == BOOLEAN) {
+            switch (value.getType()) {
+                case INTEGER:
+                    if (value.getValue().equals("1") || value.getValue().equals("0")) {
+                        return new Variable(BOOLEAN, value.getValue());
+                    }
+                    return null;
+            }
+        }
+
         return null;
     }
 

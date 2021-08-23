@@ -9,11 +9,17 @@ import com.cesar31.audiogenerator.parser.Token;
  */
 public class Assignment implements Instruction {
 
+    private TypeA kindA;
+    
     private boolean keep;
     private Token type;
     private Token id;
     private Operation value;
 
+    public enum TypeA {
+        EQUAL, PLUS_EQ, PLUS_PLUS, MINUS_MINUS
+    }
+    
     public Assignment() {
     }
     
@@ -26,7 +32,8 @@ public class Assignment implements Instruction {
     }
 
     // Asignacion
-    public Assignment(Token id, Operation value) {
+    public Assignment(TypeA kindA, Token id, Operation value) {
+        this.kindA = kindA;
         this.id = id;
         this.value = value;
     }
@@ -52,8 +59,8 @@ public class Assignment implements Instruction {
             }
         } else if (id != null && value != null) {
             // Solo asignacion
-            Variable v = value.run(table, handler);
-            handler.getEnvironment().makeAssignment(id, v, table);
+            //Variable v = value.run(table, handler);
+            handler.getEnvironment().makeAssignment(kindA, id, value, table);
         }
         return null;
     }

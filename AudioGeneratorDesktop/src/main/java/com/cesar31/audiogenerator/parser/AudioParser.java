@@ -1156,7 +1156,7 @@ class CUP$AudioParser$actions {
 		int operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new Assignment(token, operation); 
+		 RESULT = new Assignment(Assignment.TypeA.EQUAL, token, operation); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1176,7 +1176,7 @@ class CUP$AudioParser$actions {
 		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
 		
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation, op);
-					RESULT = new Assignment(token, tmp);
+					RESULT = new Assignment(Assignment.TypeA.PLUS_EQ, token, tmp);
 				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
@@ -1194,7 +1194,7 @@ class CUP$AudioParser$actions {
 		Token op = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
 		
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
-					RESULT = new Assignment(token, tmp);
+					RESULT = new Assignment(Assignment.TypeA.PLUS_PLUS, token, tmp);
 				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
@@ -1212,7 +1212,7 @@ class CUP$AudioParser$actions {
 		Token op = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
 		
 					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
-					RESULT = new Assignment(token, tmp);
+					RESULT = new Assignment(Assignment.TypeA.MINUS_MINUS, token, tmp);
 				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
@@ -1228,7 +1228,7 @@ class CUP$AudioParser$actions {
 		int operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
 		int operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
 		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
-		 RESULT = new ArrayAssignment(array_access, operation); 
+		 RESULT = new ArrayAssignment(array_access, operation, Assignment.TypeA.EQUAL); 
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1240,7 +1240,16 @@ class CUP$AudioParser$actions {
 		int array_accessleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).left;
 		int array_accessright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).right;
 		ArrayAccess array_access = (ArrayAccess)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)).value;
-
+		int opleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
+		int operationleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int operationright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		Operation operation = (Operation)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ARRAY_ACCESS, array_access), operation, op);
+					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.PLUS_EQ);
+				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-2)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1252,7 +1261,13 @@ class CUP$AudioParser$actions {
 		int array_accessleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int array_accessright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		ArrayAccess array_access = (ArrayAccess)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-
+		int opleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		
+					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ARRAY_ACCESS, array_access), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
+					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.PLUS_PLUS);
+				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;
@@ -1264,7 +1279,13 @@ class CUP$AudioParser$actions {
 		int array_accessleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).left;
 		int array_accessright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).right;
 		ArrayAccess array_access = (ArrayAccess)((java_cup.runtime.Symbol) CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)).value;
-
+		int opleft = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$AudioParser$stack.peek()).value;
+		
+					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ARRAY_ACCESS, array_access), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
+					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.MINUS_MINUS);
+				
               CUP$AudioParser$result = parser.getSymbolFactory().newSymbol("assignment",6, ((java_cup.runtime.Symbol)CUP$AudioParser$stack.elementAt(CUP$AudioParser$top-1)), ((java_cup.runtime.Symbol)CUP$AudioParser$stack.peek()), RESULT);
             }
           return CUP$AudioParser$result;

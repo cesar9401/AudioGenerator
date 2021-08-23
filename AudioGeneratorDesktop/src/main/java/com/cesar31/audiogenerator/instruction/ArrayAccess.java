@@ -22,4 +22,12 @@ public class ArrayAccess implements Instruction {
     public Variable run(SymbolTable table, OperationHandler handler) {
         return handler.getArray().getItemFromArray(id, indexes, table);
     }
+
+    public Token getId() {
+        return id;
+    }
+
+    public List<ArrayIndex> getIndexes() {
+        return indexes;
+    }
 }
