@@ -1,31 +1,36 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.parser.Token;
 import java.util.List;
 
 /**
  *
  * @author cesar31
  */
-public class Principal implements Instruction {
+public class Case implements Instruction {
 
+    private Token token;
+    private Operation operation;
     private List<Instruction> instructions;
 
-    public Principal(List<Instruction> instructions) {
+    public Case(Token token, Operation operation, List<Instruction> instructions) {
+        this.token = token;
+        this.operation = operation;
         this.instructions = instructions;
     }
 
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
-        //Crear SymbolTable local
-        System.out.println("run principal -> " + instructions.size());
-        System.out.println("");
-        SymbolTable local = new SymbolTable(table);
-        for (Instruction i : instructions) {
-            // System.out.println(i.getClass().getSimpleName());
-            i.run(local, handler);
-        }
         return null;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public Operation getOperation() {
+        return operation;
     }
 
     public List<Instruction> getInstructions() {

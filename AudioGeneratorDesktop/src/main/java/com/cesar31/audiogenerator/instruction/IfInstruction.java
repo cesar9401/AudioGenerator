@@ -11,30 +11,30 @@ import java.util.List;
  */
 public class IfInstruction implements Instruction {
 
-    private List<If> if_instructions;
+    private List<If> instructions;
 
     public IfInstruction() {
-        this.if_instructions = new ArrayList<>();
+        this.instructions = new ArrayList<>();
     }
 
     public IfInstruction(If if_) {
         this();
-        this.if_instructions.add(if_);
+        this.instructions.add(if_);
     }
 
     public IfInstruction(If if_, If else_) {
         this(if_);
-        this.if_instructions.add(else_);
+        this.instructions.add(else_);
     }
 
     public IfInstruction(If if_, List<If> if_else) {
         this(if_);
-        this.if_instructions.addAll(if_else);
+        this.instructions.addAll(if_else);
     }
 
     public IfInstruction(If if_, List<If> if_else, If else_) {
         this(if_, if_else);
-        this.if_instructions.add(else_);
+        this.instructions.add(else_);
     }
 
     public If.Type getCurrent() {
@@ -46,7 +46,7 @@ public class IfInstruction implements Instruction {
 
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
-        for (If i : if_instructions) {
+        for (If i : instructions) {
 
             Operation operation = i.getCondition();
             Boolean value = true;
@@ -70,12 +70,21 @@ public class IfInstruction implements Instruction {
             if (value) {
                 SymbolTable local = new SymbolTable(table);
                 for (Instruction j : i.getInstructions()) {
-                    j.run(local, handler);
+                    Object o = j.run(local, handler);
+                    if (o != null) {
+                        if (o instanceof Continue || o instanceof Exit) {
+                            return o;
+                        }
+                    }
                 }
-                return null;
+                return i;
             }
         }
 
         return null;
+    }
+
+    public List<If> getInstructions() {
+        return instructions;
     }
 }

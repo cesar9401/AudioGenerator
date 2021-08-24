@@ -43,14 +43,33 @@ public class For implements Instruction {
             value = false;
         }
 
+        Object o = null;
         while (value) {
             SymbolTable local1 = new SymbolTable(local);
             for (Instruction i : instructions) {
-                i.run(local1, handler);
+                o = i.run(local1, handler);
+                if (o != null) {
+                    if (o instanceof Continue) {
+                        // Realizar incremento
+                        break;
+                    }
+
+                    // Exit
+                    if (o instanceof Exit) {
+                        return null;
+                    }
+                }
             }
+
             increase.run(local1, handler);
             v = this.condition.run(local1, handler);
             value = v != null ? handler.getOperation().getValue(v, "para", token) : false;
+
+            if (o != null) {
+                if (o instanceof Continue) {
+                    continue;
+                }
+            }
         }
 
         return null;
@@ -60,31 +79,15 @@ public class For implements Instruction {
         return init;
     }
 
-    public void setInit(Assignment init) {
-        this.init = init;
-    }
-
     public Operation getCondition() {
         return condition;
-    }
-
-    public void setCondition(Operation condition) {
-        this.condition = condition;
     }
 
     public Assignment getIncrease() {
         return increase;
     }
 
-    public void setIncrease(Assignment increase) {
-        this.increase = increase;
-    }
-
     public List<Instruction> getInstructions() {
         return instructions;
-    }
-
-    public void setInstructions(List<Instruction> instructions) {
-        this.instructions = instructions;
     }
 }

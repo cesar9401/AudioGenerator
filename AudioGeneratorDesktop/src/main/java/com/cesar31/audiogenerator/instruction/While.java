@@ -37,13 +37,32 @@ public class While implements Instruction {
             value = false;
         }
 
+        Object o = null;
         while (value) {
             SymbolTable local = new SymbolTable(table);
             for (Instruction i : instructions) {
-                i.run(local, handler);
+                o = i.run(local, handler);
+                if (o != null) {
+                    // Continue
+                    if (o instanceof Continue) {
+                        break;
+                    }
+                    
+                    if(o instanceof Exit) {
+                        return null;
+                    }
+                }
             }
+            
             v = this.condition.run(local, handler);
             value = v != null ? handler.getOperation().getValue(v, "mientras", token) : false;
+            if (o != null) {
+                // Continue
+                if (o instanceof Continue) {
+
+                    continue;
+                }
+            }
         }
 
         return null;
@@ -53,7 +72,7 @@ public class While implements Instruction {
         return condition;
     }
 
-    public void setCondition(Operation condition) {
-        this.condition = condition;
+    public List<Instruction> getInstructions() {
+        return instructions;
     }
 }

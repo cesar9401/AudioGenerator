@@ -26,7 +26,7 @@ public class DoWhile implements Instruction {
     public Object run(SymbolTable table, OperationHandler handler) {
 
         Variable tmp = this.condition.run(table, handler);
-        Boolean value;
+        Boolean value;// = tmp != null ? handler.getOperation().getValue(tmp, "hacer-mientras", token) : false;
         if (tmp == null) {
             Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), token.getValue());
             String description = "No es posible evaluar condicion para la sentencia `" + token.getValue() + "` esto a que probablemente la expresion de condicion no tiene un valor definido o uno de los operadores no tiene valor definido.";
@@ -34,14 +34,31 @@ public class DoWhile implements Instruction {
             handler.getErrors().add(e);
         }
 
+        Object o = null;
         do {
             SymbolTable local = new SymbolTable(table);
             for (Instruction i : this.instructions) {
-                i.run(local, handler);
+                o = i.run(local, handler);
+                if (o != null) {
+                    if (o instanceof Continue) {
+                        break;
+                    }
+
+                    if (o instanceof Exit) {
+                        return null;
+                    }
+                }
             }
 
+            // Evaluar condicion do-while
             tmp = this.condition.run(local, handler);
             value = tmp != null ? handler.getOperation().getValue(tmp, "hacer-mientras", token) : false;
+
+            if (o != null) {
+                if (o instanceof Continue) {
+                    continue;
+                }
+            }
         } while (value);
 
         return null;
@@ -51,15 +68,7 @@ public class DoWhile implements Instruction {
         return instructions;
     }
 
-    public void setInstructions(List<Instruction> instructions) {
-        this.instructions = instructions;
-    }
-
     public Operation getCondition() {
         return condition;
-    }
-
-    public void setCondition(Operation condition) {
-        this.condition = condition;
     }
 }

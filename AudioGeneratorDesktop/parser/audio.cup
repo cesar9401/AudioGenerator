@@ -55,13 +55,12 @@ terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, ST
 terminal Token INDENT, DEDENT;
 terminal Token ERROR;
 
-non terminal Integer tab;
 non terminal Token type;
 non terminal Boolean keep;
 non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement;
-non terminal Assignment assignment, assign, for_assign;
+non terminal Assignment assignment, for_assign;
 non terminal List<Instruction> body, bod, inicio1, f_body, function_body;
 non terminal If if_, else_, else_if;
 non terminal List<If> list_else_if;
@@ -83,10 +82,15 @@ non terminal ArrayAccess l;
 non terminal IfInstruction list_if;
 non terminal Instruction control;
 non terminal List<Instruction> m_body, main_body;
+non terminal Continue continue_;
+non terminal Exit exit_;
+non terminal Case case_, default_;
+non terminal List<Case> case_list, switch_body;
+non terminal Switch switch_;
 
 non terminal eol, eol_;
 non terminal array_value;
-non terminal switch_, case_, default_, exit_, continue_, return_;
+non terminal return_;
 non terminal extends_;
 non terminal params_f, params, param;
 
@@ -158,6 +162,10 @@ body ::=
 				{: RESULT = new ArrayList<>(); RESULT.add(message); :}
 			| control:instruction
 				{: RESULT = new ArrayList<>(); RESULT.add(instruction); :}
+			| continue_:continue_ eol
+				{: RESULT = new ArrayList<>(); RESULT.add(continue_); :}
+			| exit_:exit_ eol
+				{: RESULT = new ArrayList<>(); RESULT.add(exit_); :}
 			;
 /* cuerpo para funciones */
 
@@ -389,11 +397,6 @@ keep ::=
 			|{: RESULT = false; :}
 			;
 
-tab ::=
-			tab:t TAB {: RESULT = t + 1; :}
-			| TAB {: RESULT = 0; :}
-			;
-
 eol ::=
 			eol EOL
 			| EOL
@@ -414,6 +417,8 @@ control ::=
 				{: RESULT = while_; :}
 			| do_while:do_while
 				{: RESULT = do_while; :}
+			| switch_:sw
+				{: RESULT = sw; :}
 			;
 /* ciclos y sentencias de control */
 
@@ -467,7 +472,7 @@ for_ ::=
 			;
 
 for_assign ::=
-			VAR INT:type ID:id EQUAL a:operation
+			INT:type ID:id EQUAL a:operation
 				{: RESULT = new Assignment(type, id, operation); :}
 			| assignment:assign
 				{: RESULT = assign; :}
@@ -493,25 +498,51 @@ do_while ::=
 
 /* switch  */
 switch_ ::=
-			SWITCH LPAREN a RPAREN
+			SWITCH:token LPAREN a:condition RPAREN eol switch_body:list
+				{: RESULT = new Switch(token, condition, list); :}
+			;
+
+switch_body ::=
+			INDENT case_list:list default_:default_ DEDENT
+				{:
+					RESULT = list;
+					if(default_ != null) {
+						RESULT.add(default_);
+					}
+				:}
+			|
+				{: RESULT = null; :}
+			;
+
+case_list ::=
+			case_list:list case_:case_
+				{: RESULT = list; RESULT.add(case_); :}
+			|
+				{: RESULT = new ArrayList<>(); :}
 			;
 
 case_ ::=
-			CASE a
+			CASE:token a:operation eol function_body:instructions
+				{: RESULT = new Case(token, operation, instructions); :}
 			;
 
 default_ ::=
-			DEFAULT
+			DEFAULT:token eol function_body:instructions
+				{: RESULT = new Case(token, null, instructions); :}
+			|
+				{: RESULT = null; :}
 			;
 /* switch  */
 
 /* continue - exit - return */
 exit_ ::=
-			EXIT
+			EXIT:token
+				{: RESULT = new Exit(token); :}
 			;
 
 continue_ ::=
-			CONTINUE
+			CONTINUE:token
+				{: RESULT = new Continue(token); :}
 			;
 
 return_ ::=
