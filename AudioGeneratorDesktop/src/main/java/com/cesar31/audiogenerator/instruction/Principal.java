@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.parser.Token;
 import java.util.List;
 
 /**
@@ -30,5 +31,10 @@ public class Principal implements Instruction {
 
     public List<Instruction> getInstructions() {
         return instructions;
+    }
+
+    @Override
+    public Token getInfo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

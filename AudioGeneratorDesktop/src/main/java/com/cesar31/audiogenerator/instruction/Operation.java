@@ -148,4 +148,9 @@ public class Operation implements Instruction {
     public Token getOp() {
         return op;
     }
+
+    @Override
+    public Token getInfo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

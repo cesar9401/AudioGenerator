@@ -2,6 +2,7 @@ package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
+import com.cesar31.audiogenerator.parser.Token;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +83,11 @@ public class IfInstruction implements Instruction {
         }
 
         return null;
+    }
+
+    @Override
+    public Token getInfo() {
+        return this.instructions.get(0).getToken();
     }
 
     public List<If> getInstructions() {

@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ArrayStatement implements Instruction {
 
+    private Token info;
+    
     private boolean keep;
     private Token type;
     private Token id;
@@ -21,7 +23,8 @@ public class ArrayStatement implements Instruction {
     List<Integer> ind;
 
     // solo declaracion
-    public ArrayStatement(boolean keep, Token type, Token id, List<ArrayIndex> dimensions, Object value, List<Integer> ind) {
+    public ArrayStatement(Token info, boolean keep, Token type, Token id, List<ArrayIndex> dimensions, Object value, List<Integer> ind) {
+        this.info = info;
         this.keep = keep;
         this.type = type;
         this.id = id;
@@ -101,6 +104,11 @@ public class ArrayStatement implements Instruction {
         }
 
         return null;
+    }
+
+    @Override
+    public Token getInfo() {
+        return this.info;
     }
 
     public boolean isKeep() {

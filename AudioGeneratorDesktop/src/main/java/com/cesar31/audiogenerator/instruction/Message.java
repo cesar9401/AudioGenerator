@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.parser.Token;
 
 /**
  *
@@ -8,9 +9,11 @@ import com.cesar31.audiogenerator.control.OperationHandler;
  */
 public class Message implements Instruction {
 
+    private Token info;
     private Operation operation;
 
-    public Message(Operation operation) {
+    public Message(Token info, Operation operation) {
+        this.info = info;
         this.operation = operation;
     }
 
@@ -28,5 +31,10 @@ public class Message implements Instruction {
         }
 
         return null;
+    }
+
+    @Override
+    public Token getInfo() {
+        return this.info;
     }
 }

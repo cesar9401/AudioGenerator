@@ -9,8 +9,10 @@ import com.cesar31.audiogenerator.parser.Token;
  */
 public class Assignment implements Instruction {
 
+    private Token info;
+
     private TypeA kindA;
-    
+
     private boolean keep;
     private Token type;
     private Token id;
@@ -19,12 +21,13 @@ public class Assignment implements Instruction {
     public enum TypeA {
         EQUAL, PLUS_EQ, PLUS_PLUS, MINUS_MINUS
     }
-    
+
     public Assignment() {
     }
-    
+
     // Declaracion y asignacion
-    public Assignment(boolean keep, Token type, Token id, Operation value) {
+    public Assignment(Token info, boolean keep, Token type, Token id, Operation value) {
+        this.info = info;
         this.keep = keep;
         this.type = type;
         this.id = id;
@@ -35,9 +38,10 @@ public class Assignment implements Instruction {
     public Assignment(TypeA kindA, Token id, Operation value) {
         this.kindA = kindA;
         this.id = id;
+        this.info = id;
         this.value = value;
     }
-    
+
     // para declaracion y asignacion ciclo for
     public Assignment(Token type, Token id, Operation value) {
         this.type = type;
@@ -63,6 +67,11 @@ public class Assignment implements Instruction {
             handler.getEnvironment().makeAssignment(kindA, id, value, table);
         }
         return null;
+    }
+
+    @Override
+    public Token getInfo() {
+        return this.info;
     }
 
     public boolean isKeep() {

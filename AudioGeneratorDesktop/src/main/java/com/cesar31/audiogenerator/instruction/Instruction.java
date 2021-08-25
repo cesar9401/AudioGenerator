@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.parser.Token;
 
 /**
  *
@@ -9,4 +10,6 @@ import com.cesar31.audiogenerator.control.OperationHandler;
 public interface Instruction {
 
     public Object run(SymbolTable table, OperationHandler handler);
+    
+    public Token getInfo();
 }

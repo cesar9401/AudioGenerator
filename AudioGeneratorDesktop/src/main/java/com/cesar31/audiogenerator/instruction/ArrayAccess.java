@@ -30,4 +30,9 @@ public class ArrayAccess implements Instruction {
     public List<ArrayIndex> getIndexes() {
         return indexes;
     }
+
+    @Override
+    public Token getInfo() {
+        return this.id;
+    }
 }

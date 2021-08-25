@@ -27,6 +27,11 @@ public class For implements Instruction {
     }
 
     @Override
+    public Token getInfo() {
+        return this.token;
+    }
+
+    @Override
     public Object run(SymbolTable table, OperationHandler handler) {
         SymbolTable local = new SymbolTable(table);
         this.init.run(local, handler);

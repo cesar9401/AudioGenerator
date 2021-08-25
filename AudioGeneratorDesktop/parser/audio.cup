@@ -56,10 +56,9 @@ terminal Token INDENT, DEDENT;
 terminal Token ERROR;
 
 non terminal Token type;
-non terminal Boolean keep;
 non terminal Operation value;
 non terminal List<Token> id_list;
-non terminal List<Assignment> statement;
+non terminal List<Assignment> statement, statement_function;
 non terminal Assignment assignment, for_assign;
 non terminal List<Instruction> body, bod, inicio1, f_body, function_body;
 non terminal If if_, else_, else_if;
@@ -75,7 +74,7 @@ non terminal Principal principal;
 non terminal Message message;
 non terminal For for_;
 non terminal DoWhile do_while;
-non terminal List<ArrayStatement> array_statement;
+non terminal List<ArrayStatement> array_statement, array_statement_function;
 non terminal Object list, fn;
 non terminal List<Object> list_fn;
 non terminal ArrayAccess l;
@@ -127,10 +126,9 @@ main_body ::=
 			principal:principal
 				{: RESULT = new ArrayList<>(); RESULT.add(principal); :}
 			| function
+				{: RESULT = new ArrayList<>(); :}
 			| statement:statement eol
 				{: RESULT = new ArrayList<>(); RESULT.addAll(statement); :}
-			| assignment:assignment eol
-				{: RESULT = new ArrayList<>(); RESULT.add(assignment); :}
 			| array_statement:array_statement eol
 				{: RESULT = new ArrayList<>(); RESULT.addAll(array_statement); :}
 			;
@@ -152,11 +150,11 @@ f_body ::=
 			;
 
 body ::=
-			statement:list eol /* ArrayList<>(); */
+			statement_function:list eol /* ArrayList<>(); */
 				{: RESULT = new ArrayList<>(); RESULT.addAll(list); :}
 			| assignment:assign eol /* Assignment */
 				{: RESULT = new ArrayList<>(); RESULT.add(assign); :}
-			| array_statement:list eol /* List<ArrayAssignment> */
+			| array_statement_function:list eol /* List<ArrayAssignment> */
 				{:  RESULT = new ArrayList<>(); RESULT.addAll(list); :}
 			| message:message eol /* Message */
 				{: RESULT = new ArrayList<>(); RESULT.add(message); :}
@@ -171,14 +169,31 @@ body ::=
 
 /* declaracion de variables */
 statement ::=
-			keep:keep VAR type:token id_list:list value:operation
+			KEEP:info VAR type:token id_list:list value:operation
 				{:
 					RESULT = new ArrayList<Assignment>();
 					for(Token id : list) {
-						RESULT.add(new Assignment(keep, token, id, operation));
+						RESULT.add(new Assignment(info, true, token, id, operation));
+					}
+				:}
+			| VAR:info type:token id_list:list value:operation
+				{:
+					RESULT = new ArrayList<Assignment>();
+					for(Token id : list) {
+						RESULT.add(new Assignment(info, false, token, id, operation));
 					}
 				:}
 			;
+
+statement_function ::=
+			VAR:info type:token id_list:list value:operation
+				{:
+					RESULT = new ArrayList<Assignment>();
+					for(Token id : list) {
+						RESULT.add(new Assignment(info, false, token, id, operation));
+					}
+				:}
+				;
 
 value ::=
 			EQUAL a:operation {: RESULT = operation; :}
@@ -252,11 +267,30 @@ l ::=
 
 /* declaracion de arreglos */
 array_statement ::=
-			keep:keep VAR type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+			KEEP:info VAR type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
 				{:
 					RESULT = new ArrayList<>();
 					for(Token id : list_token) {
-						RESULT.add(new ArrayStatement(keep, type, id, list_array_index, array_list, ind));
+						RESULT.add(new ArrayStatement(info, true, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| VAR:info type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, false, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			;
+
+array_statement_function ::=
+			VAR:info type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, false, type, id, list_array_index, array_list, ind));
 					}
 					ind = new ArrayList<>();
 				:}
@@ -392,11 +426,6 @@ boolean_val ::=
 			;
 /* Operaciones logicas y aritmeticas */
 
-keep ::=
-			KEEP {: RESULT = true; :}
-			|{: RESULT = false; :}
-			;
-
 eol ::=
 			eol EOL
 			| EOL
@@ -489,9 +518,9 @@ while_ ::=
 
 /* do-while - hacer-mientras */
 do_while ::=
-			DO_WHILE eol function_body:list_ins WHILE:token LPAREN a:condition RPAREN eol
+			DO_WHILE:info eol function_body:list_ins WHILE:token LPAREN a:condition RPAREN eol
 				{:
-					RESULT = new DoWhile(token, list_ins, condition);
+					RESULT = new DoWhile(info, token, list_ins, condition);
 				:}
 			;
 /* do-while - hacer-mientras */
@@ -568,9 +597,9 @@ principal ::=
 
 /* principal */
 message ::=
-			MSG LPAREN a:operation RPAREN
+			MSG:token LPAREN a:operation RPAREN
 				{:
-					RESULT = new Message(operation);
+					RESULT = new Message(token, operation);
 				:}
 			;
 

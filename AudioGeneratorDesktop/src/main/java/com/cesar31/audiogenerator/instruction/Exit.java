@@ -23,4 +23,9 @@ public class Exit implements Instruction {
     public Token getToken() {
         return token;
     }
+
+    @Override
+    public Token getInfo() {
+        return this.token;
+    }
 }

@@ -1,6 +1,7 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.parser.Token;
 
 /**
  *
@@ -27,5 +28,10 @@ public class ArrayAssignment extends Assignment implements Instruction {
         handler.getArray().assignElementToArray(arrayItem, operation, type, table);
 
         return null;
+    }
+
+    @Override
+    public Token getInfo() {
+        return arrayItem.getInfo();
     }
 }

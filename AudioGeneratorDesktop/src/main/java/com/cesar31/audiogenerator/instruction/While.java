@@ -75,4 +75,9 @@ public class While implements Instruction {
     public List<Instruction> getInstructions() {
         return instructions;
     }
+
+    @Override
+    public Token getInfo() {
+        return this.token;
+    }
 }

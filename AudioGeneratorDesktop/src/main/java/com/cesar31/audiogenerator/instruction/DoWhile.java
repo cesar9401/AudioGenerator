@@ -11,12 +11,15 @@ import java.util.List;
  */
 public class DoWhile implements Instruction {
 
+    private Token info;
+    
     private Token token;
-
+    
     private List<Instruction> instructions;
     private Operation condition;
 
-    public DoWhile(Token token, List<Instruction> instructions, Operation condition) {
+    public DoWhile(Token info, Token token, List<Instruction> instructions, Operation condition) {
+        this.info = info;
         this.token = token;
         this.instructions = instructions;
         this.condition = condition;
@@ -70,5 +73,10 @@ public class DoWhile implements Instruction {
 
     public Operation getCondition() {
         return condition;
+    }
+
+    @Override
+    public Token getInfo() {
+        return this.info;
     }
 }

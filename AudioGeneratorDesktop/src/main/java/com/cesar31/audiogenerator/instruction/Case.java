@@ -1,6 +1,5 @@
 package com.cesar31.audiogenerator.instruction;
 
-import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
 import java.util.List;
 
@@ -8,7 +7,7 @@ import java.util.List;
  *
  * @author cesar31
  */
-public class Case implements Instruction {
+public class Case {
 
     private Token token;
     private Operation operation;
@@ -18,11 +17,6 @@ public class Case implements Instruction {
         this.token = token;
         this.operation = operation;
         this.instructions = instructions;
-    }
-
-    @Override
-    public Object run(SymbolTable table, OperationHandler handler) {
-        return null;
     }
 
     public Token getToken() {
