@@ -170,37 +170,37 @@ Id = [a-zA-Z]\w*
 	{ return symbol(PLAY, yytext()); }
 
 	"do"|"Do"
-	{ return symbol(DO, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"do#"|"Do#"
-	{ return symbol(DO_, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"re"|"Re"
-	{ return symbol(RE, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"re#"|"Re#"
-	{ return symbol(RE_, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"mi"|"Mi"
-	{ return symbol(MI, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"fa"|"Fa"
-	{ return symbol(FA, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"fa#"|"Fa#"
-	{ return symbol(FA_, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"sol"|"Sol"
-	{ return symbol(SOL, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"sol#"|"Sol#"
-	{ return symbol(SOL_, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"la"|"La"
-	{ return symbol(LA, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	"la#"|"La#"
-	{ return symbol(LA_, yytext()); }
+	{ return symbol(NOTE, yytext()); }
 
 	/* Match con IF */
 	// "si"|"Si"
@@ -213,19 +213,19 @@ Id = [a-zA-Z]\w*
 	{ return symbol(ORDER, yytext()); }
 
 	"ascendente"|"Ascendente"
-	{ return symbol(ASC, yytext()); }
+	{ return symbol(WAY, yytext()); }
 
 	"descendente"|"Descendente"
-	{ return symbol(DESC, yytext()); }
+	{ return symbol(WAY, yytext()); }
 
 	"pares"|"Pares"
-	{ return symbol(EVEN, yytext()); }
+	{ return symbol(WAY, yytext()); }
 
 	"impares"|"Impares"
-	{ return symbol(ODD, yytext()); }
+	{ return symbol(WAY, yytext()); }
 
 	"primos"|"Primos"
-	{ return symbol(PRIME, yytext()); }
+	{ return symbol(WAY, yytext()); }
 
 	"sumarizar"|"Sumarizar"
 	{ return symbol(SUM, yytext()); }

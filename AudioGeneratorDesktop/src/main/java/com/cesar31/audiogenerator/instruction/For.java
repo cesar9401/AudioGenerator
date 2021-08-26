@@ -80,6 +80,32 @@ public class For implements Instruction {
         return null;
     }
 
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        SymbolTable local = new SymbolTable(table);
+        this.init.test(local, handler);
+
+        Boolean value = true;
+        Variable v = this.condition.run(local, handler);
+        if (v != null) {
+            value = handler.getOperation().getValue(v, "para", token);
+        } else {
+            Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), token.getValue());
+            String description = "No es posible evaluar condicion para la sentencia `" + token.getValue() + "` esto a que probablemente la expresion de condicion no tiene un valor definido o uno de los operadores no tiene valor definido.";
+            e.setDescription(description);
+            handler.getErrors().add(e);
+            value = false;
+        }
+
+        for (Instruction i : this.instructions) {
+            i.test(local, handler);
+        }
+
+        this.increase.test(local, handler);
+
+        return null;
+    }
+
     public Assignment getInit() {
         return init;
     }

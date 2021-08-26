@@ -19,8 +19,6 @@ public class Principal implements Instruction {
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
         //Crear SymbolTable local
-        System.out.println("run principal -> " + instructions.size());
-        System.out.println("");
         SymbolTable local = new SymbolTable(table);
         for (Instruction i : instructions) {
             // System.out.println(i.getClass().getSimpleName());
@@ -36,5 +34,15 @@ public class Principal implements Instruction {
     @Override
     public Token getInfo() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        SymbolTable local = new SymbolTable(table);
+        for (Instruction i : instructions) {
+            i.test(local, handler);
+        }
+
+        return null;
     }
 }

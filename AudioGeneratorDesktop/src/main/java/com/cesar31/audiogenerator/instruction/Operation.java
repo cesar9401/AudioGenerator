@@ -145,6 +145,11 @@ public class Operation implements Instruction {
         return null;
     }
 
+    @Override
+    public Variable test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
+    }
+
     public Token getOp() {
         return op;
     }

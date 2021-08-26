@@ -47,9 +47,9 @@ parser code {:
 
 terminal Token TRACK, EXTENDS, KEEP, VAR, INT, DOB, BOOL, CAR, CAD, TRUE, FALSE;
 terminal Token ARRAY, IF, ELSE, SWITCH, CASE,EXIT, DEFAULT, FOR, WHILE, DO_WHILE, CONTINUE, RETURN;
-terminal Token PLAY, DO, DO_, RE, RE_, MI, FA, FA_, SOL, SOL_, LA, LA_;
-terminal Token WAIT, ORDER, ASC, DESC, EVEN, ODD, PRIME, SUM, LENGTH, MSG, MAIN;
-terminal Token ID, INTEGER, DECIMAL, TAB, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
+terminal Token PLAY, NOTE;
+terminal Token WAIT, ORDER, WAY, SUM, LENGTH, MSG, MAIN;
+terminal Token ID, INTEGER, DECIMAL, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLREQ;
 terminal Token NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
 terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, STR, CHAR;
 terminal Token INDENT, DEDENT;
@@ -86,7 +86,9 @@ non terminal Exit exit_;
 non terminal Case case_, default_;
 non terminal List<Case> case_list, switch_body;
 non terminal Switch switch_;
+non terminal Token note;
 
+non terminal play, wait, order, sum, length;
 non terminal eol, eol_;
 non terminal array_value;
 non terminal return_;
@@ -617,3 +619,40 @@ param ::=
 			type ID
 			;
 /*  functions */
+
+/* musical notes */
+note ::=
+			NOTE:token {: RESULT = token; :}
+			| IF:token {: RESULT = token; :}
+			;
+/* musical notes */
+
+/* reproducir */
+play ::=
+			PLAY LPAREN note COMMA a COMMA a COMMA a RPAREN
+			;
+/* reproducir */
+
+/* wait */
+wait ::=
+			WAIT LPAREN a COMMA a RPAREN
+			;
+/* wait */
+
+/* ordenar */
+order ::=
+			ORDER LPAREN ID COMMA WAY RPAREN
+			;
+/* ordenar */
+
+/* sumarizar */
+sum ::=
+			SUM LPAREN ID RPAREN
+			;
+/* sumarizar */
+
+/* longitud */
+length ::=
+			LENGTH LPAREN a RPAREN
+			;
+/* longitud */

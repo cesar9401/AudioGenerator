@@ -12,9 +12,8 @@ import java.util.List;
 public class DoWhile implements Instruction {
 
     private Token info;
-    
+
     private Token token;
-    
     private List<Instruction> instructions;
     private Operation condition;
 
@@ -63,6 +62,27 @@ public class DoWhile implements Instruction {
                 }
             }
         } while (value);
+
+        return null;
+    }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        Variable tmp = this.condition.run(table, handler);
+        Boolean value;// = tmp != null ? handler.getOperation().getValue(tmp, "hacer-mientras", token) : false;
+        if (tmp == null) {
+            Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), token.getValue());
+            String description = "No es posible evaluar condicion para la sentencia `" + token.getValue() + "` esto a que probablemente la expresion de condicion no tiene un valor definido o uno de los operadores no tiene valor definido.";
+            e.setDescription(description);
+            handler.getErrors().add(e);
+        }
+
+        value = tmp != null ? handler.getOperation().getValue(tmp, "hacer-mientras", token) : false;
+
+        SymbolTable local = new SymbolTable(table);
+        for (Instruction i : this.instructions) {
+            i.test(local, handler);
+        }
 
         return null;
     }

@@ -47,13 +47,13 @@ public class While implements Instruction {
                     if (o instanceof Continue) {
                         break;
                     }
-                    
-                    if(o instanceof Exit) {
+
+                    if (o instanceof Exit) {
                         return null;
                     }
                 }
             }
-            
+
             v = this.condition.run(local, handler);
             value = v != null ? handler.getOperation().getValue(v, "mientras", token) : false;
             if (o != null) {
@@ -63,6 +63,30 @@ public class While implements Instruction {
                     continue;
                 }
             }
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+
+        Boolean value = true;
+        Variable v = this.condition.run(table, handler);
+        if (v != null) {
+            value = handler.getOperation().getValue(v, "mientras", token);
+        } else {
+            Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), token.getValue());
+            String description = "No es posible evaluar condicion para la sentencia `" + token.getValue() + "` esto a que probablemente la expresion de condicion no tiene un valor definido o uno de los operadores no tiene valor definido.";
+            e.setDescription(description);
+            handler.getErrors().add(e);
+            value = false;
+        }
+
+        SymbolTable local = new SymbolTable(table);
+
+        for (Instruction i : this.instructions) {
+            i.test(local, handler);
         }
 
         return null;

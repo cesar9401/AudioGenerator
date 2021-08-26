@@ -93,4 +93,33 @@ public class IfInstruction implements Instruction {
     public List<If> getInstructions() {
         return instructions;
     }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+
+        for (If i : instructions) {
+            Operation cond = i.getCondition();
+            boolean value;
+            if (cond != null) {
+                Variable v = cond.test(table, handler);
+                if (v != null) {
+                    // Error no es de tipo boolean se verifica al obtener valor
+                    value = handler.getOperation().getValue(v, i.getType().getName(), i.getToken());
+                } else {
+                    Err e = new Err(Err.TypeErr.SINTACTICO, i.getToken().getLine(), i.getToken().getColumn(), i.getType().getName());
+                    String description = "No es posible evaluar condicion para la sentencia `" + i.getType().getName() + "` esto a que probablemente la expresion de condicion no tiene un valor definido o uno de los operadores no tiene valor definido.";
+                    e.setDescription(description);
+                    handler.getErrors().add(e);
+                    value = false;
+                }
+            }
+
+            SymbolTable local = new SymbolTable(table);
+            for (Instruction j : i.getInstructions()) {
+                j.test(local, handler);
+            }
+        }
+
+        return null;
+    }
 }

@@ -2,20 +2,9 @@ package com.cesar31.audiogenerator.main;
 
 import com.cesar31.audiogenerator.control.FileControl;
 import com.cesar31.audiogenerator.control.OperationHandler;
+import com.cesar31.audiogenerator.control.ParserHandler;
 import com.cesar31.audiogenerator.error.Err;
-import com.cesar31.audiogenerator.instruction.Case;
-import com.cesar31.audiogenerator.instruction.Continue;
-import com.cesar31.audiogenerator.instruction.Exit;
-import com.cesar31.audiogenerator.instruction.For;
-import com.cesar31.audiogenerator.instruction.If;
-import com.cesar31.audiogenerator.instruction.IfInstruction;
-import com.cesar31.audiogenerator.instruction.Instruction;
-import com.cesar31.audiogenerator.instruction.Principal;
-import com.cesar31.audiogenerator.instruction.Switch;
-import com.cesar31.audiogenerator.instruction.SymbolTable;
-import com.cesar31.audiogenerator.parser.AudioLex;
-import com.cesar31.audiogenerator.parser.AudioParser;
-import java.io.StringReader;
+import com.cesar31.audiogenerator.instruction.*;
 import java.util.List;
 
 /**
@@ -26,35 +15,16 @@ public class Main {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        String input = FileControl.readData("input_files/input3.txt");
+        String input = FileControl.readData("input_files/input6.txt");
         System.out.println(input);
-        System.out.println("");
+        System.out.println("\n------------------------------------------------------------------------\n");
 
-        StringReader reader = new StringReader(input);
-        AudioLex lex = new AudioLex(reader);
+        ParserHandler parser = new ParserHandler();
+        parser.parseSource(input);
 
-        AudioParser parser = new AudioParser(lex);
-        try {
-            List<Instruction> ast = (List<Instruction>) parser.parse().value;
-            List<Err> errors = parser.getErrors();
-            if (!errors.isEmpty()) {
-                for (Err e : errors) {
-                    System.out.println(e.toString());
-                }
-            } else {
-                // checkAst(ast, true, true);
-
-                // Ejecutar solo si checkAst es correcto
-                checkExit(ast);
-                run(ast);
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace(System.out);
-        }
         long t1 = System.currentTimeMillis() - t;
-        System.out.println();
-        System.out.println(t1);
+        System.out.println("\n------------------------------------------------------------------------");
+        System.out.println("Tiempo de ejecucion: " + t1 + " ms");
     }
 
     private static void run(List<Instruction> ast) {
@@ -118,14 +88,17 @@ public class Main {
         }
     }
 
+    // se verifican en ciclos y switch
     private static void checkExit(List<Instruction> ast) {
         for (int i = 0; i < ast.size(); i++) {
             Instruction ins = ast.get(i);
 
+            // Metodo principal
             if (ins instanceof Principal) {
                 checkExit(((Principal) ins).getInstructions());
             }
 
+            // Instrucciones switch
             if (ins instanceof Switch) {
                 List<Case> cases = ((Switch) ins).getInstructions();
                 for (Case c : cases) {
@@ -134,9 +107,19 @@ public class Main {
                 }
             }
 
+            // Instrucciones for
             if (ins instanceof For) {
-                boolean value = checkExitIn(((For) ins).getInstructions(), false);
-                System.out.println(value);
+                checkExitIn(((For) ins).getInstructions(), false);
+            }
+
+            // Instrucciones While
+            if (ins instanceof While) {
+                checkExitIn(((While) ins).getInstructions(), false);
+            }
+
+            // Instrucciones Do-While
+            if (ins instanceof DoWhile) {
+                checkExitIn(((DoWhile) ins).getInstructions(), false);
             }
         }
     }
@@ -145,6 +128,7 @@ public class Main {
         for (int i = 0; i < ast.size(); i++) {
             Instruction tmp = ast.get(i);
 
+            // Instrucciones switch
             if (tmp instanceof Switch) {
                 List<Case> cases = ((Switch) tmp).getInstructions();
                 for (Case c : cases) {
@@ -152,6 +136,7 @@ public class Main {
                 }
             }
 
+            // Instruccioens if
             if (tmp instanceof IfInstruction) {
                 int size = ((IfInstruction) tmp).getInstructions().size();
                 IfInstruction aux = (IfInstruction) tmp;
@@ -162,14 +147,28 @@ public class Main {
                     boolean val = checkExitIn(tmp2, ignoreContinue);
                     value = value && val;
                 }
-                
-                
+
                 if (value) {
                     for (int j = i + 1; j < ast.size(); j++) {
                         System.out.println("No se ejecuta: " + ast.get(j).getClass().getSimpleName() + " -> " + ast.get(j).getInfo());
                     }
                     return true;
-                } 
+                }
+            }
+
+            // instrucciones for
+            if (tmp instanceof For) {
+                checkExitIn(((For) tmp).getInstructions(), false);
+            }
+
+            // instrucciones while
+            if (tmp instanceof While) {
+                checkExitIn(((While) tmp).getInstructions(), false);
+            }
+
+            // instrucciones do-while
+            if (tmp instanceof DoWhile) {
+                checkExitIn(((DoWhile) tmp).getInstructions(), false);
             }
 
             if (tmp instanceof Exit) {
@@ -177,10 +176,6 @@ public class Main {
                     System.out.println("No se ejecutan: " + ast.get(j).getClass().getSimpleName() + " -> " + ast.get(j).getInfo());
                 }
                 return true;
-            }
-
-            if (tmp instanceof For) {
-                checkExitIn(((For) tmp).getInstructions(), false);
             }
 
             if (tmp instanceof Continue && !ignoreContinue) {

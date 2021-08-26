@@ -34,4 +34,9 @@ public class ArrayAssignment extends Assignment implements Instruction {
     public Token getInfo() {
         return arrayItem.getInfo();
     }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
+    }
 }

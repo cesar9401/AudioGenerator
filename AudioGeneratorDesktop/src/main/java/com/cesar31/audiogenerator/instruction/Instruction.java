@@ -11,5 +11,7 @@ public interface Instruction {
 
     public Object run(SymbolTable table, OperationHandler handler);
     
+    public Object test(SymbolTable table, OperationHandler handler);
+    
     public Token getInfo();
 }

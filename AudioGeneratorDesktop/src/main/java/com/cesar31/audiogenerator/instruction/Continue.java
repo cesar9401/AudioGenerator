@@ -28,4 +28,9 @@ public class Continue implements Instruction {
     public Token getInfo() {
         return this.token;
     }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
+    }
 }

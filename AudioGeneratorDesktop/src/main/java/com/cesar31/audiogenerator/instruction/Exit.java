@@ -20,12 +20,17 @@ public class Exit implements Instruction {
         return this;
     }
 
-    public Token getToken() {
-        return token;
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
     }
 
     @Override
     public Token getInfo() {
         return this.token;
+    }
+
+    public Token getToken() {
+        return token;
     }
 }

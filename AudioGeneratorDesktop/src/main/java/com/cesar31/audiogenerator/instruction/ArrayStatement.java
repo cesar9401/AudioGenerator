@@ -142,4 +142,9 @@ public class ArrayStatement implements Instruction {
     public void setDimensions(List<ArrayIndex> dimensions) {
         this.dimensions = dimensions;
     }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
+    }
 }

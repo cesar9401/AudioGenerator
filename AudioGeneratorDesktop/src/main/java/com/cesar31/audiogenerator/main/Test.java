@@ -7,35 +7,8 @@ package com.cesar31.audiogenerator.main;
 public class Test {
 
     public static void main(String[] args) {
-        int a = 2;
-        switch (a) {
-            case 1:
-                if(a == 2) {
-                    break;
-                } else {
-                    if(a == 3) {
-                        break;
-                    } else {
-                        break;
-                    }
-                }
-            case 2:
-                int i = 10;
-                System.out.println(i);
-                break;
-        }
-        
-        
-        for (int i = 0; i < 10; i++) {
-            if(i == 5) {
-                break;
-            } else if(i == 2) {
-            } 
-            else {
-                break;
-            }
-            System.out.println(i); // -> no se ejecuta
-        }
+        String note = "Do#";
+        System.out.println(note.toLowerCase());
     }
 
     public static int getValue(int a) {

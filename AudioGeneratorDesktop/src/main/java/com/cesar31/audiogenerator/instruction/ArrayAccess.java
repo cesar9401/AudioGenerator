@@ -35,4 +35,9 @@ public class ArrayAccess implements Instruction {
     public Token getInfo() {
         return this.id;
     }
+
+    @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
+    }
 }

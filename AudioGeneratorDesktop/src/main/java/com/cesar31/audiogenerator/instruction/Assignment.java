@@ -70,6 +70,11 @@ public class Assignment implements Instruction {
     }
 
     @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        return this.run(table, handler);
+    }
+
+    @Override
     public Token getInfo() {
         return this.info;
     }
