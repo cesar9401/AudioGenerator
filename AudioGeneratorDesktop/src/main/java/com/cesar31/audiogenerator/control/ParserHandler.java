@@ -47,9 +47,10 @@ public class ParserHandler {
                         errors.forEach(System.out::println);
                     } else {
                         // Si no hay errores, ejecutar codigo
+                        System.out.println("\nCodigo limpio!!\n");
                         errors = runAst(ast);
                         if (!errors.isEmpty()) {
-                            System.out.println("Se entraron los siguientes errores");
+                            System.out.println("Se entraron los siguientes errores de ejecucio: ");
                             errors.forEach(System.out::println);
                         }
                     }
@@ -235,8 +236,26 @@ public class ParserHandler {
     private List<Err> testAst(List<Instruction> ast) {
         SymbolTable table = new SymbolTable();
         OperationHandler handler = new OperationHandler();
+        handler.setFather(table);
 
         for (Instruction i : ast) {
+            if (i instanceof Function) {
+                String id = ((Function) i).getFunctionId();
+                handler.getFunctions().put(id, (Function) i);
+            }
+        }
+
+        List<Instruction> tmp = new ArrayList<>();
+        for (Instruction i : ast) {
+            if (i instanceof Assignment || i instanceof ArrayStatement || i instanceof Principal) {
+                i.test(table, handler);
+            } else {
+                tmp.add(i);
+            }
+        }
+
+        handler.setTest(true);
+        for (Instruction i : tmp) {
             i.test(table, handler);
         }
 
@@ -246,11 +265,23 @@ public class ParserHandler {
     private List<Err> runAst(List<Instruction> ast) {
         SymbolTable table = new SymbolTable();
         OperationHandler handler = new OperationHandler();
+        handler.setFather(table);
 
         for (Instruction i : ast) {
-            i.run(table, handler);
+            if (i instanceof Function) {
+                String id = ((Function) i).getFunctionId();
+                handler.getFunctions().put(id, (Function) i);
+            }
         }
 
+        for (Instruction i : ast) {
+            if (i instanceof Assignment || i instanceof ArrayStatement || i instanceof Principal) {
+                i.run(table, handler);
+            } else {
+                System.out.println(i.getClass().getSimpleName());
+            }
+        }
         return handler.getErrors();
     }
+
 }

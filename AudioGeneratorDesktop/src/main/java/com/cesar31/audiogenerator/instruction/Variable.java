@@ -20,6 +20,10 @@ public class Variable {
     private int[] dimensions;
     private Object array;
 
+    public Variable(Var type) {
+        this.type = type;
+    }
+    
     public Variable(Token token) {
         this.token = token;
     }

@@ -67,6 +67,10 @@ public class OperationMaker {
 
         // double + double
         if (checkTypes(a, DOUBLE, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) + getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -74,6 +78,10 @@ public class OperationMaker {
 
         // double + integer OR integer + double
         if (a.getType() == DOUBLE && b.getType() == INTEGER || a.getType() == INTEGER && b.getType() == DOUBLE) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) + getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -81,6 +89,10 @@ public class OperationMaker {
 
         // double + char
         if (checkTypes(a, DOUBLE, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) + getAsciiCode(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -88,6 +100,10 @@ public class OperationMaker {
 
         // char + double
         if (checkTypes(a, CHAR, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getAsciiCode(a) + getDouble(a);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -95,6 +111,10 @@ public class OperationMaker {
 
         // double + boolean
         if (checkTypes(a, DOUBLE, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) + booleanToLong(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -102,6 +122,10 @@ public class OperationMaker {
 
         // boolaen + double
         if (checkTypes(a, BOOLEAN, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = booleanToLong(a) + getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -109,66 +133,110 @@ public class OperationMaker {
 
         // integer + integer
         if (checkTypes(a, INTEGER, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) + getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // entero + char
         if (checkTypes(a, INTEGER, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) + getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // char + entero
         if (checkTypes(a, CHAR, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) + getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // entero + boolean
         if (checkTypes(a, INTEGER, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) + booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean + entero
         if (checkTypes(a, BOOLEAN, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) + getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // cadena + cadena
         if (checkTypes(a, STRING, b, STRING)) {
+            if (handler.isTest()) {
+                return new Variable(STRING, "");
+            }
+
             String value = a.getValue().concat(b.getValue());
             return new Variable(STRING, value);
         }
 
         // cadena + lo que sea
         if (a.getType() == STRING || b.getType() == STRING) {
+            if (handler.isTest()) {
+                return new Variable(STRING, "");
+            }
+
             String value = a.getValue().concat(b.getValue());
             return new Variable(STRING, value);
         }
 
         // boolean + boolean
         if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) + booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter + caracter
         if (checkTypes(a, CHAR, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) + getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter + boolean
         if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) + booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean + caracter
         if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) + getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
@@ -191,6 +259,10 @@ public class OperationMaker {
 
         // double - double/integer
         if (a.getType() == DOUBLE && (b.getType() == DOUBLE || b.getType() == INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) - getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -198,6 +270,10 @@ public class OperationMaker {
 
         // integer - double
         if (checkTypes(a, INTEGER, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) - getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -205,6 +281,10 @@ public class OperationMaker {
 
         // double - char
         if (checkTypes(a, DOUBLE, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) - getAsciiCode(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -212,6 +292,10 @@ public class OperationMaker {
 
         // char - double
         if (checkTypes(a, CHAR, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getAsciiCode(a) - getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -219,6 +303,10 @@ public class OperationMaker {
 
         // double - boolean
         if (checkTypes(a, DOUBLE, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) - booleanToLong(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -226,6 +314,10 @@ public class OperationMaker {
 
         // boolean - double
         if (checkTypes(a, BOOLEAN, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = booleanToLong(a) - getDouble(a);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -233,54 +325,90 @@ public class OperationMaker {
 
         // integer - char
         if (checkTypes(a, INTEGER, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) - getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // char - integer
         if (checkTypes(a, CHAR, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) - getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // integer - boolean
         if (checkTypes(a, INTEGER, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) - booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean - integer
         if (checkTypes(a, BOOLEAN, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) - getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // integer - integer
         if (checkTypes(a, INTEGER, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) - getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean - boolean
         if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) - booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter - caracter
         if (checkTypes(a, CHAR, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) - getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter - boolean
         if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) - booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean - caracter
         if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) - getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
@@ -302,6 +430,10 @@ public class OperationMaker {
 
         // double * double
         if (checkTypes(a, DOUBLE, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) * getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -309,6 +441,10 @@ public class OperationMaker {
 
         // double * integer / integer * double
         if (checkTypes(a, DOUBLE, b, INTEGER) || checkTypes(a, INTEGER, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) * getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -316,6 +452,10 @@ public class OperationMaker {
 
         // double * char
         if (checkTypes(a, DOUBLE, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) * getAsciiCode(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -323,6 +463,10 @@ public class OperationMaker {
 
         // char * double
         if (checkTypes(a, CHAR, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getAsciiCode(a) * getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -330,6 +474,10 @@ public class OperationMaker {
 
         // double * boolean
         if (checkTypes(a, DOUBLE, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) * booleanToLong(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -337,6 +485,10 @@ public class OperationMaker {
 
         // boolaen * double
         if (checkTypes(a, BOOLEAN, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = booleanToLong(a) * getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -344,54 +496,90 @@ public class OperationMaker {
 
         // integer * integer
         if (checkTypes(a, INTEGER, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) * getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // integer * char
         if (checkTypes(a, INTEGER, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) * getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // char * integer
         if (checkTypes(a, CHAR, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) * getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // integer * boolean
         if (checkTypes(a, INTEGER, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) * booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean * integer
         if (checkTypes(a, BOOLEAN, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) * getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean * boolean
         if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) * booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter * caracter
         if (checkTypes(a, CHAR, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) * getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter * boolean
         if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) * booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean * caracter
         if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) * getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
@@ -413,6 +601,10 @@ public class OperationMaker {
 
         // double / double
         if (checkTypes(a, DOUBLE, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) / getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -420,6 +612,10 @@ public class OperationMaker {
 
         // double / integer OR integer * double
         if (checkTypes(a, DOUBLE, b, INTEGER) || checkTypes(a, INTEGER, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) / getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -427,6 +623,10 @@ public class OperationMaker {
 
         // double * char
         if (checkTypes(a, DOUBLE, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) / getAsciiCode(b).doubleValue();
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -434,6 +634,10 @@ public class OperationMaker {
 
         // char * double
         if (checkTypes(a, CHAR, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getAsciiCode(a).doubleValue() / getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -441,6 +645,10 @@ public class OperationMaker {
 
         // double / boolean
         if (checkTypes(a, DOUBLE, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = getDouble(a) / booleanToLong(b).doubleValue();
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -448,6 +656,10 @@ public class OperationMaker {
 
         // boolaen / double
         if (checkTypes(a, BOOLEAN, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = booleanToLong(a).doubleValue() / getDouble(b);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -455,54 +667,90 @@ public class OperationMaker {
 
         // integer / integer
         if (checkTypes(a, INTEGER, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) / getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // integer / char
         if (checkTypes(a, INTEGER, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) / getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // char / integer
         if (checkTypes(a, CHAR, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) / getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // integer / boolean
         if (checkTypes(a, INTEGER, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) / booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean / integer
         if (checkTypes(a, BOOLEAN, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) / getLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean * boolean
         if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) / booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter * caracter
         if (checkTypes(a, CHAR, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) / getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // caracter * boolean
         if (checkTypes(a, CHAR, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getAsciiCode(a) / booleanToLong(b);
             return new Variable(INTEGER, value.toString());
         }
 
         // boolean * caracter
         if (checkTypes(a, BOOLEAN, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = booleanToLong(a) / getAsciiCode(b);
             return new Variable(INTEGER, value.toString());
         }
@@ -523,6 +771,10 @@ public class OperationMaker {
         }
 
         if (checkTypes(a, INTEGER, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = getLong(a) % getLong(b);
             return new Variable(INTEGER, value.toString());
         }
@@ -543,11 +795,19 @@ public class OperationMaker {
         }
 
         if (checkTypes(a, INTEGER, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = (long) Math.pow(getLong(a), getLong(b));
             return new Variable(INTEGER, value.toString());
         }
 
         if (checkTypes(a, DOUBLE, b, INTEGER)) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Double value = Math.pow(getDouble(a), getLong(b));
             return new Variable(DOUBLE, value.toString());
         }
@@ -567,11 +827,19 @@ public class OperationMaker {
         }
 
         if (a.getType() == INTEGER) {
+            if (handler.isTest()) {
+                return new Variable(INTEGER, "");
+            }
+
             Long value = -getLong(a);
             return new Variable(INTEGER, value.toString());
         }
 
         if (a.getType() == DOUBLE) {
+            if (handler.isTest()) {
+                return new Variable(DOUBLE, "");
+            }
+
             Double value = -getDouble(a);
             value = formatDouble(value);
             return new Variable(DOUBLE, value.toString());
@@ -593,6 +861,10 @@ public class OperationMaker {
         }
 
         if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             boolean valueA = getBoolean(a);
             boolean valueB = getBoolean(b);
             Boolean value = true;
@@ -639,6 +911,10 @@ public class OperationMaker {
         }
 
         if (a.getType() == BOOLEAN) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             Boolean value = !getBoolean(a);
             return new Variable(BOOLEAN, value.toString());
         }
@@ -677,6 +953,10 @@ public class OperationMaker {
 
         //  comparing numbers
         if (checkTypes(a, INTEGER, b, DOUBLE) || checkTypes(a, DOUBLE, b, INTEGER) || checkTypes(a, INTEGER, b, INTEGER) || checkTypes(a, DOUBLE, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             Boolean value = true;
             Double valueA = getDouble(a), valueB = getDouble(b);
             switch (type) {
@@ -704,6 +984,10 @@ public class OperationMaker {
 
         // comparing strings
         if (checkTypes(a, STRING, b, STRING)) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             String valueA = a.getValue();
             String valueB = b.getValue();
             Boolean value = true;
@@ -732,6 +1016,10 @@ public class OperationMaker {
 
         // comparing char
         if (checkTypes(a, CHAR, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             Variable a_ = new Variable(INTEGER, getAsciiCode(a).toString());
             Variable b_ = new Variable(INTEGER, getAsciiCode(b).toString());
             return compare(a_, b_, type, op);
@@ -739,28 +1027,44 @@ public class OperationMaker {
 
         // char comparing integer/double
         if (checkTypes(a, CHAR, b, INTEGER) || checkTypes(a, CHAR, b, DOUBLE)) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             Variable a_ = new Variable(INTEGER, getAsciiCode(a).toString());
             return compare(a_, b, type, op);
         }
 
         // comparing integer/double vs char
         if (checkTypes(a, INTEGER, b, CHAR) || checkTypes(a, DOUBLE, b, CHAR)) {
+            if (handler.isTest()) {
+                return new Variable(BOOLEAN, "");
+            }
+
             Variable b_ = new Variable(INTEGER, getAsciiCode(b).toString());
             return compare(a, b_, type, op);
         }
 
         // comparar boolean vs boolean
         if (checkTypes(a, BOOLEAN, b, BOOLEAN)) {
-            String valueA = getBoolean(a).toString();
-            String valueB = getBoolean(b).toString();
-            Boolean value;
-            switch (type) {
-                case EQEQ:
-                    value = valueA.equals(valueB);
-                    return new Variable(BOOLEAN, value.toString());
-                case NEQ:
-                    value = !valueA.equals(valueB);
-                    return new Variable(BOOLEAN, value.toString());
+            if (handler.isTest()) {
+                switch (type) {
+                    case EQEQ:
+                    case NEQ:
+                        return new Variable(BOOLEAN, "");
+                }
+            } else {
+                String valueA = getBoolean(a).toString();
+                String valueB = getBoolean(b).toString();
+                Boolean value;
+                switch (type) {
+                    case EQEQ:
+                        value = valueA.equals(valueB);
+                        return new Variable(BOOLEAN, value.toString());
+                    case NEQ:
+                        value = !valueA.equals(valueB);
+                        return new Variable(BOOLEAN, value.toString());
+                }
             }
         }
 
@@ -789,6 +1093,10 @@ public class OperationMaker {
         }
 
         if (cond.getType() == Var.BOOLEAN) {
+            if(handler.isTest()) {
+                return true;
+            }
+            
             String value = cond.getValue().toLowerCase();
             return value.equals("true") || value.equals("verdadero") || value.equals("1");
         }

@@ -9,9 +9,9 @@ import com.cesar31.audiogenerator.parser.Token;
  */
 public class Assignment implements Instruction {
 
-    private Token info;
+    private Token info; // token informacion
 
-    private TypeA kindA;
+    private TypeA kindA; // tipo de asignacion
 
     private boolean keep;
     private Token type;

@@ -20,11 +20,22 @@ public class EnvironmentHandler {
         this.handler = handler;
     }
 
+    /**
+     * Agregar declaracion / declaracion y asignacion a tabla de simbolos
+     *
+     * @param type
+     * @param id
+     * @param value
+     * @param e
+     * @param keep
+     * @param assignment
+     */
     public void addSymbolTable(Token type, Token id, Variable value, SymbolTable e, boolean keep, boolean assignment) {
         if (type != null) {
             Var kind = this.handler.getCast().getType(type);
             if (value != null) {
                 if (value.getValue() != null) {
+                    
                     Variable newType = this.handler.getCast().typeConversion(kind, value);
                     if (newType != null) {
                         // En este punto el tipo de variable declarado es igual que el tipo de variable a asignar
@@ -46,7 +57,7 @@ public class EnvironmentHandler {
                         // Error, no es posible asignar por los tipos
                         Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
                         String description = "No es posible realizar una asignacion entre la variable `" + id.getValue() + "` de tipo `" + kind.getName() + "`";
-                        description += " y el valor a asignar `" + value.getValue() + "` de tipo `" + value.getType().getName() + "`.";
+                        description += " y el valor a asignar de tipo `" + value.getType().getName() + "`.";
                         err.setDescription(description);
                         this.handler.getErrors().add(err);
                     }
@@ -83,6 +94,14 @@ public class EnvironmentHandler {
         }
     }
 
+    /**
+     * Realizar asignacion
+     *
+     * @param kindA
+     * @param id
+     * @param value
+     * @param e
+     */
     public void makeAssignment(Assignment.TypeA kindA, Token id, Operation value, SymbolTable e) {
         Variable v = this.getFromSymbolTable(id, e, false);
         if (v != null) {

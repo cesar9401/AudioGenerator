@@ -159,8 +159,16 @@ public class ArrayHandler {
     public void addArrayStatementToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, SymbolTable e) {
         if (type != null) {
             Var kind = handler.getCast().getType(type);
-            Object array = Array.newInstance(String.class, dimensions);
-            Variable variable = new Variable(kind, id.getValue(), keep, dimensions, array);
+
+            Variable variable;
+            if (handler.isTest()) {
+                Object array = new Object();
+                variable = new Variable(kind, id.getValue(), keep, dimensions, array);
+            } else {
+                Object array = Array.newInstance(String.class, dimensions);
+                variable = new Variable(kind, id.getValue(), keep, dimensions, array);
+            }
+
             if (!e.containsVariable(variable.getId())) {
                 e.add(variable);
             } else {
@@ -186,6 +194,19 @@ public class ArrayHandler {
     public void addArrayAssignmentToSymbolTable(Token type, Token id, boolean keep, int[] dimensions, Object value, List<Integer> ind, SymbolTable e) {
         if (type != null) {
             Var kind = handler.getCast().getType(type);
+
+            if (handler.isTest()) {
+                Variable matrix = new Variable(kind, id.getValue(), keep, dimensions, new Object());
+                if (!e.containsVariable(matrix.getId())) {
+                    e.add(matrix);
+                } else {
+                    Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
+                    String description = "La variable `" + id.getValue() + "` ya esta definida en este ambito, intente con otro identificador.";
+                    err.setDescription(description);
+                    this.handler.getErrors().add(err);
+                }
+                return;
+            }
 
             //Verificar que dimensiones de value sean las mismas que las declaradas y almacenadas en dimensions
             if (checkArrayDimensions(dimensions, ind)) {
@@ -261,26 +282,29 @@ public class ArrayHandler {
 
                     if (tmp != null) {
                         if (tmp.getType() == Var.INTEGER) {
-                            index[i] = Integer.valueOf(tmp.getValue());
-                            if (index[i] < 0) {
-                                // Error, indice menor que cero
-                                error = true;
-                                Token left = indexes.get(i).getLbracket();
+                            if (!handler.isTest()) {
+                                index[i] = Integer.valueOf(tmp.getValue());
+                                if (index[i] < 0) {
+                                    // Error, indice menor que cero
+                                    error = true;
+                                    Token left = indexes.get(i).getLbracket();
 
-                                Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
-                                String description = "En la llamada al arreglo " + id.getValue() + ", el indice numero " + (i + 1);
-                                if (tmp.getId() != null) {
-                                    description += " con id: `" + tmp.getId() + "`";
-                                    err.setLexema(tmp.getId());
-                                    if (tmp.getToken() != null) {
-                                        err.setLine(tmp.getToken().getLine());
-                                        err.setColumn(tmp.getToken().getColumn());
+                                    Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
+                                    String description = "En la llamada al arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                                    if (tmp.getId() != null) {
+                                        description += " con id: `" + tmp.getId() + "`";
+                                        err.setLexema(tmp.getId());
+                                        if (tmp.getToken() != null) {
+                                            err.setLine(tmp.getToken().getLine());
+                                            err.setColumn(tmp.getToken().getColumn());
+                                        }
                                     }
+                                    description += ", con valor entero(value = `" + tmp.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
+                                    err.setDescription(description);
+                                    handler.getErrors().add(err);
                                 }
-                                description += ", con valor entero(value = `" + tmp.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
-                                err.setDescription(description);
-                                handler.getErrors().add(err);
                             }
+
                         } else {
                             // Error, variable para acceder a indice i no es de tipo entero
                             error = true;
@@ -310,22 +334,26 @@ public class ArrayHandler {
                 if (!error) {
                     // verificar que los indices no sobrepasen a la longitud del array
                     if (v.getDimensions().length == index.length) {
-                        if (rightDimensions(v.getDimensions(), index)) {
-                            Object value = this.getValueFromArray(index, v.getArray());
-                            if (value != null) {
-                                return new Variable(v.getType(), value.toString());
-                            } else {
-                                // Error, no tiene valor definido en indices index
-                                // System.out.println("Revisar aqui :v");
-                                return new Variable(v.getType(), null);
-                            }
-
+                        if (handler.isTest()) {
+                            return new Variable(v.getType(), "");
                         } else {
-                            // out of indexs
-                            Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), "");
-                            String description = "En la llamada al arreglo `" + id.getValue() + "`, los indices indicados: `" + Arrays.toString(index) + "`, estan fuera de rango.";
-                            err.setDescription(description);
-                            handler.getErrors().add(err);
+                            if (rightDimensions(v.getDimensions(), index)) {
+                                Object value = this.getValueFromArray(index, v.getArray());
+                                if (value != null) {
+                                    return new Variable(v.getType(), value.toString());
+                                } else {
+                                    // Error, no tiene valor definido en indices index
+                                    // System.out.println("Revisar aqui :v");
+                                    return new Variable(v.getType(), null);
+                                }
+
+                            } else {
+                                // out of indexs
+                                Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), "");
+                                String description = "En la llamada al arreglo `" + id.getValue() + "`, los indices indicados: `" + Arrays.toString(index) + "`, estan fuera de rango.";
+                                err.setDescription(description);
+                                handler.getErrors().add(err);
+                            }
                         }
                     } else {
                         // error, dimensiones con concuerdan

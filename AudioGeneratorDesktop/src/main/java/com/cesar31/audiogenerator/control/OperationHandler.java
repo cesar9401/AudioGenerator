@@ -1,7 +1,10 @@
 package com.cesar31.audiogenerator.control;
 
 import com.cesar31.audiogenerator.error.Err;
+import com.cesar31.audiogenerator.instruction.Function;
+import com.cesar31.audiogenerator.instruction.SymbolTable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,6 +13,11 @@ import java.util.List;
  */
 public class OperationHandler {
 
+    private boolean test;
+
+    private SymbolTable father;
+    private HashMap<String, Function> functions;
+
     private ArrayHandler array;
     private CastHandler cast;
     private EnvironmentHandler environment;
@@ -17,8 +25,10 @@ public class OperationHandler {
     private List<Err> errors;
 
     public OperationHandler() {
+        this.test = false;
+        this.functions = new HashMap<>();
         this.array = new ArrayHandler(this);
-        this.cast = new CastHandler();
+        this.cast = new CastHandler(this);
         this.environment = new EnvironmentHandler(this);
         this.operation = new OperationMaker(this);
         this.errors = new ArrayList<>();
@@ -42,5 +52,25 @@ public class OperationHandler {
 
     public List<Err> getErrors() {
         return errors;
+    }
+
+    public HashMap<String, Function> getFunctions() {
+        return functions;
+    }
+
+    public void setFather(SymbolTable father) {
+        this.father = father;
+    }
+
+    public SymbolTable getFather() {
+        return father;
+    }
+
+    public boolean isTest() {
+        return test;
+    }
+
+    public void setTest(boolean test) {
+        this.test = test;
     }
 }

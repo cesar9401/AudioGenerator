@@ -12,7 +12,7 @@ import java.util.List;
 public class ArrayStatement implements Instruction {
 
     private Token info;
-    
+
     private boolean keep;
     private Token type;
     private Token id;
@@ -36,7 +36,6 @@ public class ArrayStatement implements Instruction {
 
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
-        // ArrayHandler
         int[] dimension = new int[dimensions.size()];
         boolean error = false;
 
@@ -107,6 +106,77 @@ public class ArrayStatement implements Instruction {
     }
 
     @Override
+    public Object test(SymbolTable table, OperationHandler handler) {
+        int[] dimension = new int[dimensions.size()];
+        boolean error = false;
+
+        for (int i = 0; i < dimensions.size(); i++) {
+            Variable v = dimensions.get(i).getOperation().test(table, handler);
+            if (v != null) {
+                if (v.getType() == Var.INTEGER) {
+                    if (!handler.isTest()) {
+                        dimension[i] = Integer.valueOf(v.getValue());
+                        if (dimension[i] <= 0) {
+                            // Error, las dimensiones deben ser mayor a cero
+                            error = true;
+                            Token left = dimensions.get(i).getLbracket();
+
+                            Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
+                            String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                            if (v.getId() != null) {
+                                description += " con id: `" + v.getId() + "`";
+                                err.setLexema(v.getId());
+                                if (v.getToken() != null) {
+                                    err.setLine(v.getToken().getLine());
+                                    err.setColumn(v.getToken().getColumn());
+                                }
+                            }
+                            description += ", con valor entero(value = `" + v.getValue() + "` no es valido para definir la longitud/dimension de un arreglo. Este debe ser mayor que cero.";
+                            err.setDescription(description);
+                            handler.getErrors().add(err);
+                        }
+                    }
+                } else {
+                    // Agregar error aqui
+                    error = true;
+                    Token left = dimensions.get(i).getLbracket();
+
+                    Err err = new Err(Err.TypeErr.SINTACTICO, left.getLine(), left.getColumn() + 1, "");
+                    String description = "En la declaracion del arreglo " + id.getValue() + ", el indice numero " + (i + 1);
+                    if (v.getId() != null) {
+                        description += " con id: `" + v.getId() + "`";
+                        err.setLexema(v.getId());
+                        if (v.getToken() != null) {
+                            err.setLine(v.getToken().getLine());
+                            err.setColumn(v.getToken().getLine());
+                        }
+                    }
+                    description += ", no es de tipo entero(tipo = `" + v.getType().getName() + "`). Se necesita una variable de tipo entero para definir la longitud/dimension de un arreglo.";
+                    err.setDescription(description);
+                    handler.getErrors().add(err);
+                }
+            } else {
+                // Error variable no existe, error se determina en la clase operacion
+                error = true;
+            }
+        }
+
+        // solo declaracion
+        if (value == null) {
+            if (!error) {
+                // crear arreglo
+                handler.getArray().addArrayStatementToSymbolTable(type, id, keep, dimension, table);
+            }
+        } else {
+            if (!error) {
+                // Declaracion y asignacionH
+                handler.getArray().addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Token getInfo() {
         return this.info;
     }
@@ -141,10 +211,5 @@ public class ArrayStatement implements Instruction {
 
     public void setDimensions(List<ArrayIndex> dimensions) {
         this.dimensions = dimensions;
-    }
-
-    @Override
-    public Object test(SymbolTable table, OperationHandler handler) {
-        return this.run(table, handler);
     }
 }

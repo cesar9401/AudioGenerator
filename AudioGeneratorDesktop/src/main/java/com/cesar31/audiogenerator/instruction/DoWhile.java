@@ -68,7 +68,7 @@ public class DoWhile implements Instruction {
 
     @Override
     public Object test(SymbolTable table, OperationHandler handler) {
-        Variable tmp = this.condition.run(table, handler);
+        Variable tmp = this.condition.test(table, handler);
         Boolean value;// = tmp != null ? handler.getOperation().getValue(tmp, "hacer-mientras", token) : false;
         if (tmp == null) {
             Err e = new Err(Err.TypeErr.SINTACTICO, token.getLine(), token.getColumn(), token.getValue());

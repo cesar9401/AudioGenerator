@@ -72,7 +72,7 @@ public class While implements Instruction {
     public Object test(SymbolTable table, OperationHandler handler) {
 
         Boolean value = true;
-        Variable v = this.condition.run(table, handler);
+        Variable v = this.condition.test(table, handler);
         if (v != null) {
             value = handler.getOperation().getValue(v, "mientras", token);
         } else {

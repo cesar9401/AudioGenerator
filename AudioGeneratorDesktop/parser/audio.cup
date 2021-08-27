@@ -87,13 +87,16 @@ non terminal Case case_, default_;
 non terminal List<Case> case_list, switch_body;
 non terminal Switch switch_;
 non terminal Token note;
+non terminal Parameter param;
+non terminal List<Parameter> params, params_f;
+non terminal FunctionCall function_call;
+non terminal List<Operation> args, args_;
 
 non terminal play, wait, order, sum, length;
 non terminal eol, eol_;
 non terminal array_value;
 non terminal return_;
 non terminal extends_;
-non terminal params_f, params, param;
 
 start with inicio1;
 
@@ -127,8 +130,8 @@ m_body ::=
 main_body ::=
 			principal:principal
 				{: RESULT = new ArrayList<>(); RESULT.add(principal); :}
-			| function
-				{: RESULT = new ArrayList<>(); :}
+			| function:function
+				{: RESULT = new ArrayList<>(); RESULT.add(function); :}
 			| statement:statement eol
 				{: RESULT = new ArrayList<>(); RESULT.addAll(statement); :}
 			| array_statement:array_statement eol
@@ -166,6 +169,8 @@ body ::=
 				{: RESULT = new ArrayList<>(); RESULT.add(continue_); :}
 			| exit_:exit_ eol
 				{: RESULT = new ArrayList<>(); RESULT.add(exit_); :}
+			| function_call:f_call eol
+				{: RESULT = new ArrayList<>(); RESULT.add(f_call); :}
 			;
 /* cuerpo para funciones */
 
@@ -583,10 +588,12 @@ return_ ::=
 
 /*  functions */
 function ::=
-			ID LPAREN params_f RPAREN eol function_body // no keep - void
-			| KEEP type ID LPAREN params_f RPAREN eol function_body // keep - type
-			| KEEP ID LPAREN params_f RPAREN eol function_body // keep - void
-			| type ID LPAREN params_f RPAREN eol function_body // no keep - type
+			ID:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - void
+				{: RESULT = new Function(id, false, id, list, instructions); :}
+			| KEEP:info ID:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - void
+				{: RESULT = new Function(info, false, id, list, instructions); :}
+			| KEEP:info type:token_type ID LPAREN params_f:list RPAREN eol function_body // keep - type
+			| type:token_type ID LPAREN params_f:list RPAREN eol function_body // no keep - type
 			;
 
 /* principal */
@@ -606,17 +613,22 @@ message ::=
 			;
 
 params_f ::=
-			params
+			params:list
+				{: RESULT = list; :}
 			|
+				{: RESULT = new ArrayList<>(); :}
 			;
 
 params ::=
-			params COMMA param
-			| param
+			params:list COMMA param:param
+				{: RESULT = list; RESULT.add(param); :}
+			| param:param
+				{: RESULT = new ArrayList<>(); RESULT.add(param); :}
 			;
 
 param ::=
-			type ID
+			type:type ID:id
+				{: RESULT = new Parameter(type, id); :}
 			;
 /*  functions */
 
@@ -656,3 +668,24 @@ length ::=
 			LENGTH LPAREN a RPAREN
 			;
 /* longitud */
+
+/* llamada de funcion */
+function_call ::=
+			ID:token LPAREN args_:list RPAREN
+				{: RESULT = new FunctionCall(token, list); :}
+			;
+
+args_ ::=
+			args:list
+				{: RESULT = list; :}
+			|
+				{: RESULT = new ArrayList<>(); :}
+			;
+
+args ::=
+			args:list COMMA a:operation
+				{: RESULT = list; RESULT.add(operation); :}
+			| a:operation
+				{: RESULT = new ArrayList<>(); RESULT.add(operation); :}
+			;
+/* llamada de funcion */

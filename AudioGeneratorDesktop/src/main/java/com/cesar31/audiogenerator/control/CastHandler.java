@@ -11,7 +11,10 @@ import com.cesar31.audiogenerator.parser.Token;
  */
 public class CastHandler {
 
-    public CastHandler() {
+    OperationHandler handler;
+
+    public CastHandler(OperationHandler handler) {
+        this.handler = handler;
     }
 
     /**
@@ -25,6 +28,10 @@ public class CastHandler {
     public Variable typeConversion(Var type, Variable value) {
         // asignacion del mismo tipo
         if (value.getType() == type) {
+            if (handler.isTest()) {
+                return new Variable(type, "");
+            }
+
             return new Variable(type, value.getValue());
             //return value;
         }
@@ -33,11 +40,23 @@ public class CastHandler {
         if (type == INTEGER) {
             switch (value.getType()) {
                 case DOUBLE:
+                    if (handler.isTest()) {
+                        return new Variable(INTEGER, "");
+                    }
+
                     String val = String.valueOf(getDouble(value).intValue());
                     return new Variable(INTEGER, val);
                 case CHAR:
+                    if (handler.isTest()) {
+                        return new Variable(INTEGER, "");
+                    }
+
                     return new Variable(INTEGER, getAsciiCode(value).toString());
                 case BOOLEAN:
+                    if (handler.isTest()) {
+                        return new Variable(INTEGER, "");
+                    }
+
                     return new Variable(INTEGER, booleanToLong(value).toString());
                 default:
                     return null;
@@ -48,8 +67,16 @@ public class CastHandler {
         if (type == DOUBLE) {
             switch (value.getType()) {
                 case INTEGER:
+                    if (handler.isTest()) {
+                        return new Variable(DOUBLE, "");
+                    }
+
                     return new Variable(DOUBLE, getDouble(value).toString());
                 case CHAR:
+                    if (handler.isTest()) {
+                        return new Variable(DOUBLE, "");
+                    }
+
                     return new Variable(DOUBLE, getAsciiCode(value).toString());
                 default:
                     return null;
@@ -58,12 +85,20 @@ public class CastHandler {
 
         // asignacion a tipo string
         if (type == STRING) {
+            if (handler.isTest()) {
+                return new Variable(STRING, "");
+            }
+
             return new Variable(STRING, value.getValue());
         }
 
         if (type == CHAR) {
             switch (value.getType()) {
                 case INTEGER:
+                    if (handler.isTest()) {
+                        return new Variable(CHAR, "");
+                    }
+
                     return new Variable(CHAR, integerToAsciiCode(value).toString());
                 default:
                     return null;
