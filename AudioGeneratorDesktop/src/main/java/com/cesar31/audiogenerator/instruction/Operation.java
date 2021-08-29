@@ -19,7 +19,11 @@ public class Operation implements Instruction {
     // Token del operador
     private Token op;
 
+    // Acceso a arreglo
     private ArrayAccess arrayItem;
+
+    // llamada de funcion
+    private FunctionCall call;
 
     // Operaciones definidas con un valor o id
     public Operation(OperationType type, Variable value) {
@@ -48,10 +52,20 @@ public class Operation implements Instruction {
         this.arrayItem = arrayItem;
     }
 
+    // para llamada de funciones
+    public Operation(OperationType type, FunctionCall call) {
+        this.type = type;
+        this.call = call;
+    }
+
     @Override
     public Variable run(SymbolTable table, OperationHandler handler) {
         OperationMaker maker = handler.getOperation();
         switch (type) {
+            case FUNCTION_CALL:
+                Variable val1 =  (Variable) call.run(table, handler);
+                //System.out.println(val1);
+                return val1;
             case ARRAY_ACCESS:
                 Variable v = this.arrayItem.run(table, handler);
                 return v;

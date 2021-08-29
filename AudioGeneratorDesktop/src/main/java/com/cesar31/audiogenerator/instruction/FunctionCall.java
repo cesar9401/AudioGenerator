@@ -26,20 +26,22 @@ public class FunctionCall implements Instruction {
         String functionId = id.getValue() + "(";
         for (int i = 0; i < operations.size(); i++) {
             Variable v = operations.get(i).run(table, handler);
+            // System.out.println(v);
+            if (v != null) {
+                functionId += v.getType().getName();
 
-            functionId += v.getType().getName();
-
-            if (i != operations.size() - 1) {
-                functionId += ",";
+                if (i != operations.size() - 1) {
+                    functionId += ",";
+                }
+                values.add(v);
             }
-            values.add(v);
         }
         functionId += ")";
 
         Function f = handler.getFunctions().get(functionId);
         if (f != null) {
             f.setValues(values);
-            f.run(table, handler);
+            return f.run(table, handler);
         } else {
             System.out.println("function null " + functionId);
         }
@@ -50,7 +52,7 @@ public class FunctionCall implements Instruction {
     @Override
     public Object test(SymbolTable table, OperationHandler handler) {
         List<Variable> values = new ArrayList<>();
-        String functionId = id.getValue() + "(";
+        String functionId = id.getValue().toLowerCase() + "(";
         for (int i = 0; i < operations.size(); i++) {
             Variable v = operations.get(i).test(table, handler);
             if (v != null) {
@@ -71,7 +73,9 @@ public class FunctionCall implements Instruction {
         if (f != null) {
             if (operations.size() == values.size()) {
                 f.setValues(values);
-                // f.test(table, handler);
+
+                // Verificar por que estaba comentado xd
+                //f.test(table, handler);
             } else {
                 // no es posible realizar llamada a funcion
                 System.out.println("No es posible llamar a funcion");

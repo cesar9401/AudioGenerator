@@ -10,10 +10,9 @@ import java.util.List;
  */
 public class Function implements Instruction {
 
-    private String functionId;
-
     private Token info;
     private Token id;
+    private Token type;
 
     private Var kind;
     private boolean keep;
@@ -44,6 +43,44 @@ public class Function implements Instruction {
         this.kind = Var.VOID;
     }
 
+    /**
+     * Constructor para funciones que no son de tipo void(Tienen retorno)
+     *
+     * @param info
+     * @param keep
+     * @param type
+     * @param id
+     * @param params
+     * @param instructions
+     */
+    public Function(Token info, boolean keep, Token type, Token id, List<Parameter> params, List<Instruction> instructions) {
+        this.info = info;
+        this.keep = keep;
+        this.type = type;
+        this.id = id;
+        this.params = params;
+        this.instructions = instructions;
+
+        String value = type.getValue().toLowerCase();
+        switch (value) {
+            case "cadena":
+                this.kind = Var.STRING;
+                break;
+            case "doble":
+                this.kind = Var.DOUBLE;
+                break;
+            case "entero":
+                this.kind = Var.INTEGER;
+                break;
+            case "caracter":
+                this.kind = Var.CHAR;
+                break;
+            case "boolean":
+                this.kind = Var.BOOLEAN;
+                break;
+        }
+    }
+
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
         SymbolTable local = new SymbolTable(handler.getFather());
@@ -55,7 +92,15 @@ public class Function implements Instruction {
         }
 
         for (Instruction i : this.instructions) {
-            i.run(local, handler);
+            Object o = i.run(local, handler);
+            if (o != null) {
+                if (o instanceof Return) {
+                    Operation tmp = ((Return) o).getOperation();
+                    Variable v = tmp.run(local, handler);
+                    // System.out.println(v);
+                    return v;
+                }
+            }
         }
 
         return null;
@@ -66,16 +111,20 @@ public class Function implements Instruction {
         SymbolTable local = new SymbolTable(handler.getFather());
 
         for (int i = 0; i < params.size(); i++) {
-            if (values != null) {
-                params.get(i).setValue(values.get(i));
-            } else {
-                params.get(i).setValue(new Variable(handler.getCast().getType(params.get(i).getType()), ""));
-            }
+            params.get(i).setValue(new Variable(handler.getCast().getType(params.get(i).getType()), ""));
             params.get(i).test(local, handler);
         }
 
         for (Instruction i : this.instructions) {
-            i.test(local, handler);
+            Object o = i.test(local, handler);
+            if (o != null) {
+                if (o instanceof Return) {
+                    Operation tmp = ((Return) o).getOperation();
+                    Variable v = tmp.test(local, handler);
+                    System.out.println(v);
+                    //return v;
+                }
+            }
         }
 
         return null;
@@ -87,16 +136,16 @@ public class Function implements Instruction {
     }
 
     public String getFunctionId() {
-        this.functionId = this.id.getValue() + "(";
+        String functionId = this.id.getValue() + "(";
         for (int i = 0; i < this.params.size(); i++) {
-            this.functionId += params.get(i).getType().getValue().toLowerCase();
+            functionId += params.get(i).getType().getValue().toLowerCase();
             if (i != params.size() - 1) {
-                this.functionId += ",";
+                functionId += ",";
             }
         }
-        this.functionId += ")";
+        functionId += ")";
 
-        return this.functionId;
+        return functionId;
     }
 
     public Token getId() {
@@ -105,6 +154,10 @@ public class Function implements Instruction {
 
     public Var getKind() {
         return kind;
+    }
+
+    public Token getType() {
+        return type;
     }
 
     public boolean isKeep() {

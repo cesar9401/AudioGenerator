@@ -119,7 +119,7 @@ public class CastHandler {
     }
 
     public Var getType(Token type) {
-        String value = type.getValue();
+        String value = type.getValue().toLowerCase();
         switch (value) {
             case "entero":
                 return INTEGER;

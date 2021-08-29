@@ -6,6 +6,7 @@ import com.cesar31.audiogenerator.instruction.Var;
 import com.cesar31.audiogenerator.instruction.Variable;
 import static com.cesar31.audiogenerator.instruction.Var.*;
 import com.cesar31.audiogenerator.parser.Token;
+import java.util.Arrays;
 
 /**
  *
@@ -24,7 +25,7 @@ public class OperationMaker {
             // Variable no tiene valor definido
             Err e = new Err(Err.TypeErr.SINTACTICO, op.getLine(), op.getColumn(), op.getValue());
             String description = "En la operacion definida por el operador `" + op.getValue() + "` (" + name + ")";
-            description += a.getId() != null ? ", la variable `" + a.getId() + "` no tiene un valor definido. " : ", uno de los operadores no tiene un valor definido. ";
+            description +=  a.getId() != null && a.getDimensions() != null ? ", la variable `" + a.getId() + "` no tiene un valor definido, en la direccion `" + Arrays.toString(a.getDimensions()) + "`. " : a.getId() != null ? ", la variable `" + a.getId() + "` no tiene un valor definido. " : ", uno de los operadores no tiene un valor definido. ";
             description += "No es posible procesar la operacion.";
             e.setDescription(description);
             this.handler.getErrors().add(e);

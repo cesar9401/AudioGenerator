@@ -91,11 +91,11 @@ non terminal Parameter param;
 non terminal List<Parameter> params, params_f;
 non terminal FunctionCall function_call;
 non terminal List<Operation> args, args_;
+non terminal Return return_;
 
 non terminal play, wait, order, sum, length;
 non terminal eol, eol_;
 non terminal array_value;
-non terminal return_;
 non terminal extends_;
 
 start with inicio1;
@@ -171,6 +171,9 @@ body ::=
 				{: RESULT = new ArrayList<>(); RESULT.add(exit_); :}
 			| function_call:f_call eol
 				{: RESULT = new ArrayList<>(); RESULT.add(f_call); :}
+			// return
+			| return_:return_ eol
+				{: RESULT = new ArrayList<>(); RESULT.add(return_); :}
 			;
 /* cuerpo para funciones */
 
@@ -425,6 +428,8 @@ j ::=
 			| ID:token {: RESULT = new Operation(OperationType.ID, new Variable(token)); :}
 			| l:array_access {: RESULT = new Operation(OperationType.ARRAY_ACCESS, array_access); :} /* arreglo */
 			| LPAREN a:var RPAREN {: RESULT = var; :}
+			// Llamada a funcion
+			| function_call:call {: RESULT = new Operation(OperationType.FUNCTION_CALL, call); :}
 			;
 
 boolean_val ::=
@@ -582,7 +587,8 @@ continue_ ::=
 			;
 
 return_ ::=
-			RETURN a
+			RETURN:info a:operation
+				{: RESULT = new Return(info, operation); :}
 			;
 /* continue - exit return */
 
@@ -592,16 +598,18 @@ function ::=
 				{: RESULT = new Function(id, false, id, list, instructions); :}
 			| KEEP:info ID:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - void
 				{: RESULT = new Function(info, false, id, list, instructions); :}
-			| KEEP:info type:token_type ID LPAREN params_f:list RPAREN eol function_body // keep - type
-			| type:token_type ID LPAREN params_f:list RPAREN eol function_body // no keep - type
+			| KEEP:info type:token_type ID:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - type
+				{: RESULT = new Function(info, true, token_type, id, list, instructions); :}
+			| type:token_type ID:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - type
+				{: RESULT = new Function(token_type, false, token_type, id, list, instructions); :}
 			;
 
 /* principal */
 principal ::=
 			MAIN LPAREN RPAREN eol function_body:list_ins
-				{:
-					RESULT = new Principal(list_ins);
-				:}
+				{: RESULT = new Principal(list_ins); :}
+			| KEEP MAIN LPAREN RPAREN eol function_body:list_ins
+				{: RESULT = new Principal(list_ins); :}
 			;
 
 /* principal */

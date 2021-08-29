@@ -48,6 +48,11 @@ public class Switch implements Instruction {
                                     return null;
                                 }
                             }
+                            
+                            // Return
+                            if(o instanceof Return) {
+                                return o;
+                            }
                         }
                     }
                 }

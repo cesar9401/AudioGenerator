@@ -3,6 +3,7 @@ package com.cesar31.audiogenerator.instruction;
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.parser.Token;
+import java.util.Arrays;
 
 /**
  *
@@ -26,9 +27,20 @@ public class Message implements Instruction {
                 System.out.println(v.getValue());
             } else {
                 // variable no tiene valor definido, no es posible emitir mensaje
+                Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn());
+                String description = "No es posible emitir el mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido.";
+                if(v.getDimensions() != null) {
+                    description = "No es posible emitir el mensaje, debido a que el arreglo `" + v.getId() + "` en la direccion `" + Arrays.toString(v.getDimensions()) + "` no tiene valor definido";
+                }
+                err.setDescription(description);
+                handler.getErrors().add(err);
             }
         } else {
             // No es posible emitir mensaje
+            Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), "");
+            String description = "No es posible emitir el mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido o no ha sido declarado";
+            err.setDescription(description);
+            handler.getErrors().add(err);
         }
 
         return null;
@@ -67,7 +79,7 @@ public class Message implements Instruction {
         } else {
             // No es posible emitir mensaje
             Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), "");
-            String description = "No es posible emitir el mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido o no ha sido declarado";
+            String description = "No es posible emitir elc mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido o no ha sido declarado";
             err.setDescription(description);
             handler.getErrors().add(err);
         }

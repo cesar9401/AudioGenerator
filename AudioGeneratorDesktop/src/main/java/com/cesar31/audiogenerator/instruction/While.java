@@ -51,6 +51,11 @@ public class While implements Instruction {
                     if (o instanceof Exit) {
                         return null;
                     }
+
+                    // Return
+                    if (o instanceof Return) {
+                        return o;
+                    }
                 }
             }
 

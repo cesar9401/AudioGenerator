@@ -73,7 +73,7 @@ public class IfInstruction implements Instruction {
                 for (Instruction j : i.getInstructions()) {
                     Object o = j.run(local, handler);
                     if (o != null) {
-                        if (o instanceof Continue || o instanceof Exit) {
+                        if (o instanceof Continue || o instanceof Exit || o instanceof Return) {
                             return o;
                         }
                     }
@@ -116,7 +116,10 @@ public class IfInstruction implements Instruction {
 
             SymbolTable local = new SymbolTable(table);
             for (Instruction j : i.getInstructions()) {
-                j.test(local, handler);
+                Object o = j.test(local, handler);
+//                if(o instanceof Return) {
+//                    return o;
+//                }
             }
         }
 

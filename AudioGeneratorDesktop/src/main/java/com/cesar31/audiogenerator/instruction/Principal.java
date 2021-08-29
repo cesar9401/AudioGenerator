@@ -45,4 +45,9 @@ public class Principal implements Instruction {
 
         return null;
     }
+
+    public String getFunctionId() {
+        String functionId = "principal()";
+        return functionId;
+    }
 }

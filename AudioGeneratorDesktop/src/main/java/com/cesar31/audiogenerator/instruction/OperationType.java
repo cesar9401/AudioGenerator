@@ -14,6 +14,9 @@ public enum OperationType {
     ID,
     ARRAY_ACCESS,
     
+    // llamada a funcion
+    FUNCTION_CALL,
+    
     // relacionales
     EQEQ,
     NEQ,

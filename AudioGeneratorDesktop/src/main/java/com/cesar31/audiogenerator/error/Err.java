@@ -9,7 +9,8 @@ public class Err {
     public enum TypeErr {
         LEXICO,
         SINTACTICO,
-        SEMANTICO
+        SEMANTICO,
+        EJECUCION
     }
 
     private TypeErr type;

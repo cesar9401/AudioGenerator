@@ -340,11 +340,17 @@ public class ArrayHandler {
                             if (rightDimensions(v.getDimensions(), index)) {
                                 Object value = this.getValueFromArray(index, v.getArray());
                                 if (value != null) {
-                                    return new Variable(v.getType(), value.toString());
+                                    // Elemento de arreglo
+                                    Variable aux = new Variable(v.getType(), value.toString());
+                                    aux.setId(v.getId());
+                                    aux.setDimensions(index);
+                                    return aux;
                                 } else {
-                                    // Error, no tiene valor definido en indices index
-                                    // System.out.println("Revisar aqui :v");
-                                    return new Variable(v.getType(), null);
+                                    // Elemento de arreglo sin valor
+                                    Variable aux = new Variable(v.getType(), null);
+                                    aux.setId(v.getId());
+                                    aux.setDimensions(index);
+                                    return aux;
                                 }
 
                             } else {
@@ -508,7 +514,7 @@ public class ArrayHandler {
      * @param array el arreglo del cual se quiere obtener el item
      * @return item or null
      */
-    private Object getValueFromArray(int[] dimension, Object array) {
+    public Object getValueFromArray(int[] dimension, Object array) {
         try {
             int i = 1;
             Object tmp = Array.get(array, dimension[0]);

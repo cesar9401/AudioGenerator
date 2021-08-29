@@ -97,7 +97,7 @@ public class ArrayStatement implements Instruction {
             }
         } else {
             if (!error) {
-                // Declaracion y asignacionH
+                // Declaracion y asignacion
                 handler.getArray().addArrayAssignmentToSymbolTable(type, id, keep, dimension, value, ind, table);
             }
         }
