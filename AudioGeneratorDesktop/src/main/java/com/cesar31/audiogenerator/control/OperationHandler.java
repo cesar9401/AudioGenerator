@@ -22,6 +22,7 @@ public class OperationHandler {
     private CastHandler cast;
     private EnvironmentHandler environment;
     private OperationMaker operation;
+    private NativeFunctions nativeF;
     private List<Err> errors;
 
     public OperationHandler() {
@@ -31,6 +32,7 @@ public class OperationHandler {
         this.cast = new CastHandler(this);
         this.environment = new EnvironmentHandler(this);
         this.operation = new OperationMaker(this);
+        nativeF = new NativeFunctions(this);
         this.errors = new ArrayList<>();
     }
 
@@ -56,6 +58,10 @@ public class OperationHandler {
 
     public HashMap<String, Function> getFunctions() {
         return functions;
+    }
+
+    public NativeFunctions getNativeF() {
+        return nativeF;
     }
 
     public void setFather(SymbolTable father) {

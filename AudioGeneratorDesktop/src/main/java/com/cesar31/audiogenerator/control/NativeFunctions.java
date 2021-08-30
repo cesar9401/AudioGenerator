@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.SymbolTable;
 import com.cesar31.audiogenerator.instruction.Var;
 import com.cesar31.audiogenerator.instruction.Variable;
@@ -16,6 +17,28 @@ public class NativeFunctions {
 
     public NativeFunctions(OperationHandler handler) {
         this.handler = handler;
+    }
+
+    private double[] bubblesort(double[] list, int start, int end, boolean asc) {
+        for (int i = 1; i < end; i++) {
+            for (int j = start; j < end - i; j++) {
+                if (asc) {
+                    if (list[j] > list[j + 1]) {
+                        double aux = list[j];
+                        list[j] = list[j + 1];
+                        list[j + 1] = aux;
+                    }
+                } else {
+                    if (list[j] < list[j + 1]) {
+                        double aux = list[j];
+                        list[j] = list[j + 1];
+                        list[j + 1] = aux;
+                    }
+                }
+            }
+        }
+
+        return list;
     }
 
     public void order(Token id, Token way, SymbolTable table) {
@@ -123,7 +146,6 @@ public class NativeFunctions {
             int[] a = {i};
             Object value = handler.getArray().getValueFromArray(a, v.getArray());
             switch (kind) {
-                case INTEGER:
                 case DOUBLE:
                     double val = Double.valueOf(value.toString());
                     elements[i] = val;
@@ -131,33 +153,129 @@ public class NativeFunctions {
                 case CHAR:
                     int aux = (int) value.toString().charAt(0);
                     elements[i] = (double) aux;
+                    break;
             }
         }
 
         return elements;
     }
 
-    private double[] bubblesort(double[] list, int start, int end, boolean asc) {
-
-        for (int i = 1; i < end; i++) {
-            for (int j = start; j < end - i; j++) {
-                if (asc) {
-                    if (list[j] > list[j + 1]) {
-                        double aux = list[j];
-                        list[j] = list[j + 1];
-                        list[j + 1] = aux;
-                    }
-                } else {
-                    if (list[j] < list[j + 1]) {
-                        double aux = list[j];
-                        list[j] = list[j + 1];
-                        list[j + 1] = aux;
-                    }
-                }
+    /**
+     * Obtener elementos de tipo double para sumarizacion
+     *
+     * @param v
+     * @return
+     */
+    private double[] getDoubleElements(Variable v, Token info) {
+        double[] elements = new double[v.getDimensions()[0]];
+        boolean error = false;
+        for (int i = 0; i < elements.length; i++) {
+            int[] a = {i};
+            Object value = handler.getArray().getValueFromArray(a, v.getArray());
+            if (value != null) {
+                elements[i] = Double.valueOf(value.toString());
+            } else {
+                error = true;
+                Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), v.getId());
+                String description = "En la llamada a la funcion sumarizar, el arreglo `" + v.getId() + "` en la direccion `" + Arrays.toString(a) + "` tiene un valor null, no es posible efectuar la operacion.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
             }
         }
+        if (error) {
+            return null;
+        }
 
-        return list;
+        return elements;
+    }
+
+    /**
+     * Obtener elementos de tipo String para sumarizacion
+     *
+     * @param v
+     * @return
+     */
+    private String[] getStringElements(Variable v, Token info) {
+        String[] elements = new String[v.getDimensions()[0]];
+        boolean error = false;
+        for (int i = 0; i < elements.length; i++) {
+            int[] a = {i};
+            Object value = handler.getArray().getValueFromArray(a, v.getArray());
+            if (value != null) {
+                elements[i] = value.toString();
+            } else {
+                error = true;
+                Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), v.getId());
+                String description = "En la llamada a la funcion sumarizar, el arreglo `" + v.getId() + "` en la direccion `" + Arrays.toString(a) + "` tiene un valor null, no es posible efectuar la operacion.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
+            }
+        }
+        if (error) {
+            return null;
+        }
+
+        return elements;
+    }
+
+    /**
+     * Obtener elementos de tipo Integer para sum
+     *
+     * @param v
+     * @return
+     */
+    private long[] getIntegerElements(Variable v, Token info) {
+        boolean error = false;
+        long[] elements = new long[v.getDimensions()[0]];
+        for (int i = 0; i < elements.length; i++) {
+            int[] a = {i};
+            Object value = handler.getArray().getValueFromArray(a, v.getArray());
+            if (value != null) {
+                elements[i] = Long.valueOf(value.toString());
+            } else {
+                error = true;
+                Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), v.getId());
+                String description = "En la llamada a la funcion sumarizar, el arreglo `" + v.getId() + "` en la direccion `" + Arrays.toString(a) + "` tiene un valor null, no es posible efectuar la operacion.";
+                err.setDescription(description);
+                handler.getErrors().add(err);
+            }
+        }
+        if(error) {
+            return null;
+        }
+        
+        return elements;
+    }
+
+    public Variable getSummarize(Variable val, Token info) {
+        String result = "";
+        switch (val.getType()) {
+            case DOUBLE:
+                double[] listD = getDoubleElements(val, info);
+                if (listD == null) {
+                    return null;
+                }
+                result = add(listD);
+                break;
+            case INTEGER:
+                long[] list = getIntegerElements(val, info);
+                if (list == null) {
+                    return null;
+                }
+                result = add(list);
+                break;
+            case BOOLEAN:
+            case CHAR:
+            case STRING:
+                String[] list1 = getStringElements(val, info);
+                if (list1 == null) {
+                    return null;
+                }
+                result = add(list1);
+                break;
+        }
+
+        return new Variable(Var.STRING, result);
     }
 
     /**
@@ -174,8 +292,16 @@ public class NativeFunctions {
         return result.toString();
     }
 
+    private String add(long[] list) {
+        Long result = 0l;
+        for (long i : list) {
+            result += i;
+        }
+        return result.toString();
+    }
+
     /**
-     * Cadenas
+     * Cadenas / Caracteres / Booleanos
      *
      * @param list
      * @return
@@ -186,34 +312,5 @@ public class NativeFunctions {
             result += s;
         }
         return result;
-    }
-
-    /**
-     * Caracteres
-     *
-     * @param list
-     * @return
-     */
-    private String add(char[] list) {
-        String result = "";
-        for (char c : list) {
-            result += c;
-        }
-        return result;
-    }
-
-    /**
-     * Listado de enteros
-     *
-     * @param list
-     * @return
-     */
-    private String add(long[] list) {
-        int val = 0;
-
-        for (long i : list) {
-            val += i;
-        }
-        return String.valueOf(val);
     }
 }

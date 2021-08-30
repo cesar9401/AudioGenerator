@@ -63,9 +63,25 @@ public class Operation implements Instruction {
         OperationMaker maker = handler.getOperation();
         switch (type) {
             case FUNCTION_CALL:
-                Variable val1 =  (Variable) call.run(table, handler);
+                Object o = this.call.run(table, handler);
+
+                if (o != null) {
+                    if (o instanceof Variable) {
+                        return (Variable) o;
+                    } else {
+                        Function tmp = (Function) o;
+                        Token t = call.getInfo();
+                        Err err = new Err(Err.TypeErr.SINTACTICO, t.getLine(), t.getColumn(), t.getValue());
+                        String description = "La funcion definida como `" + tmp.getId().getValue() + "`, con firma `" + tmp.getFunctionId() + "`" + ", es de tipo VOID.";
+                        description += " Es decir, no tiene valor de retorno y no es posible asignarla a una variable.";
+                        err.setDescription(description);
+                        handler.getErrors().add(err);
+                        return null;
+                    }
+                }
+
                 //System.out.println(val1);
-                return val1;
+                return null;
             case ARRAY_ACCESS:
                 Variable v = this.arrayItem.run(table, handler);
                 return v;
@@ -161,6 +177,10 @@ public class Operation implements Instruction {
 
     @Override
     public Variable test(SymbolTable table, OperationHandler handler) {
+        if (type == OperationType.FUNCTION_CALL) {
+            Variable val = (Variable) call.test(table, handler);
+            return val;
+        }
         return this.run(table, handler);
     }
 

@@ -39,7 +39,6 @@ public class ArrayHandler {
 
     public void assignElementToArray(ArrayAccess arrayItem, Operation operation, Assignment.TypeA type, SymbolTable table) {
         Variable tmp = arrayItem.run(table, handler);
-
         if (tmp != null) {
             // Obtener indices aqui
             int[] indexes = new int[arrayItem.getIndexes().size()];
@@ -143,6 +142,7 @@ public class ArrayHandler {
             }
         } else {
             // Errores se verifican cuando -> arrayItem.run(table, handler)
+            // Colocar error aqui
             System.out.println("Errores del areglo");
         }
     }
@@ -384,6 +384,8 @@ public class ArrayHandler {
             String description = "El arreglo con identificador `" + id.getValue() + "` no ha sido declarado.";
             err.setDescription(description);
             this.handler.getErrors().add(err);
+            
+            return null;
         }
 
         return null;

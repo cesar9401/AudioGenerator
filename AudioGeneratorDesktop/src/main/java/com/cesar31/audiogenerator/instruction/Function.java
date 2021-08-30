@@ -23,6 +23,9 @@ public class Function implements Instruction {
     // Valores de los parametros
     private List<Variable> values;
 
+    public Function() {
+    }
+
     /**
      * Constructor funcion de tipo void
      *
@@ -97,7 +100,6 @@ public class Function implements Instruction {
                 if (o instanceof Return) {
                     Operation tmp = ((Return) o).getOperation();
                     Variable v = tmp.run(local, handler);
-                    // System.out.println(v);
                     return v;
                 }
             }
@@ -121,8 +123,7 @@ public class Function implements Instruction {
                 if (o instanceof Return) {
                     Operation tmp = ((Return) o).getOperation();
                     Variable v = tmp.test(local, handler);
-                    System.out.println(v);
-                    //return v;
+                    return v;
                 }
             }
         }

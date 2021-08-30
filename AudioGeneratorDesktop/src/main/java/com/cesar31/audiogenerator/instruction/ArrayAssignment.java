@@ -24,7 +24,7 @@ public class ArrayAssignment extends Assignment implements Instruction {
 
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
-
+        //System.out.println(arrayItem.getInfo());
         handler.getArray().assignElementToArray(arrayItem, operation, type, table);
 
         return null;

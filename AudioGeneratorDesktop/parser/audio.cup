@@ -55,7 +55,7 @@ terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, ST
 terminal Token INDENT, DEDENT;
 terminal Token ERROR;
 
-non terminal Token type;
+non terminal Token type, id;
 non terminal Operation value;
 non terminal List<Token> id_list;
 non terminal List<Assignment> statement, statement_function;
@@ -92,8 +92,9 @@ non terminal List<Parameter> params, params_f;
 non terminal FunctionCall function_call;
 non terminal List<Operation> args, args_;
 non terminal Return return_;
+// non terminal length, sum;
 
-non terminal play, wait, order, sum, length;
+non terminal play, wait, order;
 non terminal eol, eol_;
 non terminal array_value;
 non terminal extends_;
@@ -101,7 +102,7 @@ non terminal extends_;
 start with inicio1;
 
 inicio1 ::=
-			eol_ TRACK ID extends_ eol bod:list_i
+			eol_ TRACK id extends_ eol bod:list_i
 				{:
 					RESULT = list_i;
 				:}
@@ -211,12 +212,12 @@ value ::=
 			;
 
 id_list ::=
-			id_list:list COMMA ID:token
+			id_list:list COMMA id:token
 				{:
 					list.add(token);
 					RESULT = list;
 				:}
-			| ID:token
+			| id:token
 				{:
 					RESULT = new ArrayList<Token>();
 					RESULT.add(token);
@@ -233,19 +234,19 @@ type ::=
 
 /* asignacion de variables */
 assignment ::=
-			ID:token EQUAL a:operation
+			id:token EQUAL a:operation
 				{: RESULT = new Assignment(Assignment.TypeA.EQUAL, token, operation); :}
-			| ID:token PLUS_EQ:op a:operation
+			| id:token PLUS_EQ:op a:operation
 				{:
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), operation, op);
 					RESULT = new Assignment(Assignment.TypeA.PLUS_EQ, token, tmp);
 				:}
-			| ID:token PLUS_PLUS:op
+			| id:token PLUS_PLUS:op
 				{:
 					Operation tmp = new Operation(OperationType.SUM, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
 					RESULT = new Assignment(Assignment.TypeA.PLUS_PLUS, token, tmp);
 				:}
-			| ID:token MINUS_MINUS:op
+			| id:token MINUS_MINUS:op
 				{:
 					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ID, new Variable(token)), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
 					RESULT = new Assignment(Assignment.TypeA.MINUS_MINUS, token, tmp);
@@ -271,7 +272,7 @@ assignment ::=
 			;
 
 l ::=
-			ID:token_id dimensions:list_array_index
+			id:token_id dimensions:list_array_index
 				{: RESULT = new ArrayAccess(token_id, list_array_index); :}
 			;
 
@@ -425,7 +426,7 @@ j ::=
 			| STR:var {: RESULT = new Operation(OperationType.STRING, new Variable(var, Var.STRING, var.getValue())); :}
 			| CHAR:var {: RESULT = new Operation(OperationType.CHAR, new Variable(var, Var.CHAR, var.getValue())); :}
 			| boolean_val:var {: RESULT = new Operation(OperationType.BOOLEAN, var); :}
-			| ID:token {: RESULT = new Operation(OperationType.ID, new Variable(token)); :}
+			| id:token {: RESULT = new Operation(OperationType.ID, new Variable(token)); :}
 			| l:array_access {: RESULT = new Operation(OperationType.ARRAY_ACCESS, array_access); :} /* arreglo */
 			| LPAREN a:var RPAREN {: RESULT = var; :}
 			// Llamada a funcion
@@ -513,7 +514,7 @@ for_ ::=
 			;
 
 for_assign ::=
-			INT:type ID:id EQUAL a:operation
+			INT:type id:id EQUAL a:operation
 				{: RESULT = new Assignment(type, id, operation); :}
 			| assignment:assign
 				{: RESULT = assign; :}
@@ -594,13 +595,13 @@ return_ ::=
 
 /*  functions */
 function ::=
-			ID:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - void
+			id:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - void
 				{: RESULT = new Function(id, false, id, list, instructions); :}
-			| KEEP:info ID:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - void
+			| KEEP:info id:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - void
 				{: RESULT = new Function(info, false, id, list, instructions); :}
-			| KEEP:info type:token_type ID:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - type
+			| KEEP:info type:token_type id:id LPAREN params_f:list RPAREN eol function_body:instructions // keep - type
 				{: RESULT = new Function(info, true, token_type, id, list, instructions); :}
-			| type:token_type ID:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - type
+			| type:token_type id:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - type
 				{: RESULT = new Function(token_type, false, token_type, id, list, instructions); :}
 			;
 
@@ -635,7 +636,7 @@ params ::=
 			;
 
 param ::=
-			type:type ID:id
+			type:type id:id
 				{: RESULT = new Parameter(type, id); :}
 			;
 /*  functions */
@@ -661,25 +662,29 @@ wait ::=
 
 /* ordenar */
 order ::=
-			ORDER LPAREN ID COMMA WAY RPAREN
+			ORDER LPAREN id COMMA WAY RPAREN
 			;
 /* ordenar */
 
 /* sumarizar */
-sum ::=
-			SUM LPAREN ID RPAREN
-			;
+// sum ::=
+// 			SUM LPAREN id RPAREN
+// 			;
 /* sumarizar */
 
 /* longitud */
-length ::=
-			LENGTH LPAREN a RPAREN
-			;
+// length ::=
+// 			LENGTH:token LPAREN a:operation RPAREN
+// 				{:
+// 					List<Operation> tmp = new ArrayList<>();
+// 					RESULT = new Length(token, operation);
+// 				:}
+// 			;
 /* longitud */
 
 /* llamada de funcion */
 function_call ::=
-			ID:token LPAREN args_:list RPAREN
+			id:token LPAREN args_:list RPAREN
 				{: RESULT = new FunctionCall(token, list); :}
 			;
 
@@ -697,3 +702,11 @@ args ::=
 				{: RESULT = new ArrayList<>(); RESULT.add(operation); :}
 			;
 /* llamada de funcion */
+
+/* id */
+id ::=
+			ID:t {: RESULT = t; :}
+			| LENGTH:t {: RESULT = t; :}
+			| SUM:t {: RESULT = t; :}
+			;
+/* id */

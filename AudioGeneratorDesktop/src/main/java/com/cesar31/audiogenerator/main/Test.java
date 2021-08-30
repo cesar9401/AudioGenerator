@@ -65,11 +65,11 @@ public class Test {
         }
     }
     
-    public static int getInt(int n) {
-        if(n > 0) {
-            return 1;
-        } else {
-            return 1;
-        }
+    public static int getN(int n) {
+        return 1;
+    }
+    
+    public static int getN(int[] value) {
+        return 1;
     }
 }

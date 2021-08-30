@@ -79,7 +79,7 @@ public class Message implements Instruction {
         } else {
             // No es posible emitir mensaje
             Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), "");
-            String description = "No es posible emitir elc mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido o no ha sido declarado";
+            String description = "No es posible emitir el mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido o no ha sido declarado";
             err.setDescription(description);
             handler.getErrors().add(err);
         }
