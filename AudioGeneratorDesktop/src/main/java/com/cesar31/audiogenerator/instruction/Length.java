@@ -29,9 +29,7 @@ public class Length extends Function {
         if (val.getType() == Var.STRING) {
             if (val.getValue() != null) {
                 return new Variable(Var.INTEGER, String.valueOf(val.getValue().length()));
-            } else {
-                System.out.println("variable no tiene valor definido");
-            }
+            } 
         }
 
         return null;

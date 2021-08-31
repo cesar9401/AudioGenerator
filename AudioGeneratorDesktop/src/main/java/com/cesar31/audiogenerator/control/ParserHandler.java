@@ -59,7 +59,7 @@ public class ParserHandler {
                         System.out.println("\nCodigo limpio!!\n");
                         errors = runAst(ast);
                         if (!errors.isEmpty()) {
-                            System.out.println("Se entraron los siguientes errores de ejecucion: ");
+                            System.out.println("\nSe encontraron los siguientes errores de ejecucion:\n");
                             errors.forEach(e -> {
                                 e.setType(Err.TypeErr.EJECUCION);
                                 System.out.println(e);

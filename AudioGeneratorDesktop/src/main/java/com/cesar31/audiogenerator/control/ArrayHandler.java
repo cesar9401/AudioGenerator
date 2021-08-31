@@ -40,6 +40,11 @@ public class ArrayHandler {
     public void assignElementToArray(ArrayAccess arrayItem, Operation operation, Assignment.TypeA type, SymbolTable table) {
         Variable tmp = arrayItem.run(table, handler);
         if (tmp != null) {
+            // System.out.println("tmp -> " + tmp);
+            if (handler.isTest()) {
+                return;
+            }
+
             // Obtener indices aqui
             int[] indexes = new int[arrayItem.getIndexes().size()];
             for (int i = 0; i < indexes.length; i++) {
@@ -143,7 +148,7 @@ public class ArrayHandler {
         } else {
             // Errores se verifican cuando -> arrayItem.run(table, handler)
             // Colocar error aqui
-            System.out.println("Errores del areglo");
+            // System.out.println("Errores del areglo");
         }
     }
 
@@ -335,7 +340,7 @@ public class ArrayHandler {
                     // verificar que los indices no sobrepasen a la longitud del array
                     if (v.getDimensions().length == index.length) {
                         if (handler.isTest()) {
-                            return new Variable(v.getType(), "");
+                            return new Variable(v.getType(), v.getId(), "");
                         } else {
                             if (rightDimensions(v.getDimensions(), index)) {
                                 Object value = this.getValueFromArray(index, v.getArray());
@@ -384,8 +389,6 @@ public class ArrayHandler {
             String description = "El arreglo con identificador `" + id.getValue() + "` no ha sido declarado.";
             err.setDescription(description);
             this.handler.getErrors().add(err);
-            
-            return null;
         }
 
         return null;
@@ -538,7 +541,7 @@ public class ArrayHandler {
      * @param value valor a guardar en el arreglo
      * @param array es el arreglo
      */
-    private void setValueToArray(int[] dimension, String value, Object array) {
+    public void setValueToArray(int[] dimension, String value, Object array) {
         int i = 0;
         Object aux = array;
         while (i < dimension.length - 1) {

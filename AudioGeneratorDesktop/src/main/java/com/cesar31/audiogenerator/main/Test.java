@@ -15,8 +15,7 @@ import java.util.List;
 public class Test {
 
     public static void main(String[] args) {
-        int ackerman = ackerman(3, 10);
-        System.out.println(ackerman);
+        System.out.println(Math.floor(-123.2));
         
         
 //        String input = FileControl.readData("input_files/input3.txt");

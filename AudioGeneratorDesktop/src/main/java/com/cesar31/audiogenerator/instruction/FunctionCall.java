@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class FunctionCall implements Instruction {
 
-    private Token id;
-    private List<Operation> operations;
+    protected Token id;
+    protected List<Operation> operations;
 
     public FunctionCall(Token id) {
         this.id = id;
@@ -100,6 +100,15 @@ public class FunctionCall implements Instruction {
                     handler.getErrors().addAll(tmpE);
                     return null;
                 }
+            } else if (i.equals("esperar(entero,entero)")) {
+                if (!error) {
+                    Wait wait = new Wait(this.id);
+                    wait.setValues(values);
+                    return wait.run(table, handler);
+                } else {
+                    handler.getErrors().addAll(tmpE);
+                    return null;
+                }
             }
 
             Err err = new Err(Err.TypeErr.SINTACTICO, id.getLine(), id.getColumn(), id.getValue());
@@ -170,7 +179,7 @@ public class FunctionCall implements Instruction {
             }
         } else {
             String i = functionId.toLowerCase();
-            if (i.equals("longitud(cadena)") || i.equals("longitud(cadena[])") || i.equals("longitud(entero[])") || i.equals("longitud(doble[])") || i.equals("longitud(caracter[])") || i.equals("longitud(boolean)")) {
+            if (i.equals("longitud(cadena)") || i.equals("longitud(cadena[])") || i.equals("longitud(entero[])") || i.equals("longitud(doble[])") || i.equals("longitud(caracter[])") || i.equals("longitud(boolean[])")) {
                 if (!error) {
                     Length len = new Length(this.id);
                     len.setValues(values);
@@ -184,6 +193,15 @@ public class FunctionCall implements Instruction {
                     Summarize sum = new Summarize(this.id);
                     sum.setValues(values);
                     return sum.test(table, handler);
+                } else {
+                    handler.getErrors().addAll(tmpE);
+                    return null;
+                }
+            } else if (i.equals("esperar(entero,entero)")) {
+                if (!error) {
+                    Wait wait = new Wait(this.id);
+                    wait.setValues(values);
+                    return wait.run(table, handler);
                 } else {
                     handler.getErrors().addAll(tmpE);
                     return null;

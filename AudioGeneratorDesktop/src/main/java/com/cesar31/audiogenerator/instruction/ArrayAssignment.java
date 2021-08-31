@@ -37,10 +37,6 @@ public class ArrayAssignment extends Assignment implements Instruction {
 
     @Override
     public Object test(SymbolTable table, OperationHandler handler) {
-        if(handler.isTest()) {
-            return null;
-        }
-        
         return this.run(table, handler);
     }
 }
