@@ -18,14 +18,12 @@ public class Wait extends Function {
 
     @Override
     public Object run(SymbolTable table, OperationHandler handler) {
-        List<Variable> values = super.getValues();
-        
-        return new Variable(Var.INTEGER, values.get(0).getValue());
+        return handler.getRender().createWait(info, values.get(0), values.get(1));
     }
 
     @Override
     public Object test(SymbolTable table, OperationHandler handler) {
-        return this.run(table, handler);
+        return new Variable(Var.INTEGER, values.get(0).getValue());
     }
 
     @Override

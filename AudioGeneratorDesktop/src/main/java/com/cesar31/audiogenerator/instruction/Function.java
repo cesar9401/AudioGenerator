@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Function implements Instruction {
 
-    private Token info;
+    protected Token info;
     private Token id;
     private Token type;
 
@@ -21,7 +21,7 @@ public class Function implements Instruction {
     private List<Instruction> instructions;
 
     // Valores de los parametros
-    private List<Variable> values;
+    protected List<Variable> values;
 
     public Function() {
     }

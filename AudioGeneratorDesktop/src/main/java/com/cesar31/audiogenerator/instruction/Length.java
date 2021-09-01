@@ -37,7 +37,7 @@ public class Length extends Function {
 
     @Override
     public Object test(SymbolTable table, OperationHandler handler) {
-        return this.run(table, handler);
+        return new Variable(Var.INTEGER, "");
     }
 
     @Override

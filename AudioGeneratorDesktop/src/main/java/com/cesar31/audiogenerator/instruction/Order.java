@@ -78,7 +78,61 @@ public class Order extends FunctionCall {
 
     @Override
     public Object test(SymbolTable table, OperationHandler handler) {
-        return this.run(table, handler);
+        List<Variable> values = new ArrayList<>();
+        boolean error = false;
+        List<Err> tmpE = new ArrayList<>();
+
+        String j = super.getInfo().getValue() + "(";
+        for (int i = 0; i < super.getOperations().size(); i++) {
+            Variable v = super.getOperations().get(i).test(table, handler);
+            if (v != null) {
+                j += v.getType().getName();
+
+                if (v.getArray() != null) {
+                    j += "[]";
+                }
+
+                if (i != super.getOperations().size() - 1) {
+                    j += ",";
+                }
+
+                values.add(v);
+
+                if (v.getValue() == null && v.getArray() == null) {
+                    error = true;
+                    // Escribir mensaje de error aqui
+                    Err err = new Err(Err.TypeErr.SINTACTICO, super.getInfo().getLine(), super.getInfo().getColumn(), super.getInfo().getValue());
+                    String description = "En la llamada a la funcion `" + super.getInfo().getValue() + "` se esta asignando una variable con valor nulo";
+                    if (v.getId() != null) {
+                        err.setLexema(v.getId());
+                        description += ", variable con id `" + v.getId() + "`.";
+                    }
+                    err.setDescription(description);
+                    tmpE.add(err);
+                }
+            }
+        }
+
+        String h = j + "," + way.getValue() + ")";
+        j += ")";
+        j = j.toLowerCase();
+
+        if (j.equals("ordenar(cadena[])") || j.equals("ordenar(entero[])") || j.equals("ordenar(doble[])") || j.equals("ordenar(caracter[])") || j.equals("ordenar(boolean[])")) {
+            Operation tmp = super.getOperations().get(0);
+            //return handler.getNativeF().order(tmp, way, super.getInfo(), table);
+            return new Variable(Var.INTEGER, "0");
+        } else {
+            if (error) {
+                handler.getErrors().addAll(tmpE);
+                return null;
+            }
+            Err err = new Err(Err.TypeErr.SINTACTICO, super.getInfo().getLine(), super.getInfo().getColumn(), super.getInfo().getValue());
+            String description = "La funcion con firma `" + h + "` no existe.";
+            err.setDescription(description);
+            handler.getErrors().add(err);
+        }
+
+        return null;
     }
 
     public Token getWay() {

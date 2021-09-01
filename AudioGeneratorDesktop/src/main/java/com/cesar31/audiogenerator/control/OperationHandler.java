@@ -23,6 +23,9 @@ public class OperationHandler {
     private EnvironmentHandler environment;
     private OperationMaker operation;
     private NativeFunctions nativeF;
+    
+    private Render render;
+    
     private List<Err> errors;
 
     public OperationHandler() {
@@ -32,7 +35,10 @@ public class OperationHandler {
         this.cast = new CastHandler(this);
         this.environment = new EnvironmentHandler(this);
         this.operation = new OperationMaker(this);
-        nativeF = new NativeFunctions(this);
+        this.nativeF = new NativeFunctions(this);
+        
+        this.render = new Render(this);
+        
         this.errors = new ArrayList<>();
     }
 
@@ -74,6 +80,10 @@ public class OperationHandler {
 
     public boolean isTest() {
         return test;
+    }
+
+    public Render getRender() {
+        return render;
     }
 
     public void setTest(boolean test) {
