@@ -4,9 +4,11 @@ import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.parser.*;
 import java.io.StringReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -14,11 +16,14 @@ import java.util.List;
  */
 public class ParserHandler {
 
-    public ParserHandler() {
+    private JTextArea log;
 
+    public ParserHandler(JTextArea log) {
+        this.log = log;
     }
 
     public void parseSource(String data) {
+        long t = System.currentTimeMillis();
         AudioLex lex = new AudioLex(new StringReader(data));
         AudioParser parser = new AudioParser(lex);
 
@@ -57,13 +62,17 @@ public class ParserHandler {
                     } else {
                         // Si no hay errores, ejecutar codigo
                         System.out.println("\nCodigo limpio!!\n");
-                        errors = runAst(ast);
-                        if (!errors.isEmpty()) {
-                            System.out.println("\nSe encontraron los siguientes errores de ejecucion:\n");
-                            errors.forEach(e -> {
+                        OperationHandler handler = runAst(ast);
+
+                        if (!handler.getErrors().isEmpty()) {
+                            handler.getErrors().forEach(e -> {
                                 e.setType(Err.TypeErr.EJECUCION);
                                 System.out.println(e);
                             });
+                        } else {
+                            System.out.println("Compilando notas");
+                            handler.getRender().renderSounds();
+                            setOut(t, handler);
                         }
                     }
                 }
@@ -420,7 +429,7 @@ public class ParserHandler {
 
     private List<Err> testAst(List<Instruction> ast) {
         SymbolTable table = new SymbolTable();
-        OperationHandler handler = new OperationHandler();
+        OperationHandler handler = new OperationHandler(this.log);
         handler.setFather(table);
 
         // Obtener funciones
@@ -450,9 +459,9 @@ public class ParserHandler {
         return handler.getErrors();
     }
 
-    private List<Err> runAst(List<Instruction> ast) {
+    private OperationHandler runAst(List<Instruction> ast) {
         SymbolTable table = new SymbolTable();
-        OperationHandler handler = new OperationHandler();
+        OperationHandler handler = new OperationHandler(this.log);
         handler.setFather(table);
 
         // Obtener funciones
@@ -471,7 +480,19 @@ public class ParserHandler {
                 //System.out.println(i.getClass().getSimpleName());
             }
         }
-        return handler.getErrors();
+
+        return handler;
     }
 
+    private void setOut(long t, OperationHandler handler) {
+        t = System.currentTimeMillis() - t;
+        String out = "\n------------------------------------------------------------------------\n"
+                + "BUILD SUCCESS\n"
+                + "------------------------------------------------------------------------\n"
+                + "Total time: " + t + " ms\n"
+                + "Finished at: " + LocalDate.now() + "\n"
+                + "------------------------------------------------------------------------";
+
+        handler.getLog().append(out);
+    }
 }

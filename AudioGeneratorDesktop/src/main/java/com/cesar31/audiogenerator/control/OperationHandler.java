@@ -6,12 +6,15 @@ import com.cesar31.audiogenerator.instruction.SymbolTable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.JTextArea;
 
 /**
  *
  * @author cesar31
  */
 public class OperationHandler {
+
+    private JTextArea log;
 
     private boolean test;
 
@@ -23,12 +26,14 @@ public class OperationHandler {
     private EnvironmentHandler environment;
     private OperationMaker operation;
     private NativeFunctions nativeF;
-    
+
     private Render render;
-    
+
     private List<Err> errors;
 
-    public OperationHandler() {
+    public OperationHandler(JTextArea log) {
+        this.log = log;
+
         this.test = false;
         this.functions = new HashMap<>();
         this.array = new ArrayHandler(this);
@@ -36,10 +41,15 @@ public class OperationHandler {
         this.environment = new EnvironmentHandler(this);
         this.operation = new OperationMaker(this);
         this.nativeF = new NativeFunctions(this);
-        
+
+        // Para crear las notas musicales
         this.render = new Render(this);
-        
+
         this.errors = new ArrayList<>();
+    }
+
+    public JTextArea getLog() {
+        return log;
     }
 
     public ArrayHandler getArray() {

@@ -12,11 +12,20 @@
     </properties>
 
     <dependencies>
+        <!-- JCUP -->
         <!-- https://mvnrepository.com/artifact/com.github.vbmacher/java-cup -->
         <dependency>
             <groupId>com.github.vbmacher</groupId>
             <artifactId>java-cup</artifactId>
             <version>11b-20160615-1</version>
+        </dependency>
+        
+        <!-- JFuguen -->
+        <!-- instalado desede repositorio local -->
+        <dependency>
+            <artifactId>jfugue</artifactId>
+            <groupId>jfugue</groupId>
+            <version>5.0.9</version>
         </dependency>
     </dependencies>
 </project>

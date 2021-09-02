@@ -24,12 +24,14 @@ public class Message implements Instruction {
         Variable v = operation.run(table, handler);
         if (v != null) {
             if (v.getValue() != null) {
+                String message = v.getValue() + "\n";
+                handler.getLog().append(message);
                 System.out.println(v.getValue());
             } else {
                 // variable no tiene valor definido, no es posible emitir mensaje
                 Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn());
                 String description = "No es posible emitir el mensaje, esto puede ser debido a que uno de los operandos que se han pasado como parametros no tiene un valor definido.";
-                if(v.getDimensions() != null) {
+                if (v.getDimensions() != null) {
                     description = "No es posible emitir el mensaje, debido a que el arreglo `" + v.getId() + "` en la direccion `" + Arrays.toString(v.getDimensions()) + "` no tiene valor definido";
                 }
                 err.setDescription(description);
