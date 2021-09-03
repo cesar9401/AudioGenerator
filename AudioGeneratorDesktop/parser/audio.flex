@@ -59,6 +59,9 @@ Decimal = {Integer} \. \d+
 /* id for variables */
 Id = [a-zA-Z]\w*
 
+/* No match */
+Symbol = [\{\}~`@#$%&:.?¿çáäåßæéð©®þüñúµíçóøö¶«´ç»¡²³¤€¼½¾‘’¥×\w]+
+
 /* Estados */
 %state STRING
 %state CHARACTER
@@ -71,7 +74,7 @@ Id = [a-zA-Z]\w*
 	{
 		if(!stack.isEmpty() && !end) {
 			end = true;
-			return symbol(EOL);
+			return symbol(EOL, yytext());
 		} else {
 			while(!stack.isEmpty()) {
 				stack.pop();
@@ -356,8 +359,11 @@ Id = [a-zA-Z]\w*
 	{LineTerminator}
 	{
 		yybegin(LINE);
-		return symbol(EOL);
+		return symbol(EOL, yytext());
 	}
+
+	{Symbol}
+	{  System.out.println(yytext()); return symbol(SYM, yytext()); }
 
 	{WhiteSpace}
 	{ /* Ignore */ }
@@ -366,10 +372,10 @@ Id = [a-zA-Z]\w*
 /* Estado para aceptar tabulaciones despues de un salta de linea */
 <LINE> {
 	\n
-	{ return symbol(EOL); }
+	{ return symbol(EOL, yytext()); }
 
 	({Tab}|" ")*\n
-	{ return symbol(EOL); }
+	{ return symbol(EOL, yytext()); }
 
 	({Tab}|"    ")+
 	{

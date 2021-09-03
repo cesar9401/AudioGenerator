@@ -1,6 +1,10 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.error.Err;
+import com.cesar31.audiogenerator.instruction.Track;
 import com.cesar31.audiogenerator.ui.MainView;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 /**
@@ -9,6 +13,8 @@ import javax.swing.JTextArea;
  */
 public class MainControl {
 
+    private Track track;
+    
     public void initWindow() {
         java.awt.EventQueue.invokeLater(() -> {
             MainView view = new MainView(this);
@@ -17,10 +23,31 @@ public class MainControl {
         });
     }
     
-    public void parseSource(String input, JTextArea log) {
-        long t = System.currentTimeMillis();
+    /**
+     * Enviar texto para parseo (Lenguaje principal)
+     * @param input
+     * @param log 
+     */
+    public List<Err> parseSource(String input, JTextArea log) {
+        track = null;
         
         ParserHandler parser = new ParserHandler(log);
-        parser.parseSource(input);
+        List<Err> errors = parser.parseSource(input);
+        
+        if(errors.isEmpty()) {
+            this.track = parser.getTrack();
+        }
+        
+        return errors;
+    }
+    
+    public void saveTrack(MainView view) {
+        if(track != null) {
+            System.out.println("Guardar pista aqui :v");
+        }
+    }
+
+    public Track getTrack() {
+        return track;
     }
 }

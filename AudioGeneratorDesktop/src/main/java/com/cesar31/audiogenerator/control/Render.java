@@ -176,10 +176,20 @@ public class Render {
         return "";
     }
 
+    /**
+     * Obtener instrumento
+     *
+     * @param n indice del instrumento a obtener
+     * @return
+     */
     private String getInstrument(int n) {
         String[] i = {"ROCK_ORGAN", "TRUMPET", "ACOUSTIC_BASS", "VIOLIN", "CLARINET", "FLUTE", "BANJO", "STEEL_STRING_GUITAR",
             "ELECTRIC_JAZZ_GUITAR", "ELECTRIC_CLEAN_GUITAR", "TROMBONE", "TUBA", "PIANO", "GUITAR", "ELECTRIC_PIANO", "MARIMBA"};
 
         return "I[" + i[n] + "]";
+    }
+
+    public List<Sound> getSounds() {
+        return sounds;
     }
 }

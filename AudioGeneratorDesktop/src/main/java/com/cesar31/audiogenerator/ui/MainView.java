@@ -5,7 +5,6 @@ import com.cesar31.audiogenerator.control.MainControl;
 import com.cesar31.audiogenerator.error.Err;
 import java.io.File;
 import java.util.List;
-import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -17,14 +16,14 @@ public class MainView extends javax.swing.JFrame {
 
     private MainControl control;
     private FileControl file;
-    private LineNumber line2;
+    private LineNumber line;
     private String path;
 
     public MainView(MainControl control) {
         initComponents();
 
-        line2 = new LineNumber(editor);
-        scroll.setRowHeaderView(line2);
+        line = new LineNumber(editor);
+        scroll.setRowHeaderView(line);
         file = new FileControl();
         this.control = control;
     }
@@ -39,9 +38,10 @@ public class MainView extends javax.swing.JFrame {
         scroll = new javax.swing.JScrollPane();
         editor = new javax.swing.JTextArea();
         label_caret = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        compileButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         log = new javax.swing.JTextArea();
+        saveTrack = new javax.swing.JButton();
         logPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -91,13 +91,13 @@ public class MainView extends javax.swing.JFrame {
         label_caret.setForeground(new java.awt.Color(255, 255, 255));
         label_caret.setText("Linea: 1 Columna: 0");
 
-        jButton1.setBackground(new java.awt.Color(40, 180, 99));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(24, 26, 31));
-        jButton1.setText("Compilar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        compileButton.setBackground(new java.awt.Color(40, 180, 99));
+        compileButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        compileButton.setForeground(new java.awt.Color(24, 26, 31));
+        compileButton.setText("Compilar");
+        compileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                compileButtonActionPerformed(evt);
             }
         });
 
@@ -111,17 +111,30 @@ public class MainView extends javax.swing.JFrame {
         log.setMargin(new java.awt.Insets(10, 10, 10, 10));
         jScrollPane1.setViewportView(log);
 
+        saveTrack.setBackground(new java.awt.Color(40, 180, 99));
+        saveTrack.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        saveTrack.setForeground(new java.awt.Color(24, 26, 31));
+        saveTrack.setText("Guardar Pista");
+        saveTrack.setEnabled(false);
+        saveTrack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveTrackActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout editorPanelLayout = new javax.swing.GroupLayout(editorPanel);
         editorPanel.setLayout(editorPanelLayout);
         editorPanelLayout.setHorizontalGroup(
             editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(editorPanelLayout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(editorPanelLayout.createSequentialGroup()
                         .addComponent(label_caret, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(compileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(saveTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 1400, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -134,7 +147,8 @@ public class MainView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_caret, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(compileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(38, Short.MAX_VALUE))
@@ -153,6 +167,7 @@ public class MainView extends javax.swing.JFrame {
 
         jScrollPane2.setPreferredSize(new java.awt.Dimension(3500, 1800));
 
+        errorTable.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         errorTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -424,11 +439,28 @@ public class MainView extends javax.swing.JFrame {
         this.label_caret.setText(info);
     }//GEN-LAST:event_editorCaretUpdate
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void compileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compileButtonActionPerformed
         // TODO add your handling code here:
         log.setText("");
-        control.parseSource(editor.getText(), log);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        saveTrack.setEnabled(false);
+
+        List<Err> errors = control.parseSource(editor.getText(), log);
+        if (!errors.isEmpty()) {
+            setTableErrors(errors);
+            tabbed.setSelectedIndex(1);
+        } else if (control.getTrack() != null) {
+            saveTrack.setEnabled(true);
+            JOptionPane.showMessageDialog(this, "Archivo compilado con exito, el boton para guardar la pista se ha habilitado.");
+        }
+    }//GEN-LAST:event_compileButtonActionPerformed
+
+    private void saveTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTrackActionPerformed
+        // Guardar pista
+        control.saveTrack(this);
+
+        // Desactivar boton
+        saveTrack.setEnabled(false);
+    }//GEN-LAST:event_saveTrackActionPerformed
 
     /**
      * Guardar como
@@ -448,11 +480,11 @@ public class MainView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton compileButton;
     private javax.swing.JTextArea editor;
     private javax.swing.JPanel editorPanel;
     private javax.swing.JTable errorTable;
     private javax.swing.JMenuItem exit_Item;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -467,6 +499,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem open_item;
     private javax.swing.JPanel playerPanel;
     private javax.swing.JMenuItem saveAs_Item;
+    private javax.swing.JButton saveTrack;
     private javax.swing.JMenuItem save_Item;
     private javax.swing.JScrollPane scroll;
     private javax.swing.JTabbedPane tabbed;

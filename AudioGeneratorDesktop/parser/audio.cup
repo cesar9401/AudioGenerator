@@ -4,11 +4,9 @@ package com.cesar31.audiogenerator.parser;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import java.lang.reflect.Array;
 
 import com.cesar31.audiogenerator.instruction.*;
-import com.cesar31.audiogenerator.control.*;
 import com.cesar31.audiogenerator.error.*;
 
 class AudioParser;
@@ -16,6 +14,7 @@ class AudioParser;
 parser code {:
 	private ErrorHandler errorHandler;
 
+	private Token info;
 	private List<Integer> ind;
 
 	public AudioParser(AudioLex lex) {
@@ -26,6 +25,10 @@ parser code {:
 
 	public List<Err> getErrors() {
 		return this.errorHandler.getErrors();
+	}
+
+	public Token getInfo() {
+		return this.info;
 	}
 
 	public void syntax_error(Symbol cur_token) {
@@ -53,7 +56,7 @@ terminal Token ID, INTEGER, DECIMAL, EQEQ, NEQ, GREATER, SMALLER, GRTREQ, SMLLRE
 terminal Token NULL, AND, NAND, OR, NOR, XOR, NOT, COMMA, EQUAL, PLUS, MINUS, TIMES, DIVIDE, MOD, POW, PLUS_EQ, PLUS_PLUS, MINUS_MINUS;
 terminal Token LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, SEMI, EOL, STR, CHAR;
 terminal Token INDENT, DEDENT;
-terminal Token ERROR;
+terminal Token SYM, ERROR;
 
 non terminal Token type, id;
 non terminal Operation value;
@@ -95,21 +98,49 @@ non terminal Return return_;
 // non terminal length, sum;
 // non terminal play, wait, order;
 
-non terminal eol, eol_;
+non terminal eol;
 non terminal extends_;
 
 start with inicio1;
 
 inicio1 ::=
-			eol_ TRACK id extends_ eol bod:list_i
+			eol TRACK id:id extends_ eol bod:list_i
 				{:
+					info = id;
 					RESULT = list_i;
 				:}
+			| TRACK id:id extends_ eol bod:list_i
+				{: info = id; RESULT = list_i; :}
+
+			// Errores
+			| error TRACK id:id extends_ eol bod:list_i
+				{: info = id; RESULT = list_i; :}
+			| eol TRACK error extends_ eol bod:list_i
+				{: RESULT = list_i; :}
+			| eol TRACK id:id error eol bod:list_i
+				{: info = id; RESULT = list_i; :}
+			| eol TRACK id:id extends_ eol error
+				{: RESULT = null; :}
+
+			| error id:id extends_ eol bod:list_i
+				{: info = id; RESULT = list_i; :}
+			| TRACK error extends_ eol bod:list_i
+				{: RESULT = list_i; :}
+			| TRACK id:id error eol bod:list_i
+				{: info = id; RESULT = list_i; :}
+			| TRACK id:id extends_ eol error
+				{: RESULT = null; :}
+			// Errores
 			;
 
 extends_ ::=
 			EXTENDS id_list
 			|
+
+			// Errores
+			| error id_list
+			| EXTENDS error
+			// Errores
 			;
 
 /* main_body */
@@ -118,6 +149,15 @@ bod ::=
 				{: RESULT = list; :}
 			|
 				{: RESULT = new ArrayList<>(); :}
+
+			// Errores
+			| INDENT m_body:list error
+				{: RESULT = list; :}
+			| error m_body:list DEDENT
+				{: RESULT = list; :}
+			| INDENT error DEDENT
+				{: RESULT = new ArrayList<>(); :}
+			// Errores
 			;
 
 m_body ::=
@@ -129,13 +169,28 @@ m_body ::=
 
 main_body ::=
 			principal:principal
-				{: RESULT = new ArrayList<>(); RESULT.add(principal); :}
+				{:
+					RESULT = new ArrayList<>();
+					if(principal != null) {
+						RESULT.add(principal);
+					}
+				:}
 			| function:function
-				{: RESULT = new ArrayList<>(); RESULT.add(function); :}
+				{:
+					RESULT = new ArrayList<>();
+					if(function != null) {
+						RESULT.add(function);
+					}
+				:}
 			| statement:statement eol
 				{: RESULT = new ArrayList<>(); RESULT.addAll(statement); :}
 			| array_statement:array_statement eol
 				{: RESULT = new ArrayList<>(); RESULT.addAll(array_statement); :}
+
+			// Errores
+			| error eol
+				{: RESULT = new ArrayList<>(); :}
+			// Errores
 			;
 /* main_body */
 
@@ -145,6 +200,13 @@ function_body ::=
 				{: RESULT = list; :}
 			|
 				{: RESULT = new ArrayList<>(); :}
+
+			// Errores
+			| INDENT error DEDENT
+				{: RESULT = new ArrayList<>(); :}
+			| INDENT f_body:list error
+				{: RESULT = list; :}
+			// Errores
 			;
 
 f_body ::=
@@ -158,13 +220,23 @@ body ::=
 			statement_function:list eol /* ArrayList<>(); */
 				{: RESULT = new ArrayList<>(); RESULT.addAll(list); :}
 			| assignment:assign eol /* Assignment */
-				{: RESULT = new ArrayList<>(); RESULT.add(assign); :}
+				{:
+					RESULT = new ArrayList<>();
+					if(assign != null) {
+						RESULT.add(assign);
+					}
+				:}
 			| array_statement_function:list eol /* List<ArrayAssignment> */
 				{:  RESULT = new ArrayList<>(); RESULT.addAll(list); :}
 			| message:message eol /* Message */
 				{: RESULT = new ArrayList<>(); RESULT.add(message); :}
 			| control:instruction
-				{: RESULT = new ArrayList<>(); RESULT.add(instruction); :}
+				{:
+					RESULT = new ArrayList<>();
+					if(instruction != null) {
+						RESULT.add(instruction);
+					}
+				:}
 			| continue_:continue_ eol
 				{: RESULT = new ArrayList<>(); RESULT.add(continue_); :}
 			| exit_:exit_ eol
@@ -174,6 +246,11 @@ body ::=
 			// return
 			| return_:return_ eol
 				{: RESULT = new ArrayList<>(); RESULT.add(return_); :}
+
+			// Error
+			| error eol
+				{: RESULT = new ArrayList<>(); :}
+			// Error
 			;
 /* cuerpo para funciones */
 
@@ -193,8 +270,42 @@ statement ::=
 						RESULT.add(new Assignment(info, false, token, id, operation));
 					}
 				:}
+
+			// Errores
+			| error VAR:info type:token id_list:list value:operation
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list) {
+						RESULT.add(new Assignment(info, true, token, id, operation));
+					}
+				:}
+			| KEEP:info error type:token id_list:list value:operation
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list) {
+						RESULT.add(new Assignment(info, true, token, id, operation));
+					}
+				:}
+			| KEEP:info VAR error id_list value
+				{: RESULT = new ArrayList<>(); :}
+			| KEEP:info VAR type error value
+				{: RESULT = new ArrayList<>(); :}
+
+			| error type:token id_list:list value:operation
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list) {
+						RESULT.add(new Assignment(token, false, token, id, operation));
+					}
+				:}
+			| VAR:info error id_list:list value:operation
+				{: RESULT = new ArrayList<>(); :}
+			| VAR:info type:token error value:operation
+				{: RESULT = new ArrayList<>(); :}
+			// Errores
 			;
 
+// Declaracion dentro de funciones
 statement_function ::=
 			VAR:info type:token id_list:list value:operation
 				{:
@@ -203,11 +314,25 @@ statement_function ::=
 						RESULT.add(new Assignment(info, false, token, id, operation));
 					}
 				:}
-				;
+
+			// Errores
+			| VAR:info error id_list:list value:operation
+				{: RESULT = new ArrayList<>(); :}
+			| VAR:info type:token error value:operation
+				{: RESULT = new ArrayList<>(); :}
+			// Errores
+			;
+
 
 value ::=
 			EQUAL a:operation {: RESULT = operation; :}
 			|{: RESULT = null; :}
+
+			// Errores
+			// | EQUAL error {: RESULT = null; :}
+			| error a {: RESULT = null; :}
+			| error {: RESULT = null; :}
+			// Errores
 			;
 
 id_list ::=
@@ -268,6 +393,17 @@ assignment ::=
 					Operation tmp = new Operation(OperationType.SUBTRACTION, new Operation(OperationType.ARRAY_ACCESS, array_access), new Operation(OperationType.INTEGER, new Variable(Var.INTEGER, "1")), op);
 					RESULT = new ArrayAssignment(array_access, tmp, Assignment.TypeA.MINUS_MINUS);
 				:}
+
+			// Errores
+			| error EQUAL a {: RESULT = null; :}
+			| error PLUS_EQ a{: RESULT = null; :}
+			| error PLUS_PLUS {: RESULT = null; :}
+			| error MINUS_MINUS {: RESULT = null; :}
+			| id error a {: RESULT = null; :}
+			| id error {: RESULT = null; :}
+			| l error a {: RESULT = null; :}
+			| l error {: RESULT = null; :}
+			// Errores
 			;
 
 l ::=
@@ -293,6 +429,62 @@ array_statement ::=
 					}
 					ind = new ArrayList<>();
 				:}
+
+			// Errores
+			| error VAR:info type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, true, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| KEEP:info error type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, true, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| KEEP:info VAR error ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			| KEEP:info VAR type:type error id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, true, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| KEEP:info VAR type:type ARRAY error dimensions:list_array_index array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			| KEEP:info VAR type:type ARRAY id_list:list_token error array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+
+			| error type:type ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(type, false, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| VAR:info error ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			| VAR:info type:type error id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, false, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| VAR:info type:type ARRAY error dimensions:list_array_index array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			| VAR:info type:type ARRAY id_list:list_token error array_value:array_list
+				{: RESULT = new ArrayList<>();  ind = new ArrayList<>(); :}
+			// Errores
 			;
 
 array_statement_function ::=
@@ -304,6 +496,23 @@ array_statement_function ::=
 					}
 					ind = new ArrayList<>();
 				:}
+
+			// Errores
+			| VAR:info error ARRAY id_list:list_token dimensions:list_array_index array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			| VAR:info type:type error id_list:list_token dimensions:list_array_index array_value:array_list
+				{:
+					RESULT = new ArrayList<>();
+					for(Token id : list_token) {
+						RESULT.add(new ArrayStatement(info, false, type, id, list_array_index, array_list, ind));
+					}
+					ind = new ArrayList<>();
+				:}
+			| VAR:info type:type ARRAY error dimensions:list_array_index array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			| VAR:info type:type ARRAY id_list:list_token error array_value:array_list
+				{: RESULT = new ArrayList<>(); ind = new ArrayList<>(); :}
+			// Errores
 			;
 
 dimensions ::=
@@ -321,6 +530,7 @@ dimension ::=
 array_value ::=
 			EQUAL list:list {: RESULT = list; :}
 			| {: RESULT = null; :}
+			| error {: RESULT = null; :}
 			;
 
 list ::=
@@ -430,6 +640,10 @@ j ::=
 			| LPAREN a:var RPAREN {: RESULT = var; :}
 			// Llamada a funcion
 			| function_call:call {: RESULT = new Operation(OperationType.FUNCTION_CALL, call); :}
+
+			// Errores
+			| error {: RESULT = null; :}
+			// Errores
 			;
 
 boolean_val ::=
@@ -441,11 +655,6 @@ boolean_val ::=
 eol ::=
 			eol EOL
 			| EOL
-			;
-
-eol_ ::=
-			eol_ EOL
-			|
 			;
 
 /* ciclos y sentencias de control */
@@ -480,6 +689,25 @@ if_ ::=
 				{:
 					RESULT = new If(token, If.Type.IF, condition, list_ins);
 				:}
+
+			//Errores
+			| error LPAREN:token a:condition RPAREN eol function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.IF, condition, list_ins);
+				:}
+			| IF:token error a:condition RPAREN eol function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.IF, condition, list_ins);
+				:}
+			| IF:token LPAREN a:condition error eol function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.IF, condition, list_ins);
+				:}
+			| IF:token LPAREN a:condition RPAREN error function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.IF, condition, list_ins);
+				:}
+			// Errores
 			;
 
 else_ ::=
@@ -487,6 +715,13 @@ else_ ::=
 				{:
 					RESULT = new If(token, If.Type.ELSE, null, list_ins);
 				:}
+
+			// Errores
+			| ELSE:token error function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.ELSE, null, list_ins);
+				:}
+			// Errores
 			;
 
 list_else_if ::=
@@ -501,6 +736,25 @@ else_if ::=
 				{:
 					RESULT = new If(token, If.Type.ELSE_IF, condition, list_ins);
 				:}
+
+			// Errores
+			| ELSE:token error LPAREN a:condition RPAREN eol function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.ELSE_IF, condition, list_ins);
+				:}
+			| ELSE:token IF error a:condition RPAREN eol function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.ELSE_IF, condition, list_ins);
+				:}
+			| ELSE:token IF LPAREN a:condition error eol function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.ELSE_IF, condition, list_ins);
+				:}
+			| ELSE:token IF LPAREN a:condition RPAREN error function_body:list_ins
+				{:
+					RESULT = new If(token, If.Type.ELSE_IF, condition, list_ins);
+				:}
+			// Errores
 			;
 /* if - si */
 
@@ -510,6 +764,29 @@ for_ ::=
 				{:
 					RESULT = new For(token, assign, condition, increase, list_ins);
 				:}
+
+			// Errores
+			| error LPAREN:token for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN eol function_body:list_ins
+				{:
+					RESULT = new For(token, assign, condition, increase, list_ins);
+				:}
+			| FOR:token error for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN eol function_body:list_ins
+				{:
+					RESULT = new For(token, assign, condition, increase, list_ins);
+				:}
+			| FOR:token LPAREN error SEMI a:condition SEMI assignment:increase RPAREN eol function_body:list_ins
+				{: RESULT = null; :}
+			| FOR:token LPAREN for_assign:assign SEMI a:condition error assignment:increase RPAREN eol function_body:list_ins
+				{:
+					RESULT = new For(token, assign, condition, increase, list_ins);
+				:}
+			| FOR:token LPAREN for_assign:assign SEMI a:condition SEMI error RPAREN eol function_body:list_ins
+				{: RESULT = null; :}
+			| FOR:token LPAREN for_assign:assign SEMI a:condition SEMI assignment:increase RPAREN error function_body:list_ins
+				{:
+					RESULT = new For(token, assign, condition, increase, list_ins);
+				:}
+			// Errores
 			;
 
 for_assign ::=
@@ -526,6 +803,21 @@ while_ ::=
 				{:
 					RESULT = new While(token, condition, list_ins);
 				:}
+
+			// Errores
+			| WHILE:token error a:condition RPAREN eol function_body:list_ins
+				{:
+					RESULT = new While(token, condition, list_ins);
+				:}
+			| WHILE:token LPAREN a:condition error eol function_body:list_ins
+				{:
+					RESULT = new While(token, condition, list_ins);
+				:}
+			| WHILE:token LPAREN a:condition RPAREN error function_body:list_ins
+				{:
+					RESULT = new While(token, condition, list_ins);
+				:}
+			// Errores
 			;
 
 /* do-while - hacer-mientras */
@@ -534,6 +826,19 @@ do_while ::=
 				{:
 					RESULT = new DoWhile(info, token, list_ins, condition);
 				:}
+
+			// Errores
+			| DO_WHILE:info error function_body:list_ins WHILE:token LPAREN a:condition RPAREN eol
+				{: RESULT = new DoWhile(info, token, list_ins, condition); :}
+			| DO_WHILE:info eol function_body:list_ins error LPAREN:token a:condition RPAREN eol
+				{: RESULT = new DoWhile(info, token, list_ins, condition); :}
+			| DO_WHILE:info eol function_body:list_ins WHILE:token error a:condition RPAREN eol
+				{: RESULT = new DoWhile(info, token, list_ins, condition); :}
+			| DO_WHILE:info eol function_body:list_ins WHILE:token LPAREN a:condition error eol
+				{: RESULT = new DoWhile(info, token, list_ins, condition); :}
+			| DO_WHILE:info eol function_body:list_ins WHILE:token LPAREN a:condition RPAREN error
+				{: RESULT = new DoWhile(info, token, list_ins, condition); :}
+			// Errores
 			;
 /* do-while - hacer-mientras */
 
@@ -541,6 +846,15 @@ do_while ::=
 switch_ ::=
 			SWITCH:token LPAREN a:condition RPAREN eol switch_body:list
 				{: RESULT = new Switch(token, condition, list); :}
+
+			// Errores
+			| SWITCH:token error a:condition RPAREN eol switch_body:list
+				{: RESULT = new Switch(token, condition, list); :}
+			| SWITCH:token LPAREN a:condition error eol switch_body:list
+				{: RESULT = new Switch(token, condition, list); :}
+			| SWITCH:token LPAREN a:condition RPAREN error switch_body:list
+				{: RESULT = new Switch(token, condition, list); :}
+			// Errores
 			;
 
 switch_body ::=
@@ -565,6 +879,13 @@ case_list ::=
 case_ ::=
 			CASE:token a:operation eol function_body:instructions
 				{: RESULT = new Case(token, operation, instructions); :}
+
+			// Errores
+			| error a:operation eol function_body:instructions
+				{: RESULT = new Case(null, operation, instructions); :}
+			| CASE:token a:operation error function_body:instructions
+				{: RESULT = new Case(token, operation, instructions); :}
+			// Errores
 			;
 
 default_ ::=
@@ -572,6 +893,13 @@ default_ ::=
 				{: RESULT = new Case(token, null, instructions); :}
 			|
 				{: RESULT = null; :}
+
+			// Errores
+			| error eol function_body:instructions
+				{: RESULT = new Case(null, null, instructions); :}
+			| DEFAULT:token error function_body:instructions
+				{: RESULT = new Case(token, null, instructions); :}
+			// Errores
 			;
 /* switch  */
 
@@ -602,6 +930,31 @@ function ::=
 				{: RESULT = new Function(info, true, token_type, id, list, instructions); :}
 			| type:token_type id:id LPAREN params_f:list RPAREN eol function_body:instructions // no keep - type
 				{: RESULT = new Function(token_type, false, token_type, id, list, instructions); :}
+
+			// Errores
+			| error LPAREN params_f:list RPAREN eol function_body:instructions
+			| id:id error params_f:list RPAREN eol function_body:instructions
+			| id:id LPAREN error RPAREN eol function_body:instructions
+			| id:id LPAREN params_f:list RPAREN error function_body:instructions
+
+			| error id:id LPAREN params_f:list RPAREN eol function_body:instructions
+			| KEEP:info error LPAREN params_f:list RPAREN eol function_body:instructions
+			| KEEP:info id:id error params_f:list RPAREN eol function_body:instructions
+			| KEEP:info id:id LPAREN error RPAREN eol function_body:instructions
+			| KEEP:info id:id LPAREN params_f:list RPAREN error function_body:instructions
+
+			| error type:token_type id:id LPAREN params_f:list RPAREN eol function_body:instructions
+			| KEEP:info error id:id LPAREN params_f:list RPAREN eol function_body:instructions
+			| KEEP:info type:token_type error LPAREN params_f:list RPAREN eol function_body:instructions
+			| KEEP:info type:token_type id:id error params_f:list RPAREN eol function_body:instructions
+			| KEEP:info type:token_type id:id LPAREN error RPAREN eol function_body:instructions
+			| KEEP:info type:token_type id:id LPAREN params_f:list RPAREN error function_body:instructions
+
+			| type:token_type error LPAREN params_f:list RPAREN eol function_body:instructions
+			| type:token_type id:id error params_f:list RPAREN eol function_body:instructions
+			| type:token_type id:id LPAREN error RPAREN eol function_body:instructions
+			| type:token_type id:id LPAREN params_f:list RPAREN error function_body:instructions
+			// Errores
 			;
 
 /* principal */
@@ -610,6 +963,17 @@ principal ::=
 				{: RESULT = new Principal(list_ins); :}
 			| KEEP MAIN LPAREN RPAREN eol function_body:list_ins
 				{: RESULT = new Principal(list_ins); :}
+
+			// Errores
+			| MAIN error RPAREN eol function_body:list_ins
+			| MAIN LPAREN error eol function_body:list_ins
+			| MAIN LPAREN RPAREN error function_body:list_ins
+
+			| error MAIN LPAREN RPAREN eol function_body:list_ins
+			| KEEP MAIN error RPAREN eol function_body:list_ins
+			| KEEP MAIN LPAREN error eol function_body:list_ins
+			| KEEP MAIN LPAREN RPAREN error function_body:list_ins
+			// Errores
 			;
 
 /* principal */
@@ -618,6 +982,13 @@ message ::=
 				{:
 					RESULT = new Message(token, operation);
 				:}
+
+			// Errores
+			| MSG:token error a:operation RPAREN
+				{: RESULT = new Message(token, operation); :}
+			| MSG:token LPAREN a:operation error
+				{: RESULT = new Message(token, operation); :}
+			// Errores
 			;
 
 params_f ::=
@@ -685,10 +1056,26 @@ note ::=
 function_call ::=
 			id:token LPAREN args_:list RPAREN
 				{: RESULT = new FunctionCall(token, list); :}
-			| id:token LPAREN args:list COMMA WAY:way RPAREN
+			| id:token LPAREN args:list COMMA WAY:way RPAREN // Ordenar
 				{: RESULT = new Order(token, list, way); :}
-			| id:token LPAREN note:note COMMA args:list RPAREN
+			| id:token LPAREN note:note COMMA args:list RPAREN // Reproducir
 				{: RESULT = new Play(token, note, list); :}
+
+			// Errores
+			// | error LPAREN:token args:list COMMA WAY:way RPAREN // Errores Ordenar
+			// 	{: RESULT = new Order(token, list, way); :}
+			// | id:token LPAREN args:list error WAY:way RPAREN
+			// 	{: RESULT = new Order(token, list, way); :}
+			// | id:token LPAREN args:list COMMA WAY:way error
+			// 	{: RESULT = new Order(token, list, way); :}
+
+			// | error LPAREN:token note:note COMMA args:list RPAREN // Errores Reproducir
+			// 	{: RESULT = new Play(token, note, list); :}
+			// | id:token LPAREN note:note error args:list RPAREN
+			// 	{: RESULT = new Play(token, note, list); :}
+			// |  id:token LPAREN note:note COMMA args:list error
+			// 	{: RESULT = new Play(token, note, list); :}
+			// Errores
 			;
 
 args_ ::=

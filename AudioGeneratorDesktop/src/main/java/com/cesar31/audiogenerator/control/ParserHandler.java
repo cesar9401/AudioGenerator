@@ -2,6 +2,7 @@ package com.cesar31.audiogenerator.control;
 
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.*;
+import com.cesar31.audiogenerator.model.Sound;
 import com.cesar31.audiogenerator.parser.*;
 import java.io.StringReader;
 import java.time.LocalDate;
@@ -17,29 +18,33 @@ import javax.swing.JTextArea;
 public class ParserHandler {
 
     private JTextArea log;
-
+    private Track track;
+    
+    
     public ParserHandler(JTextArea log) {
         this.log = log;
     }
 
-    public void parseSource(String data) {
+    public List<Err> parseSource(String data) {
         long t = System.currentTimeMillis();
         AudioLex lex = new AudioLex(new StringReader(data));
         AudioParser parser = new AudioParser(lex);
 
         try {
             List<Instruction> ast = (List<Instruction>) parser.parse().value;
+            Token info = parser.getInfo();
             List<Err> errors = parser.getErrors();
             if (!errors.isEmpty()) {
-                errors.forEach(System.out::println);
+                // Enviar errores aqui
+                // errors.forEach(System.out::println);
+                return errors;
             } else {
                 errors = new ArrayList<>();
 
                 // Revisar ast en busca de funciones "repetidas"
                 checkAstForRepeatedFunctions(ast, errors, new HashMap<>());
 
-                // Revisar ast en busca de instrucciones retorna donde no deben ir
-                // Revisar ast en busca de instrucciones salir y continuar donde no deben ir
+                // Revisar ast en busca de instrucciones salir, continuar y retorna donde no deben ir
                 checkAst(ast, errors, true, true, true);
 
                 // Revisar ast en busca de instrucciones que no se ejecutan por la instruccion salir
@@ -50,15 +55,19 @@ public class ParserHandler {
 
                 // Ejecutar test para verificar errores semanticos
                 if (!errors.isEmpty()) {
-                    errors.forEach(System.out::println);
+                    // Enviar errores aqui
+                    // errors.forEach(System.out::println);
+                    return errors;
                 } else {
                     // testear codigo
                     System.out.println("Test");
                     errors = testAst(ast);
                     if (!errors.isEmpty()) {
-                        // Mostrar errors
-                        System.out.println("Errores test");
-                        errors.forEach(System.out::println);
+                        // Enviar errores aqui
+                        //System.out.println("Errores test");
+                        //errors.forEach(System.out::println);
+
+                        return errors;
                     } else {
                         // Si no hay errores, ejecutar codigo
                         System.out.println("\nCodigo limpio!!\n");
@@ -66,21 +75,34 @@ public class ParserHandler {
 
                         if (!handler.getErrors().isEmpty()) {
                             handler.getErrors().forEach(e -> {
+                                // Enviar errores aqui
                                 e.setType(Err.TypeErr.EJECUCION);
                                 System.out.println(e);
                             });
+
+                            // Enviar errores de ejecucion aqui
+                            return handler.getErrors();
+
                         } else {
                             System.out.println("Compilando notas");
-                            handler.getRender().renderSounds();
+                            // Obtener listado de sounds
+                            List<Sound> sounds = handler.getRender().getSounds();
+
+                            // Objeto a guardar
+                            this.track = new Track(info.getValue(), ast, sounds, data);
+
+                            // Renderizar notas y tocar
+                            // handler.getRender().renderSounds();
                             setOut(t, handler);
                         }
                     }
                 }
             }
-
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
+
+        return new ArrayList<>();
     }
 
     private void checkAstForRepeatedFunctions(List<Instruction> ast, List<Err> errors, HashMap<String, Instruction> map) {
@@ -494,5 +516,9 @@ public class ParserHandler {
                 + "------------------------------------------------------------------------";
 
         handler.getLog().append(out);
+    }
+
+    public Track getTrack() {
+        return track;
     }
 }

@@ -30,7 +30,7 @@ public class AudioParserSym {
   public static final int NOT = 49;
   public static final int NOR = 47;
   public static final int ARRAY = 13;
-  public static final int ERROR = 73;
+  public static final int ERROR = 74;
   public static final int VAR = 5;
   public static final int STR = 69;
   public static final int PLUS_PLUS = 59;
@@ -44,6 +44,7 @@ public class AudioParserSym {
   public static final int EXTENDS = 3;
   public static final int DECIMAL = 36;
   public static final int CHAR = 70;
+  public static final int SYM = 73;
   public static final int SWITCH = 16;
   public static final int FOR = 20;
   public static final int GREATER = 39;
@@ -156,6 +157,7 @@ public class AudioParserSym {
   "CHAR",
   "INDENT",
   "DEDENT",
+  "SYM",
   "ERROR"
   };
 }
