@@ -2,13 +2,13 @@ package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  * @author cesar31
  */
-public class Wait extends Function {
+public class Wait extends Function implements Serializable {
 
     private Token info;
 

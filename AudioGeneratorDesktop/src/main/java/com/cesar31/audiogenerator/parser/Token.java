@@ -1,10 +1,12 @@
 package com.cesar31.audiogenerator.parser;
 
+import java.io.Serializable;
+
 /**
  *
  * @author cesar31
  */
-public class Token {
+public class Token implements Serializable {
 
     private int type;
     private String value;

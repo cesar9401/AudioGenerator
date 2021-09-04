@@ -1,10 +1,12 @@
 package com.cesar31.audiogenerator.instruction;
 
+import java.io.Serializable;
+
 /**
  *
  * @author cesar31
  */
-public enum OperationType {
+public enum OperationType implements Serializable {
     // tipos de variables
     INTEGER,
     DOUBLE,

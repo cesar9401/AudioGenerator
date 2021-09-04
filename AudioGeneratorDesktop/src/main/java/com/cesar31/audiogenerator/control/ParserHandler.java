@@ -1,5 +1,6 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.model.Track;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.model.Sound;
@@ -19,8 +20,7 @@ public class ParserHandler {
 
     private JTextArea log;
     private Track track;
-    
-    
+
     public ParserHandler(JTextArea log) {
         this.log = log;
     }
@@ -87,9 +87,10 @@ public class ParserHandler {
                             System.out.println("Compilando notas");
                             // Obtener listado de sounds
                             List<Sound> sounds = handler.getRender().getSounds();
+                            double duration = handler.getRender().getDuration(sounds);
 
                             // Objeto a guardar
-                            this.track = new Track(info.getValue(), ast, sounds, data);
+                            this.track = new Track(info.getValue(), ast, sounds, duration, data);
 
                             // Renderizar notas y tocar
                             // handler.getRender().renderSounds();

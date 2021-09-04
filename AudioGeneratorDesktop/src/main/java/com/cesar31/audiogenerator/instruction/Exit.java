@@ -2,12 +2,13 @@ package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 
 /**
  *
  * @author cesar31
  */
-public class Exit implements Instruction {
+public class Exit implements Instruction, Serializable {
 
     private Token token;
 

@@ -3,15 +3,11 @@ package com.cesar31.audiogenerator.control;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.Var;
 import com.cesar31.audiogenerator.instruction.Variable;
-import com.cesar31.audiogenerator.model.Note;
-import com.cesar31.audiogenerator.model.Song;
 import com.cesar31.audiogenerator.model.Sound;
 import com.cesar31.audiogenerator.parser.Token;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 
 /**
  *
@@ -21,52 +17,30 @@ public class Render {
 
     private OperationHandler handler;
     private List<Sound> sounds;
-    private List<Note> notes;
-    private int count;
-    private Pattern p;
 
     public Render(OperationHandler handler) {
         this.handler = handler;
         this.sounds = new ArrayList<>();
-        this.notes = new ArrayList<>();
     }
 
-    public void renderSounds() {
-        HashMap<Integer, String> map = new HashMap<>();
-        for (Sound s : sounds) {
-            String note = s.getNote() + s.getEighth() + "/" + s.getMilliseconds() + " ";
+    public double getDuration(List<Sound> tmp) {
+        HashMap<Integer, Double> map = new HashMap<>();
+        double max = 0;
+        for (Sound s : tmp) {
+            double duration = s.getMilliseconds();
             if (!map.containsKey(s.getChannel())) {
-                map.put(s.getChannel(), note);
+                map.put(s.getChannel(), duration);
             } else {
-                note = map.get(s.getChannel()) + note;
-                map.put(s.getChannel(), note);
+                duration += map.get(s.getChannel());
+                map.put(s.getChannel(), duration);
+            }
+
+            if (duration > max) {
+                max = duration;
             }
         }
 
-        count = 0;
-        p = new Pattern();
-        System.out.println("Size: " + map.size());
-        map.forEach((key, note) -> {
-            String s = "v" + count + " " + getInstrument(count) + " " + note + " ";
-            System.out.println(s);
-            p.add(s);
-            count++;
-            if (count == 16) {
-                count = 0;
-                // Agregar pattern a algun lado xd
-                notes.add(new Note(new Player(), p));
-                p = new Pattern();
-            }
-        });
-
-        if (count != 0) {
-            notes.add(new Note(new Player(), p));
-        }
-
-        // Ejecutando notas
-        System.out.println("Ejecuntado notas");
-        Song s = new Song(notes);
-        s.start();
+        return max;
     }
 
     /**
@@ -82,7 +56,7 @@ public class Render {
     public Variable createSound(Token info, Token tokenN, Variable eighth, Variable milli, Variable channel) {
         String n = getNote(tokenN);
         int oct = Integer.valueOf(eighth.getValue());
-        double mil = Double.valueOf(milli.getValue()) / 1000d;
+        double mil = Double.valueOf(milli.getValue());
         int chann = Integer.valueOf(channel.getValue());
 
         if (oct < 0 || oct > 8) {
@@ -119,7 +93,7 @@ public class Render {
      */
     public Variable createWait(Token info, Variable milli, Variable channel) {
 
-        double mil = Double.valueOf(milli.getValue()) / 1000d;
+        double mil = Double.valueOf(milli.getValue());
         int chann = Integer.valueOf(channel.getValue());
 
         if (mil < 0) {
@@ -174,19 +148,6 @@ public class Render {
                 return "B";
         }
         return "";
-    }
-
-    /**
-     * Obtener instrumento
-     *
-     * @param n indice del instrumento a obtener
-     * @return
-     */
-    private String getInstrument(int n) {
-        String[] i = {"ROCK_ORGAN", "TRUMPET", "ACOUSTIC_BASS", "VIOLIN", "CLARINET", "FLUTE", "BANJO", "STEEL_STRING_GUITAR",
-            "ELECTRIC_JAZZ_GUITAR", "ELECTRIC_CLEAN_GUITAR", "TROMBONE", "TUBA", "PIANO", "GUITAR", "ELECTRIC_PIANO", "MARIMBA"};
-
-        return "I[" + i[n] + "]";
     }
 
     public List<Sound> getSounds() {

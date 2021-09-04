@@ -1,15 +1,16 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author cesar31
  */
-public class If {
+public class If implements Serializable {
 
-    public enum Type {
+    public enum Type implements Serializable {
         IF("si"), ELSE_IF("sino si"), ELSE("sino");
 
         private final String name;
@@ -17,7 +18,7 @@ public class If {
         private Type(String name) {
             this.name = name;
         }
-        
+
         public String getName() {
             return this.name;
         }

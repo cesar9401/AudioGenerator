@@ -3,13 +3,14 @@ package com.cesar31.audiogenerator.instruction;
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author cesar31
  */
-public class Switch implements Instruction {
+public class Switch implements Instruction, Serializable {
 
     Token token;
     Operation value;
@@ -48,9 +49,9 @@ public class Switch implements Instruction {
                                     return null;
                                 }
                             }
-                            
+
                             // Return
-                            if(o instanceof Return) {
+                            if (o instanceof Return) {
                                 return o;
                             }
                         }
@@ -84,8 +85,8 @@ public class Switch implements Instruction {
                         System.out.println("No es posible evaluar case");
                     }
                 }
-                
-                for(Instruction i : c.getInstructions()) {
+
+                for (Instruction i : c.getInstructions()) {
                     i.test(local, handler);
                 }
 

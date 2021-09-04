@@ -3,6 +3,7 @@ package com.cesar31.audiogenerator.instruction;
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  *
  * @author cesar31
  */
-public class Order extends FunctionCall {
+public class Order extends FunctionCall implements Serializable {
 
     private Token way;
 

@@ -1,13 +1,14 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author cesar31
  */
-public class Case {
+public class Case implements Serializable {
 
     private Token token;
     private Operation operation;

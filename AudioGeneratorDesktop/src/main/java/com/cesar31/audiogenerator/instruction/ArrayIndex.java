@@ -1,12 +1,13 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 
 /**
  *
  * @author cesar31
  */
-public class ArrayIndex {
+public class ArrayIndex implements Serializable {
 
     private Token lbracket;
     private Token rbrakcet;

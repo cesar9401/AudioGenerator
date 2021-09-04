@@ -1,12 +1,13 @@
 package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 
 /**
  *
  * @author cesar31
  */
-public class Variable {
+public class Variable implements Serializable {
 
     private Var type;
     private String id;
@@ -23,7 +24,7 @@ public class Variable {
     public Variable(Var type) {
         this.type = type;
     }
-    
+
     public Variable(Token token) {
         this.token = token;
     }

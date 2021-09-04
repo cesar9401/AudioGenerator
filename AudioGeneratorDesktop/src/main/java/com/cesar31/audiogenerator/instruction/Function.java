@@ -2,13 +2,14 @@ package com.cesar31.audiogenerator.instruction;
 
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  *
  * @author cesar31
  */
-public class Function implements Instruction {
+public class Function implements Instruction, Serializable {
 
     protected Token info;
     private Token id;

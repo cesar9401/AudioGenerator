@@ -3,12 +3,13 @@ package com.cesar31.audiogenerator.instruction;
 import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 
 /**
  *
  * @author cesar31
  */
-public class Summarize extends Function {
+public class Summarize extends Function implements Serializable {
 
     private Token info;
 

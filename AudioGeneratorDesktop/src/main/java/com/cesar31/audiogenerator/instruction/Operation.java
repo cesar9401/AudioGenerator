@@ -4,12 +4,13 @@ import com.cesar31.audiogenerator.control.OperationHandler;
 import com.cesar31.audiogenerator.control.OperationMaker;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.parser.Token;
+import java.io.Serializable;
 
 /**
  *
  * @author cesar31
  */
-public class Operation implements Instruction {
+public class Operation implements Instruction, Serializable {
 
     private Variable value;
     private OperationType type;

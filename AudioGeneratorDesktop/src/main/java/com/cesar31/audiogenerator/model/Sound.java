@@ -1,10 +1,12 @@
 package com.cesar31.audiogenerator.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author cesar31
  */
-public class Sound {
+public class Sound implements Serializable {
 
     private String note;
     private String eighth;
