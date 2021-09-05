@@ -26,7 +26,7 @@ public class MainView extends javax.swing.JFrame {
 
         line = new LineNumber(editor);
         scroll.setRowHeaderView(line);
-        file = new FileControl();
+        file = control.getFile();
     }
 
     @SuppressWarnings("unchecked")
@@ -43,6 +43,7 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         log = new javax.swing.JTextArea();
         saveTrack = new javax.swing.JButton();
+        typeCombo = new javax.swing.JComboBox<>();
         logPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -66,6 +67,8 @@ public class MainView extends javax.swing.JFrame {
         playButton5 = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
         playPause = new javax.swing.JButton();
+        repeatCheck = new javax.swing.JCheckBox();
+        songLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         new_Item = new javax.swing.JMenuItem();
@@ -145,6 +148,11 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
+        typeCombo.setBackground(new java.awt.Color(40, 44, 53));
+        typeCombo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        typeCombo.setForeground(new java.awt.Color(255, 255, 255));
+        typeCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Definicion de Pistas", "Definicion de Lista de Reproducción" }));
+
         javax.swing.GroupLayout editorPanelLayout = new javax.swing.GroupLayout(editorPanel);
         editorPanel.setLayout(editorPanelLayout);
         editorPanelLayout.setHorizontalGroup(
@@ -154,9 +162,11 @@ public class MainView extends javax.swing.JFrame {
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(editorPanelLayout.createSequentialGroup()
                         .addComponent(label_caret, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 537, Short.MAX_VALUE)
+                        .addComponent(typeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(compileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 884, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(saveTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1)
                     .addComponent(scroll))
@@ -171,7 +181,8 @@ public class MainView extends javax.swing.JFrame {
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label_caret, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(compileButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveTrack, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(typeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(38, Short.MAX_VALUE))
@@ -363,6 +374,18 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
+        repeatCheck.setBackground(new java.awt.Color(24, 26, 31));
+        repeatCheck.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        repeatCheck.setForeground(new java.awt.Color(255, 255, 255));
+        repeatCheck.setText("Repeat");
+
+        songLabel.setBackground(new java.awt.Color(24, 26, 31));
+        songLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        songLabel.setForeground(new java.awt.Color(255, 255, 255));
+        songLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        songLabel.setText("Play a Song");
+        songLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout playerPanelLayout = new javax.swing.GroupLayout(playerPanel);
         playerPanel.setLayout(playerPanelLayout);
         playerPanelLayout.setHorizontalGroup(
@@ -383,20 +406,25 @@ public class MainView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-                    .addComponent(scrollMusicList1)
+                    .addComponent(scrollMusicList1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                     .addComponent(scrollMusicList2)
                     .addGroup(playerPanelLayout.createSequentialGroup()
-                        .addComponent(playButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(playButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(playButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(playButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(playerPanelLayout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(playerPanelLayout.createSequentialGroup()
-                        .addGap(268, 268, 268)
-                        .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41))
+                        .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+                            .addComponent(songLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(41, 41, 41))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, playerPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(repeatCheck)
+                        .addGap(199, 199, 199))))
             .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(playerPanelLayout.createSequentialGroup()
                     .addGap(457, 457, 457)
@@ -424,7 +452,11 @@ public class MainView extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(scrollMusicList2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, playerPanelLayout.createSequentialGroup()
-                                .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(songLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(repeatCheck))
                                 .addGap(18, 18, 18)
                                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -661,7 +693,7 @@ public class MainView extends javax.swing.JFrame {
         log.setText("");
         saveTrack.setEnabled(false);
 
-        control.parseSource(editor.getText(), log, this);
+        control.parse(editor.getText(), this);
     }//GEN-LAST:event_compileButtonActionPerformed
 
     private void saveTrackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTrackActionPerformed
@@ -680,7 +712,7 @@ public class MainView extends javax.swing.JFrame {
     private void musicListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_musicListMouseClicked
         // TODO add your handling code here:
         JList list = (JList) evt.getSource();
-        if(evt.getClickCount() == 2) {
+        if (evt.getClickCount() == 2) {
             int index = list.locationToIndex(evt.getPoint());
             control.playSong(index, this);
         }
@@ -702,14 +734,23 @@ public class MainView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_playButton3ActionPerformed
 
+    // Para actualizar listas de reproduccion
     private void playListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_playListMouseClicked
-        // TODO add your handling code here:
+        JList list = (JList) evt.getSource();
+        if(evt.getClickCount() == 2) {
+            int index = list.locationToIndex(evt.getPoint());
+            control.updateSongsList(index, this);
+        }
     }//GEN-LAST:event_playListMouseClicked
 
     private void songsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_songsListMouseClicked
-        // TODO add your handling code here:
+        JList list = (JList) evt.getSource();
+        if(evt.getClickCount() == 2) {
+            int index = list.locationToIndex(evt.getPoint());
+            control.playPlayList(index, this);
+        }
     }//GEN-LAST:event_songsListMouseClicked
-
+    
     private void playButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_playButton4ActionPerformed
@@ -742,7 +783,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JButton compileButton;
     private javax.swing.JTextArea editor;
     private javax.swing.JPanel editorPanel;
-    private javax.swing.JTable errorTable;
+    public javax.swing.JTable errorTable;
     private javax.swing.JMenuItem exit_Item;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -755,7 +796,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel label_caret;
-    private javax.swing.JTextArea log;
+    public javax.swing.JTextArea log;
     private javax.swing.JPanel logPanel;
     public javax.swing.JList<String> musicList;
     private javax.swing.JMenuItem new_Item;
@@ -770,6 +811,7 @@ public class MainView extends javax.swing.JFrame {
     public javax.swing.JButton playPause;
     private javax.swing.JPanel playerPanel;
     public javax.swing.JProgressBar progressBar;
+    public javax.swing.JCheckBox repeatCheck;
     private javax.swing.JMenuItem saveAs_Item;
     public javax.swing.JButton saveTrack;
     private javax.swing.JMenuItem save_Item;
@@ -777,7 +819,9 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollMusicList;
     private javax.swing.JScrollPane scrollMusicList1;
     private javax.swing.JScrollPane scrollMusicList2;
+    public javax.swing.JLabel songLabel;
     public javax.swing.JList<String> songsList;
     public javax.swing.JTabbedPane tabbed;
+    public javax.swing.JComboBox<String> typeCombo;
     // End of variables declaration//GEN-END:variables
 }

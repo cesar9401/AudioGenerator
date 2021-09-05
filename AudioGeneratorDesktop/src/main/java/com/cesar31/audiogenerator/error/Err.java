@@ -8,8 +8,8 @@ public class Err {
 
     public enum TypeErr {
         LEXICO,
-        SINTACTICO,
         SEMANTICO,
+        SINTACTICO,
         EJECUCION
     }
 

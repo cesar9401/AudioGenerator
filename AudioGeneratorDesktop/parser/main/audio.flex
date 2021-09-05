@@ -1,8 +1,10 @@
-package com.cesar31.audiogenerator.parser;
+package com.cesar31.audiogenerator.parser.main;
 
-import static com.cesar31.audiogenerator.parser.AudioParserSym.*;
+import static com.cesar31.audiogenerator.parser.main.AudioParserSym.*;
 import java_cup.runtime.Symbol;
 import java.util.Stack;
+
+import com.cesar31.audiogenerator.parser.Token;
 
 %%
 
@@ -60,7 +62,7 @@ Decimal = {Integer} \. \d+
 Id = [a-zA-Z]\w*
 
 /* No match */
-Symbol = [\{\}~`@#$%&:.?¿çáäåßæéð©®þüñúµíçóøö¶«´ç»¡²³¤€¼½¾‘’¥×\w]+
+Symbol = [~`@#$%&:.?¿çáäåßæéð©®þüñúµíçóøö¶«´ç»¡²³¤€¼½¾‘’¥×\w]+
 
 /* Estados */
 %state STRING

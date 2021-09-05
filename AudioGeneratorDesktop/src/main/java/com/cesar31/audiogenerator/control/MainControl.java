@@ -1,25 +1,15 @@
 package com.cesar31.audiogenerator.control;
 
 import com.cesar31.audiogenerator.error.Err;
-import com.cesar31.audiogenerator.model.Note;
 import com.cesar31.audiogenerator.model.Song;
-import com.cesar31.audiogenerator.model.Sound;
 import com.cesar31.audiogenerator.model.Track;
+import com.cesar31.audiogenerator.playlist.Playlist;
 import com.cesar31.audiogenerator.ui.MainView;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import org.jfugue.pattern.Pattern;
-import org.jfugue.player.Player;
 
 /**
  *
@@ -27,17 +17,24 @@ import org.jfugue.player.Player;
  */
 public class MainControl {
 
-    private final String PATH = "tracks.dat";
+    private FileControl file;
     private List<Track> songs;
+    private List<Playlist> playlist;
+    private List<Track> tmpSongs;
     private Track track;
 
-    private Pattern p;
-    private int count;
+    private boolean random;
+    private boolean circular;
+
     private Song s;
     private boolean play;
 
     public MainControl() {
+        this.file = new FileControl();
         this.play = false;
+
+        this.random = false;
+        this.circular = false;
     }
 
     public void initWindow() {
@@ -48,113 +45,212 @@ public class MainControl {
         });
     }
 
+    public void parse(String input, MainView view) {
+        if (!input.isEmpty() || !input.isBlank()) {
+            int index = view.typeCombo.getSelectedIndex();
+            if (index == 0) {
+                // parser lenguaje definicion de pistas
+                parseSource(input, view);
+            } else if (index == 1) {
+                // parsear lenguaje definicion de listas
+                parseDefList(input, view);
+            }
+        }
+    }
+
     /**
-     * Enviar texto para parseo (Lenguaje principal)
+     * Parsear entrada para definicion de listas de reproduccion
+     *
+     * @param input
+     * @param view
+     */
+    private void parseDefList(String input, MainView view) {
+        PlaylistParserHandler parser = new PlaylistParserHandler(this, view);
+        List<Err> errors = parser.parseSource(input);
+
+        if (errors.isEmpty()) {
+            view.setTableErrors(new ArrayList<>());
+            Playlist newList = parser.getPlay();
+
+            List<Playlist> list = file.readPlaylists();
+            if (newList != null) {
+                boolean nameOcuped = list != null && list.contains(newList);
+                if (nameOcuped) {
+                    // Mensaje, cambiar de nombre
+                    JOptionPane.showMessageDialog(view, "El archivo ha sido compilado con exito, pero el nombre de la lista de reproduccion no esta disponible, intente con otro nombre");
+                } else {
+                    file.writePlayList(newList);
+                    String message = "Se ha guardado con exito la lista de reproduccion: " + newList.getName() + ".";
+                    JOptionPane.showMessageDialog(view, message);
+                }
+            }
+
+        } else {
+            view.setTableErrors(errors);
+            view.tabbed.setSelectedIndex(1);
+        }
+    }
+
+    /**
+     * Enviar texto para parseo (Definicion de pistas)
      *
      * @param input
      * @param log
      * @param view
      */
-    public void parseSource(String input, JTextArea log, MainView view) {
+    private void parseSource(String input, MainView view) {
         track = null;
-        if (!input.isEmpty() || !input.isBlank()) {
-            ParserHandler parser = new ParserHandler(log);
-            List<Err> errors = parser.parseSource(input);
+        ParserHandler parser = new ParserHandler(view);
+        List<Err> errors = parser.parseSource(input);
 
-            if (errors.isEmpty()) {
-                this.track = parser.getTrack();
-                List<Track> tracks = read();
-                if (track != null) {
-                    boolean nameOcuped = tracks != null && tracks.contains(track);
-                    if (nameOcuped) {
-                        // Mensaje, cambiar de nombre
-                        JOptionPane.showMessageDialog(view, "El archivo ha sido compilado con exito, pero el nombre de la pista no esta disponible, intente con otro nombre");
-                    } else {
-                        // Habilitar boton
-                        JOptionPane.showMessageDialog(view, "Archivo compilado con exito, el boton para guardar la pista se ha habilidato.");
-                        view.saveTrack.setEnabled(true);
-                    }
+        if (errors.isEmpty()) {
+            view.setTableErrors(new ArrayList<>());
+            this.track = parser.getTrack();
+            List<Track> tracks = file.read();
+            if (track != null) {
+                boolean nameOcuped = tracks != null && tracks.contains(track);
+                if (nameOcuped) {
+                    // Mensaje, cambiar de nombre
+                    JOptionPane.showMessageDialog(view, "El archivo ha sido compilado con exito, pero el nombre de la pista no esta disponible, intente con otro nombre");
+                } else {
+                    // Habilitar boton
+                    JOptionPane.showMessageDialog(view, "Archivo compilado con exito, el boton para guardar la pista se ha habilidato.");
+                    view.saveTrack.setEnabled(true);
                 }
-            } else {
-                view.setTableErrors(errors);
-                view.tabbed.setSelectedIndex(1);
             }
+        } else {
+            view.setTableErrors(errors);
+            view.tabbed.setSelectedIndex(1);
         }
     }
 
+    /**
+     * Guardar pista recien compilada
+     *
+     * @param view
+     */
     public void saveTrack(MainView view) {
         if (track != null) {
-            write(track);
+            file.write(track);
             // Se ha guardado la pista
             String message = "Se ha guardado con exito la pista: " + track.getName() + ".";
             JOptionPane.showMessageDialog(view, message);
         }
     }
 
-    private void write(Track tmp) {
-        List<Track> tracks = read();
-        if (tracks == null) {
-            tracks = new ArrayList<>();
-        }
-        tracks.add(tmp);
-        System.out.println("Tracks -> " + tracks.size());
-        // Escribir aqui
-        try {
-            try ( ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(this.PATH))) {
-                file.writeObject(tracks);
-            }
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace(System.out);
-        } catch (IOException ex) {
-            ex.printStackTrace(System.out);
-        }
-    }
-
-    private List<Track> read() {
-        try {
-            try ( ObjectInputStream file = new ObjectInputStream(new FileInputStream(this.PATH))) {
-                List<Track> tracks = (List<Track>) file.readObject();
-                return tracks;
-            }
-        } catch (FileNotFoundException ex) {
-            // ex.printStackTrace(System.out);
-            System.out.println("No se encontro archivo, enviando null");
-            return null;
-        } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace(System.out);
-        }
-
-        return null;
-    }
-
+    /**
+     * Escribir todas las canciones en la base de datos
+     *
+     * @param tmp
+     */
+    /**
+     * Actualizar canciones en biblioteca
+     *
+     * @param view
+     */
     public void updateSongs(MainView view) {
-        // Reproductor
+        // Actualizar listado en reproductor
         if (view.tabbed.getSelectedIndex() == 2) {
-            songs = read();
+            songs = file.read();
             if (songs != null) {
                 DefaultListModel model = new DefaultListModel();
-                songs.forEach(song -> model.addElement(song.getName()));
+                songs.forEach(song -> model.addElement(song.getName() + "  -  " + (int) Math.floor(song.getDuration() / 1000d) + " seg"));
                 view.musicList.setModel(model);
+            }
+
+            playlist = file.readPlaylists();
+            if (playlist != null) {
+                DefaultListModel model = new DefaultListModel();
+                playlist.forEach(list -> {
+                    String in = list.getName() + " (";
+                    in += list.isCircular() ? "C" : "";
+                    in += list.isRandom() ? "R" : "";
+                    in += " " + list.getPlaylist().size() + " canciones)";
+                    model.addElement(in);
+                });
+                view.playList.setModel(model);
             }
         }
     }
 
+    /**
+     * Actualizar listado de canciones al hacer doble click en lista de
+     * reproduccion
+     *
+     * @param index
+     * @param view
+     */
+    public void updateSongsList(int index, MainView view) {
+        if (index != -1) {
+            if (playlist != null) {
+                Playlist tmp = playlist.get(index);
+                if (tmp != null) {
+                    this.random = tmp.isRandom();
+                    this.circular = tmp.isCircular();
+
+                    tmpSongs = getList(tmp);
+                    DefaultListModel model = new DefaultListModel();
+                    tmpSongs.forEach(song -> model.addElement(song.getName() + "  -  " + (int) Math.floor(song.getDuration() / 1000d) + " seg"));
+                    view.songsList.setModel(model);
+                }
+            }
+        }
+    }
+
+    /**
+     * Obtener un listado
+     *
+     * @param tmp
+     * @return
+     */
+    private List<Track> getList(Playlist tmp) {
+        List<Track> list = file.read();
+        List<Track> myList = new ArrayList<>();
+
+        if (list != null) {
+            for (String s : tmp.getPlaylist()) {
+                Optional<Track> opt = list.stream().filter(t -> t.getName().equals(s)).findFirst();
+                if (opt.isPresent()) {
+                    myList.add(opt.get());
+                }
+            }
+        }
+
+        return myList;
+    }
+
+    /**
+     * Reproducir lista actual
+     *
+     * @param index
+     * @param view
+     */
     public void playSong(int index, MainView view) {
         if (index != -1) {
+            //System.out.println(index);
             if (songs != null) {
-                Track tmp = songs.get(index);
-                System.out.println("Duration: " + tmp.getDuration());
-                List<Sound> sounds = tmp.getSounds();
-
-                List<Note> notes = renderSounds(sounds);
-
-                if(s != null && s.isAlive()) {
+                if (s != null && s.isAlive()) {
                     s.stop();
                 }
-                
+
                 play = true;
                 view.playPause.setText("Pause");
-                s = new Song(notes, view.progressBar, tmp.getDuration());
+                s = new Song(index, songs, false, false, view);
+                s.start();
+            }
+        }
+    }
+
+    public void playPlayList(int index, MainView view) {
+        if (index != -1) {
+            if (tmpSongs != null) {
+                if (s != null && s.isAlive()) {
+                    s.stop();
+                }
+
+                play = true;
+                view.playPause.setText("Pause");
+                s = new Song(index, tmpSongs, this.random, this.circular, view);
                 s.start();
             }
         }
@@ -180,59 +276,11 @@ public class MainControl {
         }
     }
 
-    // Renderizar notas
-    private List<Note> renderSounds(List<Sound> sounds) {
-        List<Note> notes = new ArrayList<>();
-        HashMap<Integer, String> map = new HashMap<>();
-        for (Sound s : sounds) {
-            double milli = s.getMilliseconds() / 1000d;
-            String note = s.getNote() + s.getEighth() + "/" + milli + " ";
-            if (!map.containsKey(s.getChannel())) {
-                map.put(s.getChannel(), note);
-            } else {
-                note = map.get(s.getChannel()) + note;
-                map.put(s.getChannel(), note);
-            }
-        }
-
-        count = 0;
-        p = new Pattern();
-        map.forEach((key, note) -> {
-            String s = "T240 v" + count + " " + getInstrument(count) + " " + note + " ";
-            // System.out.println(s);
-            p.add(s);
-            count++;
-
-            if (count == 16) {
-                count = 0;
-                // Agregar a pattern a nota
-                notes.add(new Note(new Player(), p));
-                p = new Pattern();
-            }
-        });
-
-        if (count != 0) {
-            notes.add(new Note(new Player(), p));
-            //System.out.println(p.toString());
-        }
-
-        return notes;
-    }
-
-    /**
-     * Obtener instrumento
-     *
-     * @param n indice del instrumento a obtener
-     * @return
-     */
-    private String getInstrument(int n) {
-        String[] i = {"ROCK_ORGAN", "TRUMPET", "ACOUSTIC_BASS", "VIOLIN", "CLARINET", "FLUTE", "BANJO", "STEEL_STRING_GUITAR",
-            "ELECTRIC_JAZZ_GUITAR", "ELECTRIC_CLEAN_GUITAR", "TROMBONE", "TUBA", "PIANO", "GUITAR", "ELECTRIC_PIANO", "MARIMBA"};
-
-        return "I[" + i[n] + "]";
-    }
-
     public Track getTrack() {
         return track;
+    }
+
+    public FileControl getFile() {
+        return file;
     }
 }

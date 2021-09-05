@@ -1,15 +1,19 @@
 package com.cesar31.audiogenerator.control;
 
+import com.cesar31.audiogenerator.parser.main.AudioParser;
+import com.cesar31.audiogenerator.parser.main.AudioLex;
 import com.cesar31.audiogenerator.model.Track;
 import com.cesar31.audiogenerator.error.Err;
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.model.Sound;
 import com.cesar31.audiogenerator.parser.*;
+import com.cesar31.audiogenerator.ui.MainView;
 import java.io.StringReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 /**
@@ -18,11 +22,13 @@ import javax.swing.JTextArea;
  */
 public class ParserHandler {
 
+    private MainView view;
     private JTextArea log;
     private Track track;
 
-    public ParserHandler(JTextArea log) {
-        this.log = log;
+    public ParserHandler(MainView view) {
+        this.view = view;
+        this.log = this.view.log;
     }
 
     public List<Err> parseSource(String data) {
@@ -100,6 +106,7 @@ public class ParserHandler {
                 }
             }
         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(view, "No es posible compilar, por favor verifique su codigo fuente.");
             ex.printStackTrace(System.out);
         }
 

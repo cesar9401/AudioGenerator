@@ -1,0 +1,209 @@
+package com.cesar31.audiogenerator.parser.playlist;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cesar31.audiogenerator.parser.Token;
+import com.cesar31.audiogenerator.playlist.*;
+import com.cesar31.audiogenerator.error.*;
+
+class PlaylistParser;
+
+parser code {:
+    private ErrorHandler errorHandler;
+    private Token info;
+
+    public PlaylistParser(PlaylistLex lex) {
+        super(lex);
+		this.errorHandler = new ErrorHandler();
+    }
+
+    public Token getInfo() {
+        return this.info;
+    }
+
+	public List<Err> getErrors() {
+		return this.errorHandler.getErrors();
+	}
+
+    public void syntax_error(Symbol cur_token) {
+		List<String> expected = new ArrayList<>();
+		List<Integer> tokens = expected_token_ids();
+
+		// System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		for(Integer i : tokens) {
+			expected.add(symbl_name_from_id(i));
+			// System.out.printf("%s, ", symbl_name_from_id(i));
+		}
+		this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+	}
+
+	public void report_fatal_error(String message, Object info) {
+		System.out.println("message: " + message);
+		System.out.println("info: " + info);
+	}
+
+    protected int error_sync_size() {
+        return 1;
+    }
+:}
+
+terminal Token LIST, NAME, RANDOM, CIRCULAR, TRACKS, TRUE, FALSE, ID;
+terminal Token COLON, COMMA, LBRACE, RBRACE, LBRACKET, RBRACKET, STR;
+terminal Token SYM, ERROR;
+
+non terminal Boolean boolean_val;
+non terminal Token id;
+non terminal List<Token> list_id, tracks_list, tracks_l;
+non terminal Option random, circular;
+non terminal Name name;
+non terminal TrackList tracks;
+non terminal MusicList option;
+non terminal List<MusicList> options, list, playlist;
+
+playlist ::=
+            LBRACE:token list:list RBRACE
+                {: info = token; RESULT = list; :}
+
+            // Errores
+            | error list:list RBRACE
+            | LBRACE error RBRACE
+            | LBRACE list:list error
+            // Errores
+            ;
+
+list ::=
+            LIST COLON LBRACE options:list RBRACE
+                {: RESULT = list; :}
+
+            // Errores
+            | error COLON LBRACE options:list RBRACE
+            | LIST error LBRACE options:list RBRACE
+            | LIST COLON error options:list RBRACE
+            // Errores
+            ;
+
+options ::=
+            options:list COMMA option:opt
+                {:
+                    RESULT = list;
+                    if(opt != null) {
+                        RESULT.add(opt);
+                    }
+                :}
+            | option:opt
+                {:
+                    RESULT = new ArrayList<>();
+                    if(opt != null) {
+                        RESULT.add(opt);
+                    }
+                :}
+            ;
+
+option ::=
+            name:name {: RESULT = name; :}
+            | random:random {: RESULT = random; :}
+            | circular:circular {: RESULT = circular; :}
+            | tracks:tracks {: RESULT = tracks; :}
+            | error
+            ;
+
+name ::=
+            NAME:info COLON STR:name
+                {: RESULT = new Name(info, name.getValue()); :}
+
+            // Errores
+            | error COLON STR:name
+            | NAME:info error STR:name
+            | NAME:info COLON error
+            // Errores
+            ;
+
+random ::=
+            RANDOM:info COLON boolean_val:value
+                {:
+                    if(value != null) {
+                        RESULT = new Option(info, Option.Type.RANDOM, value);
+                    }
+                :}
+
+            // Errores
+            | RANDOM:info error boolean_val:value
+            // Errores
+            ;
+
+circular ::=
+            CIRCULAR:info COLON boolean_val:value
+                {:
+                    if(value != null) {
+                        RESULT = new Option(info, Option.Type.CIRCULAR, value);
+                    }
+                :}
+
+            // Errores
+            | CIRCULAR:info error boolean_val:value
+            // Errores
+            ;
+
+boolean_val ::=
+            TRUE {: RESULT = true; :}
+            | FALSE {: RESULT = false; :}
+
+            // Errores
+            | error {: RESULT = null; :}
+            // Errores
+            ;
+
+tracks ::=
+            TRACKS:info COLON tracks_l:list
+                {: RESULT = new TrackList(info, list); :}
+
+            // Errores
+            | error COLON tracks_l:list
+            | TRACKS:info error tracks_l:list
+            // Errores
+            ;
+
+tracks_l ::=
+            LBRACKET tracks_list:list RBRACKET
+                {: RESULT = list; :}
+
+            // Errores
+            | error tracks_list:list RBRACKET
+            | error
+            // Errores
+            ;
+
+tracks_list ::=
+            list_id:list {: RESULT = list; :}
+            | {: RESULT = new ArrayList<>(); :}
+            ;
+
+list_id ::=
+            list_id:list COMMA id:token
+                {:
+                    RESULT = list;
+                    if(token != null) {
+                        RESULT.add(token);
+                    }
+                :}
+            | id:token
+                {:
+                    RESULT = new ArrayList<>();
+                    if(token != null) {
+                        RESULT.add(token);
+                    }
+                :}
+            ;
+
+id ::=
+            ID:t {: RESULT = t; :}
+            | LIST:t {: RESULT = t; :}
+            | NAME:t {: RESULT = t; :}
+            | RANDOM:t {: RESULT = t; :}
+            | CIRCULAR:t {: RESULT = t; :}
+            | TRUE:t {: RESULT = t; :}
+            | FALSE:t {: RESULT = t; :}
+            | error
+            ;

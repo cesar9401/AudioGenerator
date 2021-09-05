@@ -1,11 +1,13 @@
 
-package com.cesar31.audiogenerator.parser;
+package com.cesar31.audiogenerator.parser.main;
+
 
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.reflect.Array;
 
+import com.cesar31.audiogenerator.parser.Token;
 import com.cesar31.audiogenerator.instruction.*;
 import com.cesar31.audiogenerator.error.*;
 
@@ -41,6 +43,11 @@ parser code {:
 			// System.out.printf("%s, ", symbl_name_from_id(i));
 		}
 		this.errorHandler.setError((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+	}
+
+	public void report_fatal_error(String message, Object info) {
+		System.out.println("message: " + message);
+		System.out.println("info: " + info);
 	}
 
 	protected int error_sync_size() {

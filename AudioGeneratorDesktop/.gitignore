@@ -1,11 +1,14 @@
 # sh files and some java files
-parser/*.sh
-parser/*.java~
-parser/*.java
+parser/*/*.sh
+parser/*/*.java~
+parser/*/*.java
 
-# input files examples and db
+# input files examples
 input_files/
+
+# Files for database
 tracks.dat
+playlists.dat
 
 # Eclipse
 .settings/
