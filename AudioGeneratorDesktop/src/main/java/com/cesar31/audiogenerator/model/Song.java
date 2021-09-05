@@ -1,9 +1,7 @@
 package com.cesar31.audiogenerator.model;
 
-import com.cesar31.audiogenerator.control.Position;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JProgressBar;
 import org.jfugue.player.Player;
 
 /**
@@ -12,11 +10,15 @@ import org.jfugue.player.Player;
  */
 public class Song extends Thread {
 
-    private List<Note> notes;
-    private Position pos;
+    protected int duration;
+    protected List<Note> notes;
+    protected JProgressBar bar;
 
-    public Song(List<Note> notes) {
+    public Song(List<Note> notes, JProgressBar bar, double duration) {
         this.notes = notes;
+        this.bar = bar;
+        this.duration = (int) (duration / 1000);
+        initValues();
     }
 
     @Override
@@ -26,19 +28,35 @@ public class Song extends Thread {
         }
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(500);
         } catch (InterruptedException ex) {
             ex.printStackTrace(System.out);
         }
-        
         while (getPlayer().getManagedPlayer().isPlaying()) {
             try {
-                long time = (long) (getPlayer().getManagedPlayer().getTickPosition() / (double) getPlayer().getManagedPlayer().getTickLength() * 100d);
+                int time = (int) (getPlayer().getManagedPlayer().getTickPosition() * this.duration / getPlayer().getManagedPlayer().getTickLength());
                 System.out.println(time);
-                Thread.sleep(500);
+                bar.setValue(time);
+                bar.setString(time + " s");
+                bar.setStringPainted(true);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 ex.printStackTrace(System.out);
             }
+            
+            while(getPlayer().getManagedPlayer().isPaused()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace(System.out);
+                }
+            }
+        }
+
+        if (getPlayer().getManagedPlayer().isFinished()) {
+            bar.setValue(this.duration);
+            bar.setString(this.duration + " s");
+            bar.setStringPainted(true);
         }
     }
 
@@ -47,12 +65,19 @@ public class Song extends Thread {
             n.pause();
         }
     }
+    
+    public void play() {
+        getPlayer().getManagedPlayer().resume();
+    }
+
+    public void initValues() {
+        this.bar.setValue(0);
+        this.bar.setString("0 s");
+        this.bar.setStringPainted(true);
+        this.bar.setMaximum(this.duration);
+    }
 
     public Player getPlayer() {
         return notes.get(0).getPlayer();
-    }
-
-    public void setPos(Position pos) {
-        this.pos = pos;
     }
 }

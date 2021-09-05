@@ -19,7 +19,6 @@ public class Note extends Thread {
 
     @Override
     public void run() {
-        // this.player.delayPlay(2500, pattern);
         this.player.play(this.pattern);
     }
 
@@ -28,21 +27,21 @@ public class Note extends Thread {
     }
 
     public void pause() {
-        //this.player.getManagedPlayer().pause();
+        this.player.getManagedPlayer().pause();
         // long pos = 6000;
         // long time = pos * this.player.getManagedPlayer().getTickLength() / 12000;
         // this.player.getManagedPlayer().seek(time);
 
-        System.out.println(this.player.getManagedPlayer().getTickPosition());
-        System.out.println(this.player.getManagedPlayer().isPaused());
-        System.out.println(this.player.getManagedPlayer().isStarted());
-        System.out.println(this.player.getManagedPlayer().isFinished());
+        //System.out.println(this.player.getManagedPlayer().getTickPosition());
+        //System.out.println(this.player.getManagedPlayer().isPaused());
+        //System.out.println(this.player.getManagedPlayer().isStarted());
+        //System.out.println(this.player.getManagedPlayer().isFinished());
     }
 
     public long getPosition() {
-        return (long)(this.player.getManagedPlayer().getTickPosition()/(double)this.player.getManagedPlayer().getTickLength() * 100d);
+        return (long) (this.player.getManagedPlayer().getTickPosition() / (double) this.player.getManagedPlayer().getTickLength() * 100d);
     }
-    
+
     public Player getPlayer() {
         return player;
     }

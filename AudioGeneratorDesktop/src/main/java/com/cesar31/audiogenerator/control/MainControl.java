@@ -34,9 +34,10 @@ public class MainControl {
     private Pattern p;
     private int count;
     private Song s;
-    private Position pos;
+    private boolean play;
 
     public MainControl() {
+        this.play = false;
     }
 
     public void initWindow() {
@@ -83,8 +84,10 @@ public class MainControl {
 
     public void saveTrack(MainView view) {
         if (track != null) {
-            System.out.println("Guardar pista aqui :v");
             write(track);
+            // Se ha guardado la pista
+            String message = "Se ha guardado con exito la pista: " + track.getName() + ".";
+            JOptionPane.showMessageDialog(view, message);
         }
     }
 
@@ -136,30 +139,49 @@ public class MainControl {
         }
     }
 
-    public void playSong(int index) {
+    public void playSong(int index, MainView view) {
         if (index != -1) {
             if (songs != null) {
                 Track tmp = songs.get(index);
                 System.out.println("Duration: " + tmp.getDuration());
                 List<Sound> sounds = tmp.getSounds();
 
-                s = renderSounds(sounds);
-                pos = new Position(s.getPlayer());
+                List<Note> notes = renderSounds(sounds);
+
+                if(s != null && s.isAlive()) {
+                    s.stop();
+                }
                 
-                //s.setPos(pos);
-                
+                play = true;
+                view.playPause.setText("Pause");
+                s = new Song(notes, view.progressBar, tmp.getDuration());
                 s.start();
-                //System.out.println("here");
-                //pos.start();
             }
         }
     }
 
-    public void pause() {
-        pos.start();
+    /**
+     * Play or Pause
+     *
+     * @param view
+     */
+    public void play(MainView view) {
+        // Resume
+        if (s != null && s.isAlive()) {
+            if (play) {
+                play = !play;
+                view.playPause.setText("Play");
+                s.pause();
+            } else {
+                play = !play;
+                view.playPause.setText("Pause");
+                s.play();
+            }
+        }
     }
 
-    private Song renderSounds(List<Sound> sounds) {
+    // Renderizar notas
+    private List<Note> renderSounds(List<Sound> sounds) {
         List<Note> notes = new ArrayList<>();
         HashMap<Integer, String> map = new HashMap<>();
         for (Sound s : sounds) {
@@ -194,7 +216,7 @@ public class MainControl {
             //System.out.println(p.toString());
         }
 
-        return new Song(notes);
+        return notes;
     }
 
     /**

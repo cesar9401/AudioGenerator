@@ -65,6 +65,7 @@ public class MainView extends javax.swing.JFrame {
         playButton4 = new javax.swing.JButton();
         playButton5 = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
+        playPause = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         new_Item = new javax.swing.JMenuItem();
@@ -349,6 +350,19 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
+        progressBar.setBackground(new java.awt.Color(40, 44, 53));
+        progressBar.setForeground(new java.awt.Color(9, 177, 80));
+
+        playPause.setBackground(new java.awt.Color(40, 180, 99));
+        playPause.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        playPause.setForeground(new java.awt.Color(24, 26, 31));
+        playPause.setText("Play");
+        playPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playPauseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout playerPanelLayout = new javax.swing.GroupLayout(playerPanel);
         playerPanel.setLayout(playerPanelLayout);
         playerPanelLayout.setHorizontalGroup(
@@ -375,8 +389,13 @@ public class MainView extends javax.swing.JFrame {
                         .addComponent(playButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(playButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(43, 43, 43)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(playerPanelLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(playerPanelLayout.createSequentialGroup()
+                        .addGap(268, 268, 268)
+                        .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(41, 41, 41))
             .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(playerPanelLayout.createSequentialGroup()
@@ -404,7 +423,10 @@ public class MainView extends javax.swing.JFrame {
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(scrollMusicList2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(progressBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, playerPanelLayout.createSequentialGroup()
+                                .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(playButton)
@@ -660,13 +682,12 @@ public class MainView extends javax.swing.JFrame {
         JList list = (JList) evt.getSource();
         if(evt.getClickCount() == 2) {
             int index = list.locationToIndex(evt.getPoint());
-            control.playSong(index);
+            control.playSong(index, this);
         }
     }//GEN-LAST:event_musicListMouseClicked
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
-        // TODO add your handling code here:
-        control.pause();
+        // control.play();
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void playButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton1ActionPerformed
@@ -694,8 +715,11 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_playButton4ActionPerformed
 
     private void playButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton5ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_playButton5ActionPerformed
+
+    private void playPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playPauseActionPerformed
+        control.play(this);
+    }//GEN-LAST:event_playPauseActionPerformed
 
     /**
      * Guardar como
@@ -743,8 +767,9 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JButton playButton4;
     private javax.swing.JButton playButton5;
     public javax.swing.JList<String> playList;
+    public javax.swing.JButton playPause;
     private javax.swing.JPanel playerPanel;
-    private javax.swing.JProgressBar progressBar;
+    public javax.swing.JProgressBar progressBar;
     private javax.swing.JMenuItem saveAs_Item;
     public javax.swing.JButton saveTrack;
     private javax.swing.JMenuItem save_Item;

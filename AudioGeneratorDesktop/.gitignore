@@ -3,8 +3,9 @@ parser/*.sh
 parser/*.java~
 parser/*.java
 
-# input files examples
+# input files examples and db
 input_files/
+tracks.dat
 
 # Eclipse
 .settings/
