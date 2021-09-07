@@ -1,0 +1,130 @@
+package com.cesar31.audiogenerator.parser.request;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cesar31.audiogenerator.request.*;
+import com.cesar31.audiogenerator.parser.Token;
+import com.cesar31.audiogenerator.error.*;
+
+class RequestParser;
+
+parser code {:
+    private ErrorHandler errorHandler;
+    private Token info;
+
+    public RequestParser(RequestLex lex) {
+        super(lex);
+		this.errorHandler = new ErrorHandler();
+    }
+
+    public Token getInfo() {
+        return this.info;
+    }
+
+    public List<Err> getErrors() {
+		return this.errorHandler.getErrors();
+	}
+
+    public void syntax_error(Symbol cur_token) {
+		List<String> expected = new ArrayList<>();
+		List<Integer> tokens = expected_token_ids();
+
+		System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		for(Integer i : tokens) {
+			expected.add(symbl_name_from_id(i));
+			System.out.printf("%s, ", symbl_name_from_id(i));
+		}
+        System.out.println();
+		//this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+	}
+
+	public void report_fatal_error(String message, Object info) {
+		System.out.println("message: " + message);
+		System.out.println("info: " + info);
+	}
+
+    protected int error_sync_size() {
+        return 1;
+    }
+:}
+
+terminal Token REQUEST, TYPE, NAME, LIST, TRACK, ID, GREATER, SMALLER, DIVIDE, STR;
+terminal Token ERROR;
+
+non terminal Token cl_type, cl_name, cl_request;
+non terminal Token op_type, op_name, op_request;
+non terminal RequestName name;
+non terminal Type type;
+non terminal Request option;
+non terminal List<Request> options, request;
+
+request ::=
+            op_request:token options:list cl_request
+                {: info = token; RESULT = list; :}
+            ;
+
+options ::=
+            options:list option:op
+                {:
+                    RESULT = list;
+                    if(op != null) {
+                        RESULT.add(op);
+                    }
+                :}
+            | option:op
+                {:
+                    RESULT = new ArrayList<>();
+                    if(op != null) {
+                        RESULT.add(op);
+                    }
+                :}
+            ;
+
+option ::=
+            type:type {: RESULT = type; :}
+            | name:name {: RESULT = name; :}
+            ;
+
+type ::=
+            op_type:info LIST:token cl_type
+                {: RESULT = new Type(info, token); :}
+            | op_type:info TRACK:token cl_type
+                {: RESULT = new Type(info, token); :}
+            ;
+
+name ::=
+            op_name:info STR:token cl_name
+                {: RESULT = new RequestName(info, token); :}
+            ;
+
+op_type ::=
+            SMALLER:info TYPE GREATER
+                {: RESULT = info; :}
+            ;
+
+cl_type ::=
+            SMALLER:info DIVIDE TYPE GREATER
+                {: RESULT = info; :}
+            ;
+
+op_name ::=
+            SMALLER:info NAME GREATER
+                {: RESULT = info; :}
+            ;
+
+cl_name ::=
+            SMALLER:info DIVIDE NAME GREATER
+                {: RESULT = info; :}
+            ;
+
+op_request ::=
+            SMALLER:info REQUEST GREATER
+                {: RESULT = info; :}
+            ;
+
+cl_request ::=
+            SMALLER:info DIVIDE REQUEST GREATER
+                {: RESULT = info; :}
+            ;
