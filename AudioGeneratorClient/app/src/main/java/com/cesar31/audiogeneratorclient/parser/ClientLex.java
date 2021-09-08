@@ -620,7 +620,7 @@ public class ClientLex implements java_cup.runtime.Scanner {
   private void zzDoEOF() throws java.io.IOException {
     if (!zzEOFDone) {
       zzEOFDone = true;
-    
+
   yyclose();    }
   }
 

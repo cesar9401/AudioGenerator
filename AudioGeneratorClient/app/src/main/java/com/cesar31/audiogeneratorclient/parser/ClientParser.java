@@ -5,6 +5,7 @@
 
 package com.cesar31.audiogeneratorclient.parser;
 
+import com.cesar31.audiogeneratorclient.model.*;
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +46,14 @@ public class ClientParser extends java_cup.runtime.lr_parser {
     "\003\000\002\043\005\000\002\044\006\000\002\042\005" +
     "\000\002\034\004\000\002\034\003\000\002\033\007\000" +
     "\002\036\005\000\002\035\005\000\002\031\005\000\002" +
-    "\032\006\000\002\010\005\000\002\030\004\000\002\030" +
-    "\003\000\002\007\005\000\002\027\007\000\002\002\005" +
-    "\000\002\003\005\000\002\004\005\000\002\005\005\000" +
-    "\002\006\005\000\002\011\005\000\002\012\005\000\002" +
-    "\013\005\000\002\014\005\000\002\015\005\000\002\016" +
-    "\005\000\002\017\005\000\002\020\006\000\002\021\006" +
-    "\000\002\022\006\000\002\023\006\000\002\024\006\000" +
-    "\002\025\006\000\002\026\006" });
+    "\032\006\000\002\012\005\000\002\011\004\000\002\011" +
+    "\003\000\002\010\005\000\002\007\007\000\002\002\005" +
+    "\000\002\005\005\000\002\006\005\000\002\003\005\000" +
+    "\002\004\005\000\002\013\005\000\002\014\005\000\002" +
+    "\015\005\000\002\016\005\000\002\017\005\000\002\020" +
+    "\005\000\002\021\005\000\002\022\006\000\002\023\006" +
+    "\000\002\024\006\000\002\025\006\000\002\026\006\000" +
+    "\002\027\006\000\002\030\006" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -152,12 +153,12 @@ public class ClientParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\261\000\030\010\016\017\010\031\006\033\005\042" +
+    "\000\261\000\030\012\016\021\010\031\006\033\005\042" +
     "\014\043\015\046\012\050\013\052\003\063\011\065\007" +
     "\001\001\000\002\001\001\000\002\001\001\000\010\057" +
     "\216\061\214\062\217\001\001\000\006\033\054\034\206" +
-    "\001\001\000\002\001\001\000\010\007\076\016\077\030" +
-    "\074\001\001\000\002\001\001\000\006\033\054\034\056" +
+    "\001\001\000\002\001\001\000\010\010\076\011\074\020" +
+    "\077\001\001\000\002\001\001\000\006\033\054\034\056" +
     "\001\001\000\002\001\001\000\002\001\001\000\006\046" +
     "\017\047\020\001\001\000\002\001\001\000\002\001\001" +
     "\000\006\044\050\046\046\001\001\000\002\001\001\000" +
@@ -175,27 +176,27 @@ public class ClientParser extends java_cup.runtime.lr_parser {
     "\000\004\036\066\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\004\035\070\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\010\007\200\016\077\026\177" +
+    "\001\000\002\001\001\000\010\010\200\020\077\030\177" +
     "\001\001\000\002\001\001\000\002\001\001\000\010\002" +
-    "\101\011\103\027\100\001\001\000\004\025\170\001\001" +
-    "\000\006\003\114\012\115\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\020\105\001\001\000\002\001\001" +
+    "\101\007\100\013\103\001\001\000\004\027\170\001\001" +
+    "\000\006\005\114\014\115\001\001\000\002\001\001\000" +
+    "\002\001\001\000\004\022\105\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\006" +
-    "\004\130\013\127\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\004\021\123" +
+    "\006\130\015\127\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\004\023\123" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\006\005\134\014\135\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\006\006\151\015\147" +
+    "\000\006\003\134\016\135\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\006\004\151\017\147" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\004\023\142\001\001\000\002" +
+    "\001\000\002\001\001\000\004\025\142\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\004\024\155\001\001\000\002\001\001\000\002\001\001" +
+    "\004\026\155\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\004\022\164\001\001\000\002\001\001\000\002\001\001" +
+    "\004\024\164\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
@@ -256,9 +257,17 @@ public class ClientParser extends java_cup.runtime.lr_parser {
 
 
 
+
+    private List<Err> errors;
+
     public ClientParser(ClientLex lex) {
         super(lex);
     }
+
+    public List<Err> getErrors() {
+        return errors;
+    }
+
     public void syntax_error(Symbol cur_token) {
 		List<String> expected = new ArrayList<>();
 		List<Integer> tokens = expected_token_ids();
@@ -360,6 +369,9 @@ class CUP$ClientParser$actions {
           case 5: // client ::= errors 
             {
               Object RESULT =null;
+		int list_errleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).left;
+		int list_errright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).right;
+		List<Err> list_err = (List<Err>)((java_cup.runtime.Symbol) CUP$ClientParser$stack.peek()).value;
 
               CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("client",51, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
@@ -680,56 +692,86 @@ class CUP$ClientParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 39: // errors ::= op_errors error_list cl_errors 
             {
-              Object RESULT =null;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("errors",6, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              List<Err> RESULT =null;
+		int listleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
+		int listright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
+		List<Err> list = (List<Err>)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
+		 RESULT = list; 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("errors",8, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 40: // error_list ::= error_list err 
             {
-              Object RESULT =null;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("error_list",22, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              List<Err> RESULT =null;
+		int listleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
+		int listright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
+		List<Err> list = (List<Err>)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).right;
+		Err e = (Err)((java_cup.runtime.Symbol) CUP$ClientParser$stack.peek()).value;
+		 RESULT = list; RESULT.add(e); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("error_list",7, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 41: // error_list ::= err 
             {
-              Object RESULT =null;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("error_list",22, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              List<Err> RESULT =null;
+		int eleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).right;
+		Err e = (Err)((java_cup.runtime.Symbol) CUP$ClientParser$stack.peek()).value;
+		 RESULT = new ArrayList<>(); RESULT.add(e); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("error_list",7, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 42: // err ::= op_error error_options cl_error 
             {
-              Object RESULT =null;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("err",5, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              Err RESULT =null;
+		int errleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
+		int errright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
+		Err err = (Err)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
+		 RESULT = err; 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("err",6, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 43: // error_options ::= type line column lex desc 
             {
-              Object RESULT =null;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("error_options",21, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-4)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              Err RESULT =null;
+		int aleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-4)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-4)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-4)).value;
+		int bleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)).right;
+		Integer b = (Integer)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)).value;
+		int cleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)).right;
+		Integer c = (Integer)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)).value;
+		int dleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
+		int dright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
+		String d = (String)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
+		int eleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()).right;
+		String e = (String)((java_cup.runtime.Symbol) CUP$ClientParser$stack.peek()).value;
+		 RESULT = new Err(a, b, c, d, e); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("error_options",5, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-4)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 44: // type ::= op_type TYPE_E cl_type 
             {
-              Object RESULT =null;
+              String RESULT =null;
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
-
+		 RESULT = token.getValue(); 
               CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("type",0, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
@@ -737,48 +779,48 @@ class CUP$ClientParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 45: // line ::= op_line INTEGER cl_line 
             {
-              Object RESULT =null;
+              Integer RESULT =null;
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("line",1, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+		 RESULT = Integer.valueOf(token.getValue()); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("line",3, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 46: // column ::= op_column INTEGER cl_column 
             {
-              Object RESULT =null;
+              Integer RESULT =null;
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("column",2, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+		 RESULT = Integer.valueOf(token.getValue()); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("column",4, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 47: // lex ::= op_lex STR cl_lex 
             {
-              Object RESULT =null;
+              String RESULT =null;
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("lex",3, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+		 RESULT = token.getValue(); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("lex",1, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 48: // desc ::= op_desc STR cl_desc 
             {
-              Object RESULT =null;
+              String RESULT =null;
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-1)).value;
-
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("desc",4, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+		 RESULT = token.getValue(); 
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("desc",2, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -787,7 +829,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_type",7, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_type",9, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -796,7 +838,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_line",8, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_line",10, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -805,7 +847,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_column",9, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_column",11, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -814,7 +856,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_lex",10, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_lex",12, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -823,7 +865,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_desc",11, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_desc",13, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -832,7 +874,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_error",12, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_error",14, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -841,7 +883,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_errors",13, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("op_errors",15, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-2)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -850,7 +892,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_type",14, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_type",16, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -859,7 +901,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_line",15, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_line",17, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -868,7 +910,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_column",16, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_column",18, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -877,7 +919,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_lex",17, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_lex",19, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -886,7 +928,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_desc",18, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_desc",20, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -895,7 +937,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_error",19, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_error",21, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 
@@ -904,7 +946,7 @@ class CUP$ClientParser$actions {
             {
               Object RESULT =null;
 
-              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_errors",20, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
+              CUP$ClientParser$result = parser.getSymbolFactory().newSymbol("cl_errors",22, ((java_cup.runtime.Symbol)CUP$ClientParser$stack.elementAt(CUP$ClientParser$top-3)), ((java_cup.runtime.Symbol)CUP$ClientParser$stack.peek()), RESULT);
             }
           return CUP$ClientParser$result;
 

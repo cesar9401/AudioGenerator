@@ -1,5 +1,7 @@
 package com.cesar31.audiogeneratorclient.parser;
 
+import com.cesar31.audiogeneratorclient.model.*;
+
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +9,17 @@ import java.util.List;
 class ClientParser;
 
 parser code {:
+
+    private List<Err> errors;
+
     public ClientParser(ClientLex lex) {
         super(lex);
     }
+
+    public List<Err> getErrors() {
+        return errors;
+    }
+
     public void syntax_error(Symbol cur_token) {
 		List<String> expected = new ArrayList<>();
 		List<Integer> tokens = expected_token_ids();
@@ -38,10 +48,13 @@ terminal Token LISTS, LIST, RANDOM, CIRCULAR, TRUE, FALSE, CHANNEL, NOTE, NUMBER
 terminal Token INTEGER, DECIMAL, STR;
 terminal Token UNKNOWN;
 
-non terminal type, line, column, lex, desc, err, errors;
+non terminal String type, lex, desc;
+non terminal Integer line, column;
+non terminal Err error_options, err;
+non terminal List<Err> error_list, errors;
+
 non terminal op_type, op_line, op_column, op_lex, op_desc, op_error, op_errors;
 non terminal cl_type, cl_line, cl_column, cl_lex, cl_desc, cl_error, cl_errors;
-non terminal error_options, error_list;
 non terminal op_tracks, cl_tracks, track, track_list;
 non terminal duration, name, random, circular, boolean_value, tracks;
 non terminal op_lists, cl_lists, number_tracks, list_item, list_list, list;
@@ -57,7 +70,7 @@ client ::=
             | tracks // Todas las pistas
             | list_tracks // Respuesta de lista por nombre
             | track_notes // Respuesta notas de una pista
-            | errors // Respuesta de errores
+            | errors:list_err // Respuesta de errores
             ;
 // opciones
 
@@ -184,40 +197,50 @@ cl_tracks ::=
 
 // Gramatica para errores
 errors ::=
-            op_errors error_list cl_errors
+            op_errors error_list:list cl_errors
+                {: RESULT = list; :}
             ;
 
 error_list ::=
-            error_list err
-            | err
+            error_list:list err:e
+                {: RESULT = list; RESULT.add(e); :}
+            | err:e
+                {: RESULT = new ArrayList<>(); RESULT.add(e); :}
             ;
 
 err ::=
-            op_error error_options cl_error
+            op_error error_options:err cl_error
+                {: RESULT = err; :}
             ;
 
 error_options ::=
-            type line column lex desc
+            type:a line:b column:c lex:d desc:e
+                {: RESULT = new Err(a, b, c, d, e); :}
             ;
 
 type ::=
             op_type TYPE_E:token cl_type
+                {: RESULT = token.getValue(); :}
             ;
 
 line ::=
             op_line INTEGER:token cl_line
+                {: RESULT = Integer.valueOf(token.getValue()); :}
             ;
 
 column ::=
             op_column INTEGER:token cl_column
+                {: RESULT = Integer.valueOf(token.getValue()); :}
             ;
 
 lex ::=
             op_lex STR:token cl_lex
+                {: RESULT = token.getValue(); :}
             ;
 
 desc ::=
             op_desc STR:token cl_desc
+                {: RESULT = token.getValue(); :}
             ;
 
 op_type ::=

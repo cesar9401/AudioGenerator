@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AudioGeneratorClient</string>
+    <string name="button">Send</string>
 </resources>
