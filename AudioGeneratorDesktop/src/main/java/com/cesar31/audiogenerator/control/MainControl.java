@@ -188,35 +188,13 @@ public class MainControl {
                     this.random = tmp.isRandom();
                     this.circular = tmp.isCircular();
 
-                    tmpSongs = getList(tmp);
+                    tmpSongs = file.getList(tmp);
                     DefaultListModel model = new DefaultListModel();
                     tmpSongs.forEach(song -> model.addElement(song.getName() + "  -  " + (int) Math.floor(song.getDuration() / 1000d) + " seg"));
                     view.songsList.setModel(model);
                 }
             }
         }
-    }
-
-    /**
-     * Obtener un listado
-     *
-     * @param tmp
-     * @return
-     */
-    private List<Track> getList(Playlist tmp) {
-        List<Track> list = file.read();
-        List<Track> myList = new ArrayList<>();
-
-        if (list != null) {
-            for (String s : tmp.getPlaylist()) {
-                Optional<Track> opt = list.stream().filter(t -> t.getName().equals(s)).findFirst();
-                if (opt.isPresent()) {
-                    myList.add(opt.get());
-                }
-            }
-        }
-
-        return myList;
     }
 
     /**

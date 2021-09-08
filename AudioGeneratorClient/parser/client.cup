@@ -1,0 +1,278 @@
+package com.cesar31.audiogeneratorclient.parser;
+
+import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import java.util.List;
+
+class ClientParser;
+
+parser code {:
+    public ClientParser(ClientLex lex) {
+        super(lex);
+    }
+    public void syntax_error(Symbol cur_token) {
+		List<String> expected = new ArrayList<>();
+		List<Integer> tokens = expected_token_ids();
+
+		System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		for(Integer i : tokens) {
+			expected.add(symbl_name_from_id(i));
+			System.out.printf("%s, ", symbl_name_from_id(i));
+		}
+        System.out.println();
+        //this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+	}
+
+	public void report_fatal_error(String message, Object info) {
+		System.out.println("message: " + message);
+		System.out.println("info: " + info);
+	}
+
+    protected int error_sync_size() {
+        return 1;
+    }
+:}
+
+terminal Token ERRORS, ERROR, TYPE, TYPE_E, LINE, COLUMN, LEXEMA, DESCRIPTION, TRACKS, TRACK, NAME, DURATION;
+terminal Token LISTS, LIST, RANDOM, CIRCULAR, TRUE, FALSE, CHANNEL, NOTE, NUMBER, EIGHTH, EQUAL, SMALLER, GREATER, DIVIDE;
+terminal Token INTEGER, DECIMAL, STR;
+terminal Token UNKNOWN;
+
+non terminal type, line, column, lex, desc, err, errors;
+non terminal op_type, op_line, op_column, op_lex, op_desc, op_error, op_errors;
+non terminal cl_type, cl_line, cl_column, cl_lex, cl_desc, cl_error, cl_errors;
+non terminal error_options, error_list;
+non terminal op_tracks, cl_tracks, track, track_list;
+non terminal duration, name, random, circular, boolean_value, tracks;
+non terminal op_lists, cl_lists, number_tracks, list_item, list_list, list;
+non terminal cl_list, list_tracks;
+non terminal note, list_notes, eighth, number, op_channel, cl_channel, channel;
+non terminal list_channel, track_notes, cl_track;
+
+non terminal client;
+
+// opciones
+client ::=
+            list // lista de listas
+            | tracks // Todas las pistas
+            | list_tracks // Respuesta de lista por nombre
+            | track_notes // Respuesta notas de una pista
+            | errors // Respuesta de errores
+            ;
+// opciones
+
+// Gramatica para pista por nombre
+track_notes ::=
+            track list_channel cl_track
+            ;
+
+cl_track ::=
+            SMALLER DIVIDE TRACK GREATER
+            ;
+
+list_channel ::=
+            list_channel channel
+            | channel
+            ;
+
+channel ::=
+            op_channel list_notes cl_channel
+            ;
+
+list_notes ::=
+            list_notes note
+            | note
+            ;
+
+op_channel ::=
+            SMALLER CHANNEL number GREATER
+            ;
+
+cl_channel ::=
+            SMALLER DIVIDE CHANNEL GREATER
+            ;
+
+number ::=
+            NUMBER EQUAL INTEGER:token
+            ;
+
+note ::=
+            SMALLER NOTE name eighth duration GREATER
+            ;
+
+eighth ::=
+            EIGHTH EQUAL STR:token
+            ;
+
+// Gramatica para lista
+list_tracks ::=
+            list_item track_list cl_list
+            ;
+
+cl_list ::=
+            SMALLER DIVIDE LIST GREATER
+            ;
+
+// Gramatica para lista de listas
+list ::=
+            op_lists list_list cl_lists
+            ;
+
+list_list ::=
+            list_list list_item
+            | list_item
+            ;
+
+list_item ::=
+            SMALLER LIST name number_tracks random circular GREATER
+            ;
+
+number_tracks ::=
+            TRACKS EQUAL INTEGER:token
+            ;
+
+random ::=
+            RANDOM EQUAL boolean_value
+            ;
+
+circular ::=
+            CIRCULAR EQUAL boolean_value
+            ;
+
+boolean_value ::=
+            TRUE
+            | FALSE
+            ;
+
+op_lists ::=
+            SMALLER LISTS GREATER
+            ;
+
+cl_lists ::=
+            SMALLER DIVIDE LISTS GREATER
+            ;
+
+// Gramatica para lista de pistas
+tracks ::=
+            op_tracks track_list cl_tracks
+            ;
+
+track_list ::=
+            track_list track
+            | track
+            ;
+
+track ::=
+            SMALLER TRACK name duration GREATER
+            ;
+
+name ::=
+            NAME EQUAL STR:token
+            ;
+
+duration ::=
+            DURATION EQUAL DECIMAL:token
+            ;
+
+op_tracks ::=
+            SMALLER TRACKS GREATER
+            ;
+
+cl_tracks ::=
+            SMALLER DIVIDE TRACKS GREATER
+            ;
+
+// Gramatica para errores
+errors ::=
+            op_errors error_list cl_errors
+            ;
+
+error_list ::=
+            error_list err
+            | err
+            ;
+
+err ::=
+            op_error error_options cl_error
+            ;
+
+error_options ::=
+            type line column lex desc
+            ;
+
+type ::=
+            op_type TYPE_E:token cl_type
+            ;
+
+line ::=
+            op_line INTEGER:token cl_line
+            ;
+
+column ::=
+            op_column INTEGER:token cl_column
+            ;
+
+lex ::=
+            op_lex STR:token cl_lex
+            ;
+
+desc ::=
+            op_desc STR:token cl_desc
+            ;
+
+op_type ::=
+            SMALLER TYPE GREATER
+            ;
+
+op_line ::=
+            SMALLER LINE GREATER
+            ;
+
+op_column ::=
+            SMALLER COLUMN GREATER
+            ;
+
+op_lex ::=
+            SMALLER LEXEMA GREATER
+            ;
+
+op_desc ::=
+            SMALLER DESCRIPTION GREATER
+            ;
+
+op_error ::=
+            SMALLER ERROR GREATER
+            ;
+
+op_errors ::=
+            SMALLER ERRORS GREATER
+            ;
+
+cl_type ::=
+            SMALLER DIVIDE TYPE GREATER
+            ;
+
+cl_line ::=
+            SMALLER DIVIDE LINE GREATER
+            ;
+
+cl_column ::=
+            SMALLER DIVIDE COLUMN GREATER
+            ;
+
+cl_lex ::=
+            SMALLER DIVIDE LEXEMA GREATER
+            ;
+
+cl_desc ::=
+            SMALLER DIVIDE DESCRIPTION GREATER
+            ;
+
+cl_error ::=
+            SMALLER DIVIDE ERROR GREATER
+            ;
+
+cl_errors ::=
+            SMALLER DIVIDE ERRORS GREATER
+            ;
+// Gramatica para errores

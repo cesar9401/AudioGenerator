@@ -17,6 +17,7 @@ parser code {:
     public PlaylistParser(PlaylistLex lex) {
         super(lex);
 		this.errorHandler = new ErrorHandler();
+        this.errorHandler.initGrammarOfPlaylists(); 
     }
 
     public Token getInfo() {

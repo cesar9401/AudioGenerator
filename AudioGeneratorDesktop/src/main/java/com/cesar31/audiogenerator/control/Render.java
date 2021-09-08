@@ -54,7 +54,8 @@ public class Render {
      * @return
      */
     public Variable createSound(Token info, Token tokenN, Variable eighth, Variable milli, Variable channel) {
-        String n = getNote(tokenN);
+        // String n = getNote(tokenN);
+        String n = tokenN.getValue().toLowerCase();
         int oct = Integer.valueOf(eighth.getValue());
         double mil = Double.valueOf(milli.getValue());
         int chann = Integer.valueOf(channel.getValue());
@@ -68,11 +69,6 @@ public class Render {
         }
 
         if (mil < 0) {
-            // Error aqui
-            return null;
-        }
-
-        if (chann < 0) {
             // Error aqui
             return null;
         }
@@ -101,53 +97,10 @@ public class Render {
             return null;
         }
 
-        if (chann < 0) {
-            // Error aqui
-            return null;
-        }
-
         Sound sound = new Sound("R", "", mil, chann);
         this.sounds.add(sound);
 
         return new Variable(Var.INTEGER, milli.getValue());
-    }
-
-    /**
-     * Obtener nota para JFugue
-     *
-     * @param note
-     * @return
-     */
-    private String getNote(Token note) {
-        String value = note.getValue().toLowerCase();
-
-        switch (value) {
-            case "do":
-                return "C";
-            case "do#":
-                return "C#";
-            case "re":
-                return "D";
-            case "re#":
-                return "D#";
-            case "mi":
-                return "E";
-            case "fa":
-                return "F";
-            case "fa#":
-                return "F#";
-            case "sol":
-                return "G";
-            case "sol#":
-                return "G#";
-            case "la":
-                return "A";
-            case "la#":
-                return "A#";
-            case "si":
-                return "B";
-        }
-        return "";
     }
 
     public List<Sound> getSounds() {

@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
@@ -118,7 +119,7 @@ public class FileControl {
     }
 
     /**
-     * Leer todas en la base de datos
+     * Leer todas las canciones en la base de datos
      *
      * @return
      */
@@ -182,5 +183,27 @@ public class FileControl {
         }
 
         return null;
+    }
+
+    /**
+     * Obtener un listado
+     *
+     * @param tmp
+     * @return
+     */
+    public List<Track> getList(Playlist tmp) {
+        List<Track> list = this.read();
+        List<Track> myList = new ArrayList<>();
+
+        if (list != null) {
+            for (String s : tmp.getPlaylist()) {
+                Optional<Track> opt = list.stream().filter(t -> t.getName().equals(s)).findFirst();
+                if (opt.isPresent()) {
+                    myList.add(opt.get());
+                }
+            }
+        }
+
+        return myList;
     }
 }

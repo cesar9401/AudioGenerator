@@ -17,6 +17,7 @@ parser code {:
     public RequestParser(RequestLex lex) {
         super(lex);
 		this.errorHandler = new ErrorHandler();
+        this.errorHandler.initGrammarOfRequests();
     }
 
     public Token getInfo() {
@@ -31,13 +32,13 @@ parser code {:
 		List<String> expected = new ArrayList<>();
 		List<Integer> tokens = expected_token_ids();
 
-		System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		// System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
 		for(Integer i : tokens) {
 			expected.add(symbl_name_from_id(i));
-			System.out.printf("%s, ", symbl_name_from_id(i));
+			// System.out.printf("%s, ", symbl_name_from_id(i));
 		}
-        System.out.println();
-		//this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+		this.errorHandler.setErrorForGramOfRequest((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+        //this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
 	}
 
 	public void report_fatal_error(String message, Object info) {
@@ -51,7 +52,7 @@ parser code {:
 :}
 
 terminal Token REQUEST, TYPE, NAME, LIST, TRACK, ID, GREATER, SMALLER, DIVIDE, STR;
-terminal Token ERROR;
+terminal Token SYM, ERROR;
 
 non terminal Token cl_type, cl_name, cl_request;
 non terminal Token op_type, op_name, op_request;
@@ -63,6 +64,12 @@ non terminal List<Request> options, request;
 request ::=
             op_request:token options:list cl_request
                 {: info = token; RESULT = list; :}
+
+            // Errores
+            | error options:list cl_request
+            | op_request:token error cl_request
+            | op_request:token options:list error
+            // Errores
             ;
 
 options ::=
@@ -89,42 +96,106 @@ option ::=
 
 type ::=
             op_type:info LIST:token cl_type
-                {: RESULT = new Type(info, token); :}
+                {:
+                    if(info != null) {
+                        RESULT = new Type(info, token);
+                    }
+                :}
             | op_type:info TRACK:token cl_type
-                {: RESULT = new Type(info, token); :}
+                {:
+                    if(info != null) {
+                        RESULT = new Type(info, token);
+                    }
+                :}
+
+            // Errores
+            | error LIST:token cl_type
+            | op_type:info LIST:token error
+            | error TRACK:token cl_type
+            | op_type:info TRACK:token error
+            // Errores
             ;
 
 name ::=
             op_name:info STR:token cl_name
-                {: RESULT = new RequestName(info, token); :}
+                {:
+                    if(info != null) {
+                        RESULT = new RequestName(info, token);
+                    }
+                :}
+
+            // Errores
+            | error STR:token cl_name
+            | op_name:info error cl_name
+            | op_name:info STR:token error
+            // Errores
             ;
 
 op_type ::=
             SMALLER:info TYPE GREATER
                 {: RESULT = info; :}
+
+            // Errores
+            | error TYPE GREATER
+            | SMALLER:info error GREATER
+            | SMALLER:info TYPE error
+            // Errores
             ;
 
 cl_type ::=
             SMALLER:info DIVIDE TYPE GREATER
                 {: RESULT = info; :}
+
+            // Errores
+            | error DIVIDE TYPE GREATER
+            | SMALLER:info error TYPE GREATER
+            | SMALLER:info DIVIDE error GREATER
+            | SMALLER:info DIVIDE TYPE error
+            // Errores
             ;
 
 op_name ::=
             SMALLER:info NAME GREATER
                 {: RESULT = info; :}
+
+            // Errores
+            | error NAME GREATER
+            | SMALLER:info error GREATER
+            | SMALLER:info NAME error
+            // Errores
             ;
 
 cl_name ::=
             SMALLER:info DIVIDE NAME GREATER
                 {: RESULT = info; :}
+
+            // Error
+            | error DIVIDE NAME GREATER
+            | SMALLER:info error NAME GREATER
+            | SMALLER:info DIVIDE error GREATER
+            | SMALLER:info DIVIDE NAME error
+            // Error
             ;
 
 op_request ::=
             SMALLER:info REQUEST GREATER
                 {: RESULT = info; :}
+
+            // Error
+            | error REQUEST GREATER
+            | SMALLER:info error GREATER
+            | SMALLER:info REQUEST error
+            // Error
             ;
 
 cl_request ::=
             SMALLER:info DIVIDE REQUEST GREATER
                 {: RESULT = info; :}
+
+            // Errores
+            | error DIVIDE REQUEST GREATER
+            | SMALLER:info error REQUEST GREATER
+            | SMALLER:info DIVIDE error GREATER
+            | SMALLER:info DIVIDE REQUEST error
+            // Errores
             ;

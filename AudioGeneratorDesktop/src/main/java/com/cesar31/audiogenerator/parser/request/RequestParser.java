@@ -36,11 +36,21 @@ public class RequestParser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\017\000\002\014\005\000\002\002\004\000\002\013" +
-    "\004\000\002\013\003\000\002\012\003\000\002\012\003" +
-    "\000\002\011\005\000\002\011\005\000\002\010\005\000" +
-    "\002\005\005\000\002\002\006\000\002\006\005\000\002" +
-    "\003\006\000\002\007\005\000\002\004\006" });
+    "\000\056\000\002\014\005\000\002\002\004\000\002\014" +
+    "\005\000\002\014\005\000\002\014\005\000\002\013\004" +
+    "\000\002\013\003\000\002\012\003\000\002\012\003\000" +
+    "\002\011\005\000\002\011\005\000\002\011\005\000\002" +
+    "\011\005\000\002\011\005\000\002\011\005\000\002\010" +
+    "\005\000\002\010\005\000\002\010\005\000\002\010\005" +
+    "\000\002\005\005\000\002\005\005\000\002\005\005\000" +
+    "\002\005\005\000\002\002\006\000\002\002\006\000\002" +
+    "\002\006\000\002\002\006\000\002\002\006\000\002\006" +
+    "\005\000\002\006\005\000\002\006\005\000\002\006\005" +
+    "\000\002\003\006\000\002\003\006\000\002\003\006\000" +
+    "\002\003\006\000\002\003\006\000\002\007\005\000\002" +
+    "\007\005\000\002\007\005\000\002\007\005\000\002\004" +
+    "\006\000\002\004\006\000\002\004\006\000\002\004\006" +
+    "\000\002\004\006" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -48,25 +58,68 @@ public class RequestParser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\046\000\004\013\005\001\002\000\004\002\050\001" +
-    "\002\000\004\004\046\001\002\000\004\013\013\001\002" +
-    "\000\004\013\041\001\002\000\004\013\ufffc\001\002\000" +
-    "\004\013\ufffe\001\002\000\004\013\ufffd\001\002\000\006" +
-    "\005\035\006\034\001\002\000\004\015\026\001\002\000" +
-    "\006\007\016\010\017\001\002\000\004\013\021\001\002" +
-    "\000\004\013\021\001\002\000\004\013\ufffa\001\002\000" +
-    "\004\014\022\001\002\000\004\005\023\001\002\000\004" +
-    "\012\024\001\002\000\004\013\ufff7\001\002\000\004\013" +
-    "\ufffb\001\002\000\004\013\027\001\002\000\004\014\031" +
-    "\001\002\000\004\013\ufff9\001\002\000\004\006\032\001" +
-    "\002\000\004\012\033\001\002\000\004\013\ufff5\001\002" +
-    "\000\004\012\037\001\002\000\004\012\036\001\002\000" +
-    "\006\007\ufff8\010\ufff8\001\002\000\004\015\ufff6\001\002" +
-    "\000\004\013\uffff\001\002\000\010\005\035\006\034\014" +
-    "\043\001\002\000\004\002\001\001\002\000\004\004\044" +
-    "\001\002\000\004\012\045\001\002\000\004\002\ufff3\001" +
-    "\002\000\004\012\047\001\002\000\004\013\ufff4\001\002" +
-    "\000\004\002\000\001\002" });
+    "\000\146\000\006\003\004\013\006\001\002\000\010\003" +
+    "\143\004\144\013\015\001\002\000\004\002\142\001\002" +
+    "\000\006\003\136\004\135\001\002\000\006\003\011\013" +
+    "\015\001\002\000\006\003\ufff9\013\ufff9\001\002\000\020" +
+    "\003\131\005\120\006\117\007\113\010\114\013\132\015" +
+    "\115\001\002\000\006\003\076\013\100\001\002\000\006" +
+    "\003\ufffa\013\ufffa\001\002\000\006\003\ufffb\013\ufffb\001" +
+    "\002\000\010\003\066\005\070\006\067\001\002\000\006" +
+    "\003\043\015\044\001\002\000\006\007\020\010\021\001" +
+    "\002\000\006\003\042\013\024\001\002\000\006\003\023" +
+    "\013\024\001\002\000\006\003\ufff7\013\ufff7\001\002\000" +
+    "\010\003\ufff3\013\ufff3\014\036\001\002\000\006\003\025" +
+    "\014\026\001\002\000\004\005\034\001\002\000\006\003" +
+    "\027\005\030\001\002\000\004\012\033\001\002\000\006" +
+    "\003\031\012\032\001\002\000\006\003\uffe6\013\uffe6\001" +
+    "\002\000\006\003\uffea\013\uffea\001\002\000\006\003\uffe7" +
+    "\013\uffe7\001\002\000\004\012\035\001\002\000\006\003" +
+    "\uffe8\013\uffe8\001\002\000\004\005\037\001\002\000\004" +
+    "\012\040\001\002\000\006\003\uffe9\013\uffe9\001\002\000" +
+    "\006\003\ufff8\013\ufff8\001\002\000\010\003\ufff5\013\ufff5" +
+    "\014\036\001\002\000\006\003\064\013\046\001\002\000" +
+    "\006\003\045\013\046\001\002\000\010\003\uffef\013\uffef" +
+    "\014\061\001\002\000\006\003\050\014\051\001\002\000" +
+    "\006\003\ufff2\013\ufff2\001\002\000\004\006\057\001\002" +
+    "\000\006\003\052\006\053\001\002\000\004\012\056\001" +
+    "\002\000\006\003\054\012\055\001\002\000\006\003\uffdd" +
+    "\013\uffdd\001\002\000\006\003\uffe1\013\uffe1\001\002\000" +
+    "\006\003\uffde\013\uffde\001\002\000\004\012\060\001\002" +
+    "\000\006\003\uffdf\013\uffdf\001\002\000\004\006\062\001" +
+    "\002\000\004\012\063\001\002\000\006\003\uffe0\013\uffe0" +
+    "\001\002\000\004\014\061\001\002\000\006\003\ufff0\013" +
+    "\ufff0\001\002\000\004\012\075\001\002\000\006\003\074" +
+    "\012\073\001\002\000\006\003\072\012\071\001\002\000" +
+    "\006\007\uffee\010\uffee\001\002\000\006\007\uffeb\010\uffeb" +
+    "\001\002\000\006\003\uffe5\015\uffe5\001\002\000\006\003" +
+    "\uffe2\015\uffe2\001\002\000\012\003\uffe3\007\uffec\010\uffec" +
+    "\015\uffe3\001\002\000\020\002\ufffd\005\120\006\117\007" +
+    "\113\010\114\014\116\015\115\001\002\000\006\003\ufffc" +
+    "\013\ufffc\001\002\000\012\003\102\005\070\006\067\014" +
+    "\103\001\002\000\004\002\001\001\002\000\006\004\111" +
+    "\012\075\001\002\000\006\003\105\004\104\001\002\000" +
+    "\006\003\110\012\107\001\002\000\004\012\106\001\002" +
+    "\000\004\002\uffd5\001\002\000\004\002\uffd8\001\002\000" +
+    "\004\002\uffd4\001\002\000\004\012\112\001\002\000\004" +
+    "\002\uffd6\001\002\000\006\003\127\013\024\001\002\000" +
+    "\006\003\127\013\024\001\002\000\006\003\064\013\046" +
+    "\001\002\000\004\004\123\001\002\000\004\012\122\001" +
+    "\002\000\004\012\121\001\002\000\006\007\uffed\010\uffed" +
+    "\001\002\000\006\003\uffe4\015\uffe4\001\002\000\004\012" +
+    "\124\001\002\000\004\002\uffd7\001\002\000\006\003\ufff1" +
+    "\013\ufff1\001\002\000\006\003\ufff4\013\ufff4\001\002\000" +
+    "\004\014\036\001\002\000\006\003\ufff6\013\ufff6\001\002" +
+    "\000\004\014\116\001\002\000\006\003\134\014\103\001" +
+    "\002\000\004\002\ufffe\001\002\000\004\004\111\001\002" +
+    "\000\006\003\141\012\140\001\002\000\004\012\137\001" +
+    "\002\000\006\003\uffda\013\uffda\001\002\000\006\003\uffdc" +
+    "\013\uffdc\001\002\000\006\003\uffd9\013\uffd9\001\002\000" +
+    "\004\002\000\001\002\000\014\005\120\006\117\007\113" +
+    "\010\114\015\115\001\002\000\004\012\150\001\002\000" +
+    "\006\003\146\013\100\001\002\000\016\005\120\006\117" +
+    "\007\113\010\114\014\116\015\115\001\002\000\004\002" +
+    "\uffff\001\002\000\006\003\uffdb\013\uffdb\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -74,21 +127,43 @@ public class RequestParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\046\000\006\007\005\014\003\001\001\000\002\001" +
-    "\001\000\002\001\001\000\016\005\014\006\013\010\007" +
-    "\011\011\012\010\013\006\001\001\000\016\004\041\005" +
-    "\014\006\013\010\007\011\011\012\037\001\001\000\002" +
+    "\000\146\000\006\007\006\014\004\001\001\000\016\005" +
+    "\016\006\015\010\007\011\012\012\013\013\144\001\001" +
+    "\000\002\001\001\000\002\001\001\000\016\005\016\006" +
+    "\015\010\007\011\012\012\013\013\011\001\001\000\002" +
+    "\001\001\000\004\004\132\001\001\000\016\004\100\005" +
+    "\016\006\015\010\007\011\012\012\076\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\004\002\024" +
-    "\001\001\000\004\002\017\001\001\000\002\001\001\000" +
+    "\001\000\002\001\001\000\004\002\040\001\001\000\004" +
+    "\002\021\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\004\003\027\001\001\000" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\003\064\001\001" +
+    "\000\004\003\046\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001" });
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\004\002\127\001\001\000\004\002\125\001" +
+    "\001\000\004\003\124\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\016\004\146\005" +
+    "\016\006\015\010\007\011\012\012\076\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -133,6 +208,7 @@ public class RequestParser extends java_cup.runtime.lr_parser {
     public RequestParser(RequestLex lex) {
         super(lex);
 		this.errorHandler = new ErrorHandler();
+        this.errorHandler.initGrammarOfRequests();
     }
 
     public Token getInfo() {
@@ -147,13 +223,13 @@ public class RequestParser extends java_cup.runtime.lr_parser {
 		List<String> expected = new ArrayList<>();
 		List<Integer> tokens = expected_token_ids();
 
-		System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
+		// System.out.printf("Se encontro: %s -> (%s), linea %d columna %d, se esperaba -> ", cur_token.value, symbl_name_from_id(cur_token.sym), cur_token.left, cur_token.right);
 		for(Integer i : tokens) {
 			expected.add(symbl_name_from_id(i));
-			System.out.printf("%s, ", symbl_name_from_id(i));
+			// System.out.printf("%s, ", symbl_name_from_id(i));
 		}
-        System.out.println();
-		//this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+		this.errorHandler.setErrorForGramOfRequest((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
+        //this.errorHandler.setErrorForListGram((Token) cur_token.value, symbl_name_from_id(cur_token.sym), expected);
 	}
 
 	public void report_fatal_error(String message, Object info) {
@@ -220,7 +296,46 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // options ::= options option 
+          case 2: // request ::= error options cl_request 
+            {
+              List<Request> RESULT =null;
+		int listleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int listright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		List<Request> list = (List<Request>)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("request",10, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 3: // request ::= op_request error cl_request 
+            {
+              List<Request> RESULT =null;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("request",10, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 4: // request ::= op_request options error 
+            {
+              List<Request> RESULT =null;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+		int listleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int listright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		List<Request> list = (List<Request>)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("request",10, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 5: // options ::= options option 
             {
               List<Request> RESULT =null;
 		int listleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
@@ -240,7 +355,7 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // options ::= option 
+          case 6: // options ::= option 
             {
               List<Request> RESULT =null;
 		int opleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()).left;
@@ -257,7 +372,7 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // option ::= type 
+          case 7: // option ::= type 
             {
               Request RESULT =null;
 		int typeleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()).left;
@@ -269,7 +384,7 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // option ::= name 
+          case 8: // option ::= name 
             {
               Request RESULT =null;
 		int nameleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()).left;
@@ -281,7 +396,7 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // type ::= op_type LIST cl_type 
+          case 9: // type ::= op_type LIST cl_type 
             {
               Type RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
@@ -290,13 +405,17 @@ class CUP$RequestParser$actions {
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
-		 RESULT = new Type(info, token); 
+		
+                    if(info != null) {
+                        RESULT = new Type(info, token);
+                    }
+                
               CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("type",7, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
             }
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // type ::= op_type TRACK cl_type 
+          case 10: // type ::= op_type TRACK cl_type 
             {
               Type RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
@@ -305,13 +424,71 @@ class CUP$RequestParser$actions {
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
-		 RESULT = new Type(info, token); 
+		
+                    if(info != null) {
+                        RESULT = new Type(info, token);
+                    }
+                
               CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("type",7, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
             }
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // name ::= op_name STR cl_name 
+          case 11: // type ::= error LIST cl_type 
+            {
+              Type RESULT =null;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("type",7, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 12: // type ::= op_type LIST error 
+            {
+              Type RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("type",7, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 13: // type ::= error TRACK cl_type 
+            {
+              Type RESULT =null;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("type",7, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 14: // type ::= op_type TRACK error 
+            {
+              Type RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("type",7, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 15: // name ::= op_name STR cl_name 
             {
               RequestName RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
@@ -320,13 +497,56 @@ class CUP$RequestParser$actions {
 		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
 		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
 		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
-		 RESULT = new RequestName(info, token); 
+		
+                    if(info != null) {
+                        RESULT = new RequestName(info, token);
+                    }
+                
               CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("name",6, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
             }
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // op_type ::= SMALLER TYPE GREATER 
+          case 16: // name ::= error STR cl_name 
+            {
+              RequestName RESULT =null;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("name",6, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 17: // name ::= op_name error cl_name 
+            {
+              RequestName RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("name",6, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 18: // name ::= op_name STR error 
+            {
+              RequestName RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+		int tokenleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).left;
+		int tokenright = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).right;
+		Token token = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-1)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("name",6, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 19: // op_type ::= SMALLER TYPE GREATER 
             {
               Token RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
@@ -338,7 +558,40 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 10: // cl_type ::= SMALLER DIVIDE TYPE GREATER 
+          case 20: // op_type ::= error TYPE GREATER 
+            {
+              Token RESULT =null;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_type",3, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 21: // op_type ::= SMALLER error GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_type",3, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 22: // op_type ::= SMALLER TYPE error 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_type",3, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 23: // cl_type ::= SMALLER DIVIDE TYPE GREATER 
             {
               Token RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
@@ -350,7 +603,52 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 11: // op_name ::= SMALLER NAME GREATER 
+          case 24: // cl_type ::= error DIVIDE TYPE GREATER 
+            {
+              Token RESULT =null;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_type",0, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 25: // cl_type ::= SMALLER error TYPE GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_type",0, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 26: // cl_type ::= SMALLER DIVIDE error GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_type",0, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 27: // cl_type ::= SMALLER DIVIDE TYPE error 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_type",0, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 28: // op_name ::= SMALLER NAME GREATER 
             {
               Token RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
@@ -362,7 +660,40 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // cl_name ::= SMALLER DIVIDE NAME GREATER 
+          case 29: // op_name ::= error NAME GREATER 
+            {
+              Token RESULT =null;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_name",4, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 30: // op_name ::= SMALLER error GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_name",4, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 31: // op_name ::= SMALLER NAME error 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_name",4, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 32: // cl_name ::= SMALLER DIVIDE NAME GREATER 
             {
               Token RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
@@ -374,7 +705,52 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // op_request ::= SMALLER REQUEST GREATER 
+          case 33: // cl_name ::= error DIVIDE NAME GREATER 
+            {
+              Token RESULT =null;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_name",1, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 34: // cl_name ::= SMALLER error NAME GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_name",1, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 35: // cl_name ::= SMALLER DIVIDE error GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_name",1, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 36: // cl_name ::= SMALLER DIVIDE NAME error 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_name",1, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 37: // op_request ::= SMALLER REQUEST GREATER 
             {
               Token RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
@@ -386,13 +762,91 @@ class CUP$RequestParser$actions {
           return CUP$RequestParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // cl_request ::= SMALLER DIVIDE REQUEST GREATER 
+          case 38: // op_request ::= error REQUEST GREATER 
+            {
+              Token RESULT =null;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_request",5, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 39: // op_request ::= SMALLER error GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_request",5, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 40: // op_request ::= SMALLER REQUEST error 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("op_request",5, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-2)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 41: // cl_request ::= SMALLER DIVIDE REQUEST GREATER 
             {
               Token RESULT =null;
 		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
 		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
 		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
 		 RESULT = info; 
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_request",2, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 42: // cl_request ::= error DIVIDE REQUEST GREATER 
+            {
+              Token RESULT =null;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_request",2, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 43: // cl_request ::= SMALLER error REQUEST GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_request",2, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 44: // cl_request ::= SMALLER DIVIDE error GREATER 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
+              CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_request",2, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
+            }
+          return CUP$RequestParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 45: // cl_request ::= SMALLER DIVIDE REQUEST error 
+            {
+              Token RESULT =null;
+		int infoleft = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).left;
+		int inforight = ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).right;
+		Token info = (Token)((java_cup.runtime.Symbol) CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)).value;
+
               CUP$RequestParser$result = parser.getSymbolFactory().newSymbol("cl_request",2, ((java_cup.runtime.Symbol)CUP$RequestParser$stack.elementAt(CUP$RequestParser$top-3)), ((java_cup.runtime.Symbol)CUP$RequestParser$stack.peek()), RESULT);
             }
           return CUP$RequestParser$result;

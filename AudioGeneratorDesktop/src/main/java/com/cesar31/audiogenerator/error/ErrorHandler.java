@@ -11,53 +11,116 @@ import java.util.HashMap;
  * @author cesar31
  */
 public class ErrorHandler {
-    
+
     private List<Err> errors;
     private HashMap<String, String> list;
-    
+
     public ErrorHandler() {
         this.errors = new ArrayList<>();
-        list = getListGrammar();
+        this.list = new HashMap<>();
     }
-    
+
+    public void initGrammarOfRequests() {
+        this.list = getGrammarOfRequests();
+    }
+
+    public void initGrammarOfPlaylists() {
+        this.list = getListGrammar();
+    }
+
+    /**
+     * Errores gramatica principal
+     *
+     * @param token
+     * @param type
+     * @param expected
+     */
     public void setError(Token token, String type, List<String> expected) {
         Err.TypeErr kindE = type.equals("ERROR") || type.equals("SYM") ? TypeErr.LEXICO : TypeErr.SEMANTICO;
         String lexema = type.equals("EOF") ? "Fin de entrada" : token.getValue();
-        
+
         Err e = new Err(kindE, token.getLine(), token.getColumn(), lexema);
         String description = kindE == TypeErr.LEXICO ? "La cadena no se reconoce en el lenguaje." : "";
         description += "Se encontro " + lexema + ". Se esperaba: ";
-        
+
         for (int i = 0; i < expected.size(); i++) {
             if (!expected.get(i).equals("error")) {
-                description += "\'" + expected.get(i) + "\'";
-                description += i == expected.size() - 1 ? "." : ",";
+                description += expected.get(i);
+                description += i == expected.size() - 1 ? "." : ", ";
             }
         }
-        
+
         e.setDescription(description);
         errors.add(e);
     }
-    
+
+    /**
+     * Errores gramatica para playlists
+     *
+     * @param token
+     * @param type
+     * @param expected
+     */
     public void setErrorForListGram(Token token, String type, List<String> expected) {
-        Err.TypeErr kindE = type.equals("ERROR") ? TypeErr.LEXICO : TypeErr.SEMANTICO;
+        Err.TypeErr kindE = type.equals("ERROR") || type.equals("SYM") ? TypeErr.LEXICO : TypeErr.SEMANTICO;
         String lexema = type.equals("EOF") ? "Fin de entrada" : token.getValue();
-        
+
         Err e = new Err(kindE, token.getLine(), token.getColumn(), lexema);
         String description = kindE == TypeErr.LEXICO ? "La cadena no se reconoce en el lenguaje." : "";
         description += "Se encontro " + lexema + ". Se esperaba: ";
-        
+
         for (int i = 0; i < expected.size(); i++) {
             if (!expected.get(i).equals("error")) {
-                description += "\'" + list.get(expected.get(i)) + "\'";
-                description += i == expected.size() - 1 ? "." : ",";
+                description += getValue(expected.get(i));
+                description += i == expected.size() - 1 ? "." : ", ";
             }
         }
-        
+
         e.setDescription(description);
         errors.add(e);
     }
-    
+
+    /**
+     * Errores para gramatica de peticiones del cliente
+     *
+     * @param token
+     * @param type
+     * @param expected
+     */
+    public void setErrorForGramOfRequest(Token token, String type, List<String> expected) {
+        Err.TypeErr kindE = type.equals("ERROR") || type.equals("SYM") ? TypeErr.LEXICO : TypeErr.SEMANTICO;
+        String lexema = type.equals("EOF") ? "Fin de entrada" : token.getValue();
+
+        Err e = new Err(kindE, token.getLine(), token.getColumn(), lexema);
+        String description = kindE == TypeErr.LEXICO ? "La cadena no se reconoce en el lenguaje." : "";
+        description += "Se encontro " + lexema + ". Se esperaba: ";
+
+        for (int i = 0; i < expected.size(); i++) {
+            if (!expected.get(i).equals("error")) {
+                description += getValue(expected.get(i));
+                description += i == expected.size() - 1 ? "." : ", ";
+            }
+        }
+
+        e.setDescription(description);
+        errors.add(e);
+    }
+
+    /**
+     * Obtener valor de list
+     *
+     * @param key
+     * @return
+     */
+    private String getValue(String key) {
+        return list.get(key) != null ? list.get(key) : key;
+    }
+
+    /**
+     * Para gramatica de playlists
+     *
+     * @return
+     */
     private HashMap<String, String> getListGrammar() {
         HashMap<String, String> map = new HashMap<>();
         map.put("LIST", "lista");
@@ -77,7 +140,27 @@ public class ErrorHandler {
         map.put("STR", "string entre comillas");
         return map;
     }
-    
+
+    /**
+     * Para gramatica de peticiones del cliente
+     *
+     * @return
+     */
+    private HashMap<String, String> getGrammarOfRequests() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("REQUEST", "solicitud");
+        map.put("TYPE", "tipo");
+        map.put("NAME", "nombre");
+        map.put("LIST", "Lista");
+        map.put("TRACK", "Pista");
+        map.put("ID", "identificador(caracteres alfanumericos)");
+        map.put("GREATER", "mayor que `>`");
+        map.put("SMALLER", "menor que `<`");
+        map.put("DIVIDE", "diagonal `/`");
+        map.put("STR", "string entre comillas");
+        return map;
+    }
+
     public List<Err> getErrors() {
         return errors;
     }

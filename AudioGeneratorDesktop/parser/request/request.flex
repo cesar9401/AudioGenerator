@@ -39,6 +39,9 @@ WhiteSpace = {LineTerminator} | [ \t\f]
 /* id */
 Id = [a-zA-Z]\w*
 
+/* No match */
+Sym = [\.\(\)\{\}\[\]\$\^\?`~!@#%&\*\-\_\+=\|:;,?¡²³¤€¼½¾‘’¥×äåé®þüúíóö«»¬áßðø¶´æ©ñµç¿\w]+
+
 /* Estados */
 %state STRING
 
@@ -80,6 +83,9 @@ Id = [a-zA-Z]\w*
 
     {WhiteSpace}
     { /* Ignore */ }
+
+    {Sym}
+    { return symbol(SYM, yytext()); }
 }
 
 <STRING> {

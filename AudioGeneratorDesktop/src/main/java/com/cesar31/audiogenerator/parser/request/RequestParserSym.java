@@ -11,13 +11,14 @@ public class RequestParserSym {
   public static final int DIVIDE = 10;
   public static final int SMALLER = 9;
   public static final int STR = 11;
-  public static final int ERROR = 12;
+  public static final int ERROR = 13;
   public static final int GREATER = 8;
   public static final int EOF = 0;
   public static final int LIST = 5;
   public static final int TYPE = 3;
   public static final int ID = 7;
   public static final int error = 1;
+  public static final int SYM = 12;
   public static final int REQUEST = 2;
   public static final int TRACK = 6;
   public static final int NAME = 4;
@@ -34,6 +35,7 @@ public class RequestParserSym {
   "SMALLER",
   "DIVIDE",
   "STR",
+  "SYM",
   "ERROR"
   };
 }

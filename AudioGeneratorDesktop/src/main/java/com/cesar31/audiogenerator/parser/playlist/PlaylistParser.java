@@ -198,6 +198,7 @@ public class PlaylistParser extends java_cup.runtime.lr_parser {
     public PlaylistParser(PlaylistLex lex) {
         super(lex);
 		this.errorHandler = new ErrorHandler();
+        this.errorHandler.initGrammarOfPlaylists(); 
     }
 
     public Token getInfo() {

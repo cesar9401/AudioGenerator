@@ -135,7 +135,7 @@ public class Song extends Thread {
         HashMap<Integer, String> map = new HashMap<>();
         for (Sound s : sounds) {
             double milli = s.getMilliseconds() / 1000d;
-            String note = s.getNote() + s.getEighth() + "/" + milli + " ";
+            String note = getNote(s.getNote()) + s.getEighth() + "/" + milli + " ";
             if (!map.containsKey(s.getChannel())) {
                 map.put(s.getChannel(), note);
             } else {
@@ -168,10 +168,56 @@ public class Song extends Thread {
         return tmp;
     }
 
+    /**
+     * Obtener instrumento para jfugue
+     * @param n
+     * @return 
+     */
     private String getInstrument(int n) {
         String[] i = {"ROCK_ORGAN", "TRUMPET", "ACOUSTIC_BASS", "VIOLIN", "CLARINET", "FLUTE", "BANJO", "STEEL_STRING_GUITAR",
             "ELECTRIC_JAZZ_GUITAR", "ELECTRIC_CLEAN_GUITAR", "TROMBONE", "TUBA", "PIANO", "GUITAR", "ELECTRIC_PIANO", "MARIMBA"};
 
         return "I[" + i[n] + "]";
+    }
+
+    /**
+     * Obtener nota para JFugue
+     *
+     * @param note
+     * @return
+     */
+    private String getNote(String note) {
+        switch (note) {
+            // Para esperar
+            case "R":
+                return "R";
+                
+            // Notas
+            case "do":
+                return "C";
+            case "do#":
+                return "C#";
+            case "re":
+                return "D";
+            case "re#":
+                return "D#";
+            case "mi":
+                return "E";
+            case "fa":
+                return "F";
+            case "fa#":
+                return "F#";
+            case "sol":
+                return "G";
+            case "sol#":
+                return "G#";
+            case "la":
+                return "A";
+            case "la#":
+                return "A#";
+            case "si":
+                return "B";
+        }
+        return "";
     }
 }
