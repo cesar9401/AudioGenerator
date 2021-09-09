@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Reportes de errores -->
+    <string-array name="header_errors">
+        <item>Tipo</item>
+        <item>Linea</item>
+        <item>Columna</item>
+        <item>Lexema</item>
+        <item>Descripcion</item>
+    </string-array>
+    
+    <!-- Lista de pistas y lista por nombre -->
+    <string-array name="header_tracks">
+        <item>Nombre</item>
+        <item>Duracion</item>
+    </string-array>
+
+    <!-- Lista de listas -->
+    <string-array name="header_playlists">
+        <item>Nombre</item>
+        <item>Pistas</item>
+        <item>Random</item>
+        <item>Cicular</item>
+    </string-array>
+
+    <!-- Pista por nombre con notas -->
+    <string-array name="header_notes">
+        <item>Nota</item>
+        <item>Octava</item>
+        <item>Duracion</item>
+        <item>Canal</item>
+    </string-array>
+</resources>

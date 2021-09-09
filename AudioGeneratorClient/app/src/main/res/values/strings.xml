@@ -4,4 +4,5 @@
     <string name="text1">new request</string>
     <string name="text2">new song</string>
     <string name="hint1">enter your request here</string>
+    <string name="title1">Respuesta del servidor</string>
 </resources>
