@@ -10,10 +10,30 @@ class ClientParser;
 
 parser code {:
 
-    private List<Err> errors;
+    private List<Err> errors; // Errores
+    private List<Track> tracks; // listado de pistas
+    private List<Playlist> playlists; // listado de listas
+    private Playlist playlist; // playlist con listado de pistas
+    private Track track; // pista con sus respectivas notas
 
     public ClientParser(ClientLex lex) {
         super(lex);
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public List<Track> getTracks() {
+        return tracks;
     }
 
     public List<Err> getErrors() {
@@ -48,35 +68,44 @@ terminal Token LISTS, LIST, RANDOM, CIRCULAR, TRUE, FALSE, CHANNEL, NOTE, NUMBER
 terminal Token INTEGER, DECIMAL, STR;
 terminal Token UNKNOWN;
 
-non terminal String type, lex, desc;
-non terminal Integer line, column;
+non terminal String type, lex, desc, name, eighth;
+non terminal Integer line, column, number, op_channel;
 non terminal Err error_options, err;
 non terminal List<Err> error_list, errors;
+non terminal Double duration;
+non terminal Track track, track_notes;
+non terminal List<Track> track_list, tracks;
+non terminal Integer number_tracks;
+non terminal Boolean random, circular, boolean_value;
+non terminal Playlist list_item, list_tracks;
+non terminal List<Playlist>  list_list, list;
+non terminal Note note;
+non terminal List<Note> list_notes, channel, list_channel;
 
 non terminal op_type, op_line, op_column, op_lex, op_desc, op_error, op_errors;
 non terminal cl_type, cl_line, cl_column, cl_lex, cl_desc, cl_error, cl_errors;
-non terminal op_tracks, cl_tracks, track, track_list;
-non terminal duration, name, random, circular, boolean_value, tracks;
-non terminal op_lists, cl_lists, number_tracks, list_item, list_list, list;
-non terminal cl_list, list_tracks;
-non terminal note, list_notes, eighth, number, op_channel, cl_channel, channel;
-non terminal list_channel, track_notes, cl_track;
+non terminal op_tracks, cl_tracks;
+non terminal op_lists, cl_lists;
+non terminal cl_list;
+non terminal cl_channel;
+non terminal cl_track;
 
 non terminal client;
 
 // opciones
 client ::=
-            list // lista de listas
-            | tracks // Todas las pistas
-            | list_tracks // Respuesta de lista por nombre
-            | track_notes // Respuesta notas de una pista
-            | errors:list_err // Respuesta de errores
+            list:list_list {: playlists = list_list; :} // lista de listas
+            | tracks:list_track {: tracks = list_track; :} // Todas las pistas
+            | list_tracks:play {: playlist = play; :} // Respuesta de lista por nombre
+            | track_notes:track_notes {: track = track_notes; :}// Respuesta notas de una pista
+            | errors:list_err {: errors = list_err; :} // Respuesta de errores
             ;
 // opciones
 
 // Gramatica para pista por nombre
 track_notes ::=
-            track list_channel cl_track
+            track:track list_channel:list_notes cl_track
+                {: RESULT = track; RESULT.setNotes(list_notes); :}
             ;
 
 cl_track ::=
@@ -84,21 +113,32 @@ cl_track ::=
             ;
 
 list_channel ::=
-            list_channel channel
-            | channel
+            list_channel:sup_list channel:list
+                {: RESULT = sup_list; RESULT.addAll(list); :}
+            | channel:list
+                {: RESULT = list; :}
             ;
 
 channel ::=
-            op_channel list_notes cl_channel
+            op_channel:numb_channel list_notes:list cl_channel
+                {:
+                    for(Note n : list) {
+                        n.setChannel(numb_channel);
+                    }
+                    RESULT = list;
+                :}
             ;
 
 list_notes ::=
-            list_notes note
-            | note
+            list_notes:list note:note
+                {: RESULT = list; RESULT.add(note); :}
+            | note:note
+                {: RESULT = new ArrayList<>(); RESULT.add(note); :}
             ;
 
 op_channel ::=
-            SMALLER CHANNEL number GREATER
+            SMALLER CHANNEL number:number GREATER
+                {: RESULT = number; :}
             ;
 
 cl_channel ::=
@@ -107,19 +147,23 @@ cl_channel ::=
 
 number ::=
             NUMBER EQUAL INTEGER:token
+                {: RESULT = Integer.valueOf(token.getValue()); :}
             ;
 
 note ::=
-            SMALLER NOTE name eighth duration GREATER
+            SMALLER NOTE name:name eighth:eighth duration:duration GREATER
+                {: RESULT = new Note(name, eighth, duration); :}
             ;
 
 eighth ::=
             EIGHTH EQUAL STR:token
+                {: RESULT = token.getValue(); :}
             ;
 
 // Gramatica para lista
 list_tracks ::=
-            list_item track_list cl_list
+            list_item:playlist track_list:tracklist cl_list
+                {: RESULT = playlist; RESULT.setTracks(tracklist); :}
             ;
 
 cl_list ::=
@@ -128,33 +172,40 @@ cl_list ::=
 
 // Gramatica para lista de listas
 list ::=
-            op_lists list_list cl_lists
+            op_lists list_list:list cl_lists
+                {: RESULT = list; :}
             ;
 
 list_list ::=
-            list_list list_item
-            | list_item
+            list_list:list list_item:play
+                {: RESULT = list; RESULT.add(play); :}
+            | list_item:play
+                {: RESULT = new ArrayList<>(); RESULT.add(play); :}
             ;
 
 list_item ::=
-            SMALLER LIST name number_tracks random circular GREATER
+            SMALLER LIST name:name number_tracks:number random:random circular:circular GREATER
+                {: RESULT = new Playlist(name, number, random, circular); :}
             ;
 
 number_tracks ::=
             TRACKS EQUAL INTEGER:token
+                {: RESULT = Integer.valueOf(token.getValue()); :}
             ;
 
 random ::=
-            RANDOM EQUAL boolean_value
+            RANDOM EQUAL boolean_value:value
+                {: RESULT = value; :}
             ;
 
 circular ::=
-            CIRCULAR EQUAL boolean_value
+            CIRCULAR EQUAL boolean_value:value
+                {: RESULT = value; :}
             ;
 
 boolean_value ::=
-            TRUE
-            | FALSE
+            TRUE {: RESULT = true; :}
+            | FALSE {: RESULT = false; :}
             ;
 
 op_lists ::=
@@ -167,24 +218,30 @@ cl_lists ::=
 
 // Gramatica para lista de pistas
 tracks ::=
-            op_tracks track_list cl_tracks
+            op_tracks track_list:list cl_tracks
+                {: RESULT = list; :}
             ;
 
 track_list ::=
-            track_list track
-            | track
+            track_list:list track:track
+                {: RESULT = list; RESULT.add(track); :}
+            | track:track
+                {: RESULT = new ArrayList<>(); RESULT.add(track); :}
             ;
 
 track ::=
-            SMALLER TRACK name duration GREATER
+            SMALLER TRACK name:name duration:duration GREATER
+                {: RESULT = new Track(name, duration); :}
             ;
 
 name ::=
             NAME EQUAL STR:token
+                {: RESULT = token.getValue(); :}
             ;
 
 duration ::=
             DURATION EQUAL DECIMAL:token
+                {: RESULT = Double.valueOf(token.getValue()); :}
             ;
 
 op_tracks ::=

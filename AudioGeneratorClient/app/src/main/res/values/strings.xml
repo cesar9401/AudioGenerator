@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">AudioGeneratorClient</string>
     <string name="button">Send</string>
+    <string name="text1">new request</string>
+    <string name="text2">new song</string>
+    <string name="hint1">enter your request here</string>
 </resources>

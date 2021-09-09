@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white1"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="60dp"
         android:padding="0dp"
         android:src="@drawable/usac"
         app:layout_constraintBottom_toTopOf="@+id/btnPiano"
@@ -20,25 +21,48 @@
 
     <Button
         android:id="@+id/btnPiano"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="140dp"
         android:background="@drawable/music_note_vector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnRequest"
-        />
+        app:layout_constraintStart_toEndOf="@+id/btnRequest" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text1"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRequest"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnRequest"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="140dp"
         android:background="@drawable/contactless_vector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnPiano"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text2"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text1"
+        app:layout_constraintTop_toBottomOf="@+id/btnPiano"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,6 @@ import com.cesar31.audiogenerator.playlist.Playlist;
 import com.cesar31.audiogenerator.ui.MainView;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -29,6 +28,8 @@ public class MainControl {
     private Song s;
     private boolean play;
 
+    private Listener listener;
+
     public MainControl() {
         this.file = new FileControl();
         this.play = false;
@@ -43,6 +44,17 @@ public class MainControl {
             view.setLocationRelativeTo(null);
             view.setVisible(true);
         });
+    }
+
+    /**
+     * Se inicia el escuchador de peticiones
+     */
+    public void initListener() {
+        int portServer = 8080;
+        String ipClient = "192.168.10.103";
+        int portClient = 8081;
+        this.listener = new Listener(portServer, ipClient, portClient);
+        this.listener.start();
     }
 
     public void parse(String input, MainView view) {
