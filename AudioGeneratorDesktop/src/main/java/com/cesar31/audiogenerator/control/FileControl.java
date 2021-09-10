@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
@@ -110,6 +112,40 @@ public class FileControl {
         try {
             try ( ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(this.PATH))) {
                 file.writeObject(tracks);
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+        }
+    }
+
+    /**
+     * Escribir todas las pistas actuales
+     *
+     * @param tracks pistas a guardar en db
+     */
+    public void writeAll(List<Track> tracks) {
+        try {
+            try ( ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(this.PATH))) {
+                file.writeObject(tracks);
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace(System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace(System.out);
+        }
+    }
+
+    /**
+     * Escribir todas las listas de reproduccion actuales
+     *
+     * @param playlist listas a guardar en db
+     */
+    public void writeAllPlaylists(List<Playlist> playlist) {
+        try {
+            try ( ObjectOutputStream file = new ObjectOutputStream(new FileOutputStream(this.PLAYLISTS_PATH))) {
+                file.writeObject(playlist);
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace(System.out);

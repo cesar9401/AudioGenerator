@@ -55,9 +55,10 @@ public class Listener extends Thread {
                             message += "\n";
                         }
                     }
-                    System.out.println("Recibiendo : \n" + message);
+                    // System.out.println("Recibiendo : \n" + message);
                     // Analizar mensaje aqui
                     String response = parser.parseSource(message);
+                    // String IP = parser.getIP(); // ip obtenida desde telefono
                     sendResponse(response);
                 }
             }
@@ -72,7 +73,7 @@ public class Listener extends Thread {
      * @param response mensaje que se envia al cliente
      */
     private void sendResponse(String response) {
-        System.out.println("Enviado: \n" + response);
+        // System.out.println("Enviado: \n" + response);
         try {
             try ( Socket socket = new Socket(ipClient, portClient); PrintWriter printWriter = new PrintWriter(socket.getOutputStream())) {
                 printWriter.write(response);
@@ -81,5 +82,13 @@ public class Listener extends Thread {
         } catch (IOException ex) {
             ex.printStackTrace(System.out);
         }
+    }
+
+    public String getIpClient() {
+        return ipClient;
+    }
+
+    public void setIpClient(String ipClient) {
+        this.ipClient = ipClient;
     }
 }

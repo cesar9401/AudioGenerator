@@ -1845,6 +1845,7 @@ public class AudioParser extends java_cup.runtime.lr_parser {
 	public AudioParser(AudioLex lex) {
 		super(lex);
 		this.errorHandler = new ErrorHandler();
+        this.errorHandler.initMainGrammar();
 		this.ind = new ArrayList<>();
 	}
 

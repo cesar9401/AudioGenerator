@@ -36,6 +36,8 @@ import com.cesar31.audiogenerator.parser.Token;
 LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [ \t\f]
 
+// Ip = (\d{1,3}\.){3,3}\d{1,3}
+
 /* id */
 Id = [a-zA-Z]\w*
 

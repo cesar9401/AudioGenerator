@@ -1,9 +1,11 @@
 package com.cesar31.audiogeneratorclient.task
 
+
 import android.os.AsyncTask
 import java.io.IOException
 import java.io.PrintWriter
 import java.net.Socket
+
 
 class MyTask(private val ip: String, private val port: Int, private val message: String) : AsyncTask<Void?, Void?, Void?>() {
     // private var socket: Socket? = null
@@ -17,6 +19,7 @@ class MyTask(private val ip: String, private val port: Int, private val message:
 
     override fun doInBackground(vararg p0: Void?): Void? {
         try {
+            // val thisIP = getIP()
             println("Sending: \n$message")
             val socket = Socket(ip, port)
             val printWriter = PrintWriter(socket.getOutputStream())

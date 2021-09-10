@@ -119,6 +119,12 @@ public class Song extends Thread {
         }
     }
 
+    public void stopping() {
+        if (getPlayer().getManagedPlayer().isPlaying() || getPlayer().getManagedPlayer().isPaused()) {
+            getPlayer().getManagedPlayer().finish();
+        }
+    }
+
     public void initValues(int duration) {
         this.bar.setValue(0);
         this.bar.setString("0 s");
@@ -170,8 +176,9 @@ public class Song extends Thread {
 
     /**
      * Obtener instrumento para jfugue
+     *
      * @param n
-     * @return 
+     * @return
      */
     private String getInstrument(int n) {
         String[] i = {"ROCK_ORGAN", "TRUMPET", "ACOUSTIC_BASS", "VIOLIN", "CLARINET", "FLUTE", "BANJO", "STEEL_STRING_GUITAR",
@@ -191,7 +198,7 @@ public class Song extends Thread {
             // Para esperar
             case "R":
                 return "R";
-                
+
             // Notas
             case "do":
                 return "C";

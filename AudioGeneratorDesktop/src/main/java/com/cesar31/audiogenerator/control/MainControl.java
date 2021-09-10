@@ -5,6 +5,8 @@ import com.cesar31.audiogenerator.model.Song;
 import com.cesar31.audiogenerator.model.Track;
 import com.cesar31.audiogenerator.playlist.Playlist;
 import com.cesar31.audiogenerator.ui.MainView;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -50,14 +52,40 @@ public class MainControl {
      * Se inicia el escuchador de peticiones
      */
     public void initListener() {
-        int portServer = 8080;
-        String ipClient = "192.168.10.103";
-        int portClient = 8081;
+        int portServer = 8080; // puerto donde el servidor escucha
+        int portClient = 8081; // puerto donde el cliente escucha
+        String ipClient = "192.168.10.103"; // ip del cliente
+        
+        // Imprimir ip's
+        System.out.println("IP cliente: " + ipClient);
+        getIP();
+
         this.listener = new Listener(portServer, ipClient, portClient);
         this.listener.start();
     }
 
+    private void getIP() {
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            System.out.println("IP local: " + address.getHostAddress());
+        } catch (UnknownHostException ex) {
+            //ex.printStackTrace(System.out);
+        }
+    }
+
+    public void setIpClient(String ip) {
+        if (this.listener != null) {
+            if (ip != null) {
+                if (ip.length() > 0 && ip.trim().length() > 0) {
+                    this.listener.setIpClient(ip.trim());
+                    System.out.println("Cambiando a: " + ip);
+                }
+            }
+        }
+    }
+
     public void parse(String input, MainView view) {
+        stop(view); // Cortar reproduccion
         if (!input.isEmpty() || !input.isBlank()) {
             int index = view.typeCombo.getSelectedIndex();
             if (index == 0) {
@@ -129,6 +157,11 @@ public class MainControl {
                     JOptionPane.showMessageDialog(view, "Archivo compilado con exito, el boton para guardar la pista se ha habilidato.");
                     view.saveTrack.setEnabled(true);
                 }
+            } else if (!parser.hasPrincipal()) {
+                JOptionPane.showMessageDialog(view, "El archivo no tiene metodo principal, no se ha generado ninguna pista.");
+                // System.out.println("No tiene metodo principal");
+            } else if (track == null) {
+                JOptionPane.showMessageDialog(view, "Archivo compilado, no se genero ninguna pista.");
             }
         } else {
             view.setTableErrors(errors);
@@ -210,7 +243,7 @@ public class MainControl {
     }
 
     /**
-     * Reproducir lista actual
+     * Reproducir biblioteca actual
      *
      * @param index
      * @param view
@@ -231,6 +264,12 @@ public class MainControl {
         }
     }
 
+    /**
+     * Reproducir playlist
+     *
+     * @param index
+     * @param view
+     */
     public void playPlayList(int index, MainView view) {
         if (index != -1) {
             if (tmpSongs != null) {
@@ -262,6 +301,81 @@ public class MainControl {
                 play = !play;
                 view.playPause.setText("Pause");
                 s.play();
+            }
+        } else if (s != null) {
+            // s.start();
+        }
+    }
+
+    /**
+     * Detener reproduccion
+     *
+     * @param view
+     */
+    public void stop(MainView view) {
+        if (s != null && s.isAlive()) {
+            play = false;
+            view.playPause.setText("Play");
+            view.progressBar.setValue(0);
+            view.progressBar.setString("0 s");
+            s.stopping();
+        }
+
+        if (s != null && s.isAlive()) {
+            // System.out.println("still alive");
+            s.stop();
+        }
+    }
+
+    /**
+     * Eliminar pista de biblioteca
+     *
+     * @param view
+     * @param index
+     */
+    public void deleteFromLibrary(MainView view, int index) {
+        if (index != -1) {
+            if (songs != null && songs.size() > index) {
+                stop(view); // Detener reproduccion
+
+                Track tmp = songs.get(index);// obtener pista a eliminar
+                songs = file.read();
+                songs.remove(tmp); // eliminar de listado
+
+                // Escribir en db
+                file.writeAll(songs);
+
+                // Eliminar tmp de cada lista de reproduccion
+                this.playlist = file.readPlaylists();
+                if (playlist != null) {
+                    for (Playlist p : playlist) {
+                        if (p.getPlaylist() != null && p.getPlaylist().contains(tmp.getName())) {
+                            p.getPlaylist().remove(tmp.getName()); //Eliminar tmp de cada lista
+                            // System.out.println(tmp.getName() + " deleted from " + p.getName());
+                        }
+                    }
+
+                    // grabar songs and playlists
+                    file.writeAllPlaylists(playlist);
+                }
+
+                // Actualizar vista
+                updateSongs(view);
+                view.songsList.setModel(new DefaultListModel<>());
+            }
+        }
+    }
+
+    public void deletePlaylist(MainView view, int index) {
+        if (index != -1) {
+            if (playlist != null && playlist.size() > index) {
+                stop(view); // Detener reproduccion
+                Playlist tmp = playlist.get(index);
+                playlist.remove(tmp);
+                file.writeAllPlaylists(playlist);
+
+                updateSongs(view);
+                view.songsList.setModel(new DefaultListModel<>());
             }
         }
     }

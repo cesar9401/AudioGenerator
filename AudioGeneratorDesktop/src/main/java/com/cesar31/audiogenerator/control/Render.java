@@ -70,6 +70,10 @@ public class Render {
 
         if (mil < 0) {
             // Error aqui
+            Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), String.valueOf(mil));
+            String description = "En la llamada a la función reproducir, el tercer parametro(milisegundos) debe ser mayor que cero, no se puede proceder con la operacion.";
+            err.setDescription(description);
+            handler.getErrors().add(err);
             return null;
         }
 
@@ -94,6 +98,10 @@ public class Render {
 
         if (mil < 0) {
             // Error aqui
+            Err err = new Err(Err.TypeErr.SINTACTICO, info.getLine(), info.getColumn(), String.valueOf(mil));
+            String description = "En la llamada a la función esperar, el primer parametro(milisegundos) debe ser mayor que cero, no se puede proceder con la operacion.";
+            err.setDescription(description);
+            handler.getErrors().add(err);
             return null;
         }
 

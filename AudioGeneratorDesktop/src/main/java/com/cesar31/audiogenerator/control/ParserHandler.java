@@ -25,10 +25,12 @@ public class ParserHandler {
     private MainView view;
     private JTextArea log;
     private Track track;
+    private boolean hasPrincipal;
 
     public ParserHandler(MainView view) {
         this.view = view;
         this.log = this.view.log;
+        this.hasPrincipal = false;
     }
 
     public List<Err> parseSource(String data) {
@@ -66,7 +68,7 @@ public class ParserHandler {
                     return errors;
                 } else {
                     // testear codigo
-                    System.out.println("Test");
+                    // System.out.println("Test");
                     errors = testAst(ast);
                     if (!errors.isEmpty()) {
                         // Enviar errores aqui
@@ -76,27 +78,35 @@ public class ParserHandler {
                         return errors;
                     } else {
                         // Si no hay errores, ejecutar codigo
-                        System.out.println("\nCodigo limpio!!\n");
+                        // System.out.println("\nCodigo limpio!!\n");
                         OperationHandler handler = runAst(ast);
 
                         if (!handler.getErrors().isEmpty()) {
                             handler.getErrors().forEach(e -> {
                                 // Enviar errores aqui
                                 e.setType(Err.TypeErr.EJECUCION);
-                                System.out.println(e);
+                                // System.out.println(e);
                             });
 
                             // Enviar errores de ejecucion aqui
                             return handler.getErrors();
 
                         } else {
-                            System.out.println("Compilando notas");
+                            // System.out.println("Compilando notas");
                             // Obtener listado de sounds
                             List<Sound> sounds = handler.getRender().getSounds();
                             double duration = handler.getRender().getDuration(sounds);
 
                             // Objeto a guardar
-                            this.track = new Track(info.getValue(), ast, sounds, duration, data);
+                            if(hasPrincipal) {
+                                if(!sounds.isEmpty()) {
+                                    this.track = new Track(info.getValue(), ast, sounds, duration, data);
+                                } else {
+                                    this.track = null;
+                                }
+                            } else {
+                                this.track = null;
+                            }
 
                             // Renderizar notas y tocar
                             // handler.getRender().renderSounds();
@@ -107,7 +117,7 @@ public class ParserHandler {
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(view, "No es posible compilar, por favor verifique su codigo fuente.");
-            ex.printStackTrace(System.out);
+            // ex.printStackTrace(System.out);
         }
 
         return new ArrayList<>();
@@ -471,15 +481,22 @@ public class ParserHandler {
         }
 
         // Test de declaracion de variables y arreglos y metodo principal
+        Principal p = null;
         List<Instruction> tmp = new ArrayList<>();
         for (Instruction i : ast) {
-            if (i instanceof Assignment || i instanceof ArrayStatement || i instanceof Principal) {
+            if (i instanceof Assignment || i instanceof ArrayStatement) {
                 i.test(table, handler);
+            } else if(i instanceof Principal) {
+                p = (Principal) i;
             } else {
                 tmp.add(i);
             }
         }
 
+        if(p != null) {
+            p.test(table, handler);
+        }
+        
         // Test de funciones
         handler.setTest(true);
         for (Instruction i : tmp) {
@@ -503,12 +520,22 @@ public class ParserHandler {
         }
 
         // Ejecutar declaracion de variables, de arreglos y metodo principal
+        Principal p = null;
         for (Instruction i : ast) {
-            if (i instanceof Assignment || i instanceof ArrayStatement || i instanceof Principal) {
+            if (i instanceof Assignment || i instanceof ArrayStatement) {
                 i.run(table, handler);
-            } else {
+            } else if(i instanceof Principal){
                 //System.out.println(i.getClass().getSimpleName());
+                p = (Principal) i;
             }
+        }
+        
+        hasPrincipal = true;
+        if(p != null) {
+            // Ejecutar metodo main
+            p.run(table, handler);
+        } else {
+            hasPrincipal = false;
         }
 
         return handler;
@@ -528,5 +555,9 @@ public class ParserHandler {
 
     public Track getTrack() {
         return track;
+    }
+
+    public boolean hasPrincipal() {
+        return hasPrincipal;
     }
 }

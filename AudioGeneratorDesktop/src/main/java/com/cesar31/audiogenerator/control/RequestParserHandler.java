@@ -71,7 +71,7 @@ public class RequestParserHandler {
             }
         } catch (Exception ex) {
             // Reportar error
-            ex.printStackTrace(System.out);
+            // ex.printStackTrace(System.out);
             return this.exceptionErr();
         }
     }

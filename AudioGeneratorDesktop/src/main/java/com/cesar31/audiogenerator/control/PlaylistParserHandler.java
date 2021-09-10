@@ -72,7 +72,7 @@ public class PlaylistParserHandler {
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(view, "No es posible compilar, por favor verifique su codigo fuente.");
-            ex.printStackTrace(System.out);
+            // ex.printStackTrace(System.out);
         }
 
         return new ArrayList<>();

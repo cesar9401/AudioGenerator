@@ -63,12 +63,13 @@ public class MainView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         scrollMusicList2 = new javax.swing.JScrollPane();
         songsList = new javax.swing.JList<>();
-        playButton4 = new javax.swing.JButton();
+        deleteButtonLists = new javax.swing.JButton();
         playButton5 = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
         playPause = new javax.swing.JButton();
         repeatCheck = new javax.swing.JCheckBox();
         songLabel = new javax.swing.JLabel();
+        stopButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         new_Item = new javax.swing.JMenuItem();
@@ -76,6 +77,7 @@ public class MainView extends javax.swing.JFrame {
         save_Item = new javax.swing.JMenuItem();
         saveAs_Item = new javax.swing.JMenuItem();
         exit_Item = new javax.swing.JMenuItem();
+        ip_item = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(150, 850));
@@ -341,13 +343,13 @@ public class MainView extends javax.swing.JFrame {
         });
         scrollMusicList2.setViewportView(songsList);
 
-        playButton4.setBackground(new java.awt.Color(40, 180, 99));
-        playButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        playButton4.setForeground(new java.awt.Color(24, 26, 31));
-        playButton4.setText("Delete");
-        playButton4.addActionListener(new java.awt.event.ActionListener() {
+        deleteButtonLists.setBackground(new java.awt.Color(40, 180, 99));
+        deleteButtonLists.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        deleteButtonLists.setForeground(new java.awt.Color(24, 26, 31));
+        deleteButtonLists.setText("Delete");
+        deleteButtonLists.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                playButton4ActionPerformed(evt);
+                deleteButtonListsActionPerformed(evt);
             }
         });
 
@@ -386,6 +388,16 @@ public class MainView extends javax.swing.JFrame {
         songLabel.setText("Play a Song");
         songLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        stopButton.setBackground(new java.awt.Color(40, 180, 99));
+        stopButton.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        stopButton.setForeground(new java.awt.Color(24, 26, 31));
+        stopButton.setText("S");
+        stopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout playerPanelLayout = new javax.swing.GroupLayout(playerPanel);
         playerPanel.setLayout(playerPanelLayout);
         playerPanelLayout.setHorizontalGroup(
@@ -405,26 +417,28 @@ public class MainView extends javax.swing.JFrame {
                     .addComponent(scrollMusicList))
                 .addGap(18, 18, 18)
                 .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
-                    .addComponent(scrollMusicList1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addComponent(scrollMusicList1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                     .addComponent(scrollMusicList2)
                     .addGroup(playerPanelLayout.createSequentialGroup()
                         .addComponent(playButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(playButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(deleteButtonLists, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(playerPanelLayout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
-                            .addComponent(songLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(41, 41, 41))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, playerPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
+                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(repeatCheck)
-                        .addGap(199, 199, 199))))
+                        .addGap(118, 118, 118))
+                    .addGroup(playerPanelLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(songLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(41, 41, 41))
             .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(playerPanelLayout.createSequentialGroup()
                     .addGap(457, 457, 457)
@@ -445,7 +459,7 @@ public class MainView extends javax.swing.JFrame {
                         .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, playerPanelLayout.createSequentialGroup()
                                 .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(playButton4)
+                                    .addComponent(deleteButtonLists)
                                     .addComponent(playButton5))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -453,10 +467,15 @@ public class MainView extends javax.swing.JFrame {
                                 .addComponent(scrollMusicList2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, playerPanelLayout.createSequentialGroup()
                                 .addComponent(songLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(repeatCheck))
+                                .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(playerPanelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(playerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(playPause, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(repeatCheck)))
+                                    .addGroup(playerPanelLayout.createSequentialGroup()
+                                        .addGap(62, 62, 62)
+                                        .addComponent(stopButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -554,6 +573,17 @@ public class MainView extends javax.swing.JFrame {
             }
         });
         jMenu1.add(exit_Item);
+
+        ip_item.setBackground(new java.awt.Color(24, 26, 31));
+        ip_item.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ip_item.setForeground(new java.awt.Color(255, 255, 255));
+        ip_item.setText("IP Cliente");
+        ip_item.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ip_itemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ip_item);
 
         jMenuBar1.add(jMenu1);
 
@@ -727,7 +757,9 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_playButton1ActionPerformed
 
     private void playButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton2ActionPerformed
-        // TODO add your handling code here:
+        // Eliminar pista de biblioteca
+        int index = musicList.getSelectedIndex();
+        control.deleteFromLibrary(this, index);
     }//GEN-LAST:event_playButton2ActionPerformed
 
     private void playButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton3ActionPerformed
@@ -751,9 +783,11 @@ public class MainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_songsListMouseClicked
     
-    private void playButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton4ActionPerformed
+    private void deleteButtonListsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonListsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_playButton4ActionPerformed
+        int index = playList.getSelectedIndex();
+        control.deletePlaylist(this, index);
+    }//GEN-LAST:event_deleteButtonListsActionPerformed
 
     private void playButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButton5ActionPerformed
     }//GEN-LAST:event_playButton5ActionPerformed
@@ -761,6 +795,17 @@ public class MainView extends javax.swing.JFrame {
     private void playPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playPauseActionPerformed
         control.play(this);
     }//GEN-LAST:event_playPauseActionPerformed
+
+    private void ip_itemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ip_itemActionPerformed
+        // TODO add your handling code here:
+        String port = JOptionPane.showInputDialog(this, "¿Desea cambiar la direccion ip del cliente?");
+        control.setIpClient(port);
+    }//GEN-LAST:event_ip_itemActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+        // Detener reproduccion aqui
+        control.stop(this);
+    }//GEN-LAST:event_stopButtonActionPerformed
 
     /**
      * Guardar como
@@ -781,10 +826,12 @@ public class MainView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton compileButton;
+    private javax.swing.JButton deleteButtonLists;
     private javax.swing.JTextArea editor;
     private javax.swing.JPanel editorPanel;
     public javax.swing.JTable errorTable;
     private javax.swing.JMenuItem exit_Item;
+    private javax.swing.JMenuItem ip_item;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -805,7 +852,6 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JButton playButton1;
     private javax.swing.JButton playButton2;
     private javax.swing.JButton playButton3;
-    private javax.swing.JButton playButton4;
     private javax.swing.JButton playButton5;
     public javax.swing.JList<String> playList;
     public javax.swing.JButton playPause;
@@ -821,6 +867,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollMusicList2;
     public javax.swing.JLabel songLabel;
     public javax.swing.JList<String> songsList;
+    private javax.swing.JButton stopButton;
     public javax.swing.JTabbedPane tabbed;
     public javax.swing.JComboBox<String> typeCombo;
     // End of variables declaration//GEN-END:variables
