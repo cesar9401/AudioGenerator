@@ -12,7 +12,7 @@
     <!-- Lista de pistas y lista por nombre -->
     <string-array name="header_tracks">
         <item>Nombre</item>
-        <item>Duracion</item>
+        <item>Duracion(s)</item>
     </string-array>
 
     <!-- Lista de listas -->

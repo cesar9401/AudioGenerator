@@ -16,22 +16,26 @@ class MainActivity : AppCompatActivity() {
         val btnPiano = findViewById<Button>(R.id.btnPiano)
         val btnRequest = findViewById<Button>(R.id.btnRequest)
 
+        val port = 8081
+        val listener = Listener(port, this)
+        Listener.setListener(listener)
+        listener.start()
+
         btnRequest.setOnClickListener{
-            getEditor()
+            getEditor(listener)
         }
 
         btnPiano.setOnClickListener {
             // write your code here
-            println("Here we go!")
         }
-
-        val port = 8081
-        val listener = Listener(port)
-        listener.start()
     }
 
-    private fun getEditor() {
+    private fun getEditor(listener: Listener) {
         val i = Intent(this, RequestActivity::class.java)
+        //val bundle = Bundle()
+
+        //bundle.putSerializable("listener", listener)
+        //i.putExtras(bundle)
         startActivity(i)
     }
 }

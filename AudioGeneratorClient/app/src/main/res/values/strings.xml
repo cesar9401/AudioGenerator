@@ -4,5 +4,10 @@
     <string name="text1">new request</string>
     <string name="text2">new song</string>
     <string name="hint1">enter your request here</string>
+    <string name="hint2">enter the server ip here</string>
     <string name="title1">Respuesta del servidor</string>
+    <string name="back">Back</string>
+    <string name="table">Table</string>
+    <string name="response">Response</string>
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

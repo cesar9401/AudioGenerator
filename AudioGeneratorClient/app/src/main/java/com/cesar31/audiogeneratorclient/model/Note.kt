@@ -1,6 +1,8 @@
 package com.cesar31.audiogeneratorclient.model
 
-class Note(var name: String, var eighth: String, var duration: Double) {
+import java.io.Serializable
+
+class Note(var name: String, var eighth: String, var duration: Double): Serializable {
     var channel = 0
     override fun toString(): String {
         return "Note{" +

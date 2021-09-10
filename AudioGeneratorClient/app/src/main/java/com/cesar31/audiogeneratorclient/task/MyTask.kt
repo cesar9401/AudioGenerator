@@ -11,6 +11,10 @@ class MyTask(private val ip: String, private val port: Int, private val message:
     // private val ip = "192.168.10.106"
     // private val port = 8080;
 
+    companion object {
+        var ipServer = "192.168.10.106"
+    }
+
     override fun doInBackground(vararg p0: Void?): Void? {
         try {
             println("Sending: \n$message")
